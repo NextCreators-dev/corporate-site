@@ -1,0 +1,107 @@
+---
+import {Image} from 'astro:assets';
+import {Menu, X} from 'lucide-react';
+---
+
+<header
+  class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b"
+>
+  <div class="container mx-auto px-4">
+    <div class="flex items-center justify-between h-16">
+      <div class="flex items-center">
+        <Image
+          src="/logo.png"
+          alt="クリエイターのうえきばち"
+          width={200}
+          height={50}
+          class="w-auto h-8"
+        />
+      </div>
+
+      <!-- Desktop Navigation -->
+      <nav class="hidden md:flex items-center space-x-8">
+        <a
+          href="#vision"
+          class="text-gray-600 hover:text-[#219e9b] transition-colors"
+          >ビジョン</a
+        >
+        <a
+          href="#product"
+          class="text-gray-600 hover:text-[#219e9b] transition-colors"
+          >プロダクト</a
+        >
+        <a
+          href="#company"
+          class="text-gray-600 hover:text-[#219e9b] transition-colors"
+          >会社概要</a
+        >
+      </nav>
+
+      <!-- Mobile Navigation -->
+      <div class="md:hidden">
+        <button
+          id="menu-toggle"
+          class="text-gray-600 hover:text-[#219e9b] transition-colors"
+        >
+          <Menu client:load class="h-6 w-6" />
+          <span class="sr-only">メニューを開く</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div
+  id="mobile-menu"
+  class="fixed inset-0 bg-white z-50 transform translate-x-full transition-transform duration-300 ease-in-out"
+>
+  <div class="flex flex-col h-full">
+    <div class="flex justify-end p-4">
+      <button
+        id="close-menu"
+        class="text-gray-600 hover:text-[#219e9b] transition-colors"
+      >
+        <X client:load class="h-6 w-6" />
+        <span class="sr-only">メニューを閉じる</span>
+      </button>
+    </div>
+    <nav class="flex flex-col items-center space-y-8 mt-16">
+      <a
+        href="#vision"
+        class="text-xl text-gray-600 hover:text-[#219e9b] transition-colors"
+        >ビジョン</a
+      >
+      <a
+        href="#product"
+        class="text-xl text-gray-600 hover:text-[#219e9b] transition-colors"
+        >プロダクト</a
+      >
+      <a
+        href="#company"
+        class="text-xl text-gray-600 hover:text-[#219e9b] transition-colors"
+        >会社概要</a
+      >
+    </nav>
+  </div>
+</div>
+
+<script>
+  const menuToggle = document.getElementById("menu-toggle");
+  const closeMenu = document.getElementById("close-menu");
+  const mobileMenu = document.getElementById("mobile-menu");
+  const mobileMenuLinks = document.querySelectorAll("#mobile-menu a");
+
+  menuToggle?.addEventListener("click", () => {
+    mobileMenu?.classList.remove("translate-x-full");
+  });
+
+  closeMenu?.addEventListener("click", () => {
+    mobileMenu?.classList.add("translate-x-full");
+  });
+
+  mobileMenuLinks.forEach((link) => {
+    link.addEventListener("click", () => {
+      mobileMenu?.classList.add("translate-x-full");
+    });
+  });
+</script>
