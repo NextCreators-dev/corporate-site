@@ -1,9 +1,12 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import Layout from "@layouts/Layout.astro";
 import { Image } from "astro:assets";
 import { Palette, Code, Users, Lightbulb, Building2 } from "lucide-react";
-import Navigation from "../components/Navigation.astro";
-import Footer from "../components/Footer.astro";
+import Navigation from "@components/Navigation.astro";
+import Footer from "@components/Footer.astro";
+import heroBg from "@public/hero-bg.png";
+import noLogicLogo from "@public/nologic-logo.png";
+import nextCreatorLogo from "@public/nextcreator-logo.png";
 ---
 
 <Layout title="株式会社クリエイターのうえきばち">
@@ -14,7 +17,7 @@ import Footer from "../components/Footer.astro";
     <section class="relative h-screen overflow-hidden">
       <div class="absolute inset-0">
         <Image
-          src="/hero-bg.png"
+          src={heroBg}
           width={1920}
           height={1080}
           alt="クリエイティブな背景"
@@ -47,7 +50,7 @@ import Footer from "../components/Footer.astro";
             <div
               class="w-12 h-12 bg-[#219e9b] rounded-lg flex items-center justify-center mb-4"
             >
-              <Lightbulb client:load class="text-white w-6 h-6" />
+              <Lightbulb client:load className="text-white w-6 h-6" />
             </div>
             <h3 class="text-xl font-bold mb-4">ビジョン</h3>
             <p class="text-gray-600">誰もが創作に挑戦できる世界の実現</p>
@@ -56,7 +59,7 @@ import Footer from "../components/Footer.astro";
             <div
               class="w-12 h-12 bg-[#e5d137] rounded-lg flex items-center justify-center mb-4"
             >
-              <Users client:load class="text-white w-6 h-6" />
+              <Users client:load className="text-white w-6 h-6" />
             </div>
             <h3 class="text-xl font-bold mb-4">ミッション</h3>
             <p class="text-gray-600">創作における環境的ハードルを破壊する</p>
@@ -65,12 +68,12 @@ import Footer from "../components/Footer.astro";
             <div
               class="w-12 h-12 bg-[#219e9b] rounded-lg flex items-center justify-center mb-4"
             >
-              <Palette client:load class="text-white w-6 h-6" />
+              <Palette client:load className="text-white w-6 h-6" />
             </div>
             <h3 class="text-xl font-bold mb-4">バリュー</h3>
             <p class="text-gray-600">クリエイターの力を信じ抜く</p>
             <p class="text-gray-600">
-              成すべきことを、成すべき時に、<br>成すべきように成す
+              成すべきことを、成すべき時に、<br />成すべきように成す
             </p>
             <p class="text-gray-600">
               クリエイターとして、支援者として、<br />挑戦し続ける
@@ -83,11 +86,11 @@ import Footer from "../components/Footer.astro";
     <!-- Product Section -->
     <section class="py-20">
       <div class="container px-4 mx-auto">
-        <h2 class="text-3xl font-bold text-center mb-12">プロダクト</h2>
+        <p class="text-3xl font-bold text-center mb-12">プロダクト</p>
         <div class="flex flex-col lg:flex-row items-center gap-12">
           <div class="flex-1">
             <Image
-              src="/nologic-logo.png"
+              src={noLogicLogo}
               width={540}
               height={540}
               alt="NoLogic製品イメージ"
@@ -95,18 +98,18 @@ import Footer from "../components/Footer.astro";
             />
           </div>
           <div class="flex-1">
-            <h3 class="text-2xl font-bold mb-4">NoLogic</h3>
+            <h3 class="text-2xl font-bold mb-4">ノーコードゲーム制作プラットフォーム「NoLogic」</h3>
             <p class="text-gray-600 mb-6">
               テンプレートを改造しながら簡単にゲームを作ることができるプラットフォーム。
               プログラミングの知識がなくても、直感的な操作で独自のゲームを作成できます。
             </p>
             <div class="grid grid-cols-2 gap-4 mb-8">
               <div class="flex items-center gap-2">
-                <Code client:load class="text-[#219e9b] w-5 h-5" />
+                <Code client:load className="text-[#219e9b] w-5 h-5" />
                 <span>ノーコードでゲーム制作</span>
               </div>
               <div class="flex items-center gap-2">
-                <Users client:load class="text-[#219e9b] w-5 h-5" />
+                <Users client:load className="text-[#219e9b] w-5 h-5" />
                 <span>作ってすぐ公開！</span>
               </div>
             </div>
@@ -128,11 +131,11 @@ import Footer from "../components/Footer.astro";
             </p>
             <div class="grid grid-cols-2 gap-4 mb-8">
               <div class="flex items-center gap-2">
-                <Users client:load class="text-[#219e9b] w-5 h-5" />
+                <Users client:load className="text-[#219e9b] w-5 h-5" />
                 <span>質問の共有</span>
               </div>
               <div class="flex items-center gap-2">
-                <Lightbulb client:load class="text-[#219e9b] w-5 h-5" />
+                <Lightbulb client:load className="text-[#219e9b] w-5 h-5" />
                 <span>作品の共有</span>
               </div>
             </div>
@@ -145,7 +148,7 @@ import Footer from "../components/Footer.astro";
           </div>
           <div class="flex-1 order-1 lg:order-2">
             <Image
-              src="/nextcreator-logo.png"
+              src={nextCreatorLogo}
               width={540}
               height={540}
               alt="クリエイターコミュニティのイメージ"
@@ -167,7 +170,7 @@ import Footer from "../components/Footer.astro";
             <div class="p-6 flex items-start gap-4">
               <Building2
                 client:load
-                class="text-[#219e9b] flex-shrink-0 w-6 h-6"
+                className="text-[#219e9b] flex-shrink-0 w-6 h-6"
               />
               <div>
                 <h3 class="font-bold mb-2">株式会社クリエイターのうえきばち</h3>

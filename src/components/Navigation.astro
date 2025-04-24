@@ -1,6 +1,7 @@
 ---
 import {Image} from 'astro:assets';
 import {Menu, X} from 'lucide-react';
+import Logo from "@public/logo.png";
 ---
 
 <header
@@ -10,7 +11,7 @@ import {Menu, X} from 'lucide-react';
     <div class="flex items-center justify-between h-16">
       <div class="flex items-center">
         <Image
-          src="/logo.png"
+          src={Logo}
           alt="クリエイターのうえきばち"
           width={200}
           height={50}
@@ -43,7 +44,7 @@ import {Menu, X} from 'lucide-react';
           id="menu-toggle"
           class="text-gray-600 hover:text-[#219e9b] transition-colors"
         >
-          <Menu client:load class="h-6 w-6" />
+          <Menu client:load className="h-6 w-6" />
           <span class="sr-only">メニューを開く</span>
         </button>
       </div>
@@ -61,7 +62,7 @@ import {Menu, X} from 'lucide-react';
         id="close-menu"
         class="text-gray-600 hover:text-[#219e9b] transition-colors"
       >
-        <X client:load class="h-6 w-6" />
+        <X client:load className="h-6 w-6" />
         <span class="sr-only">メニューを閉じる</span>
       </button>
     </div>

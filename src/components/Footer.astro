@@ -1,6 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import { Twitter } from "lucide-react";
+import CrebachiLogo from "@public/crebachi-logo.png";
 ---
 
 <footer class="bg-gray-900 border-t">
@@ -8,7 +9,7 @@ import { Twitter } from "lucide-react";
     <div class="flex flex-col md:flex-row items-center justify-between gap-6">
       <div>
         <Image
-          src="/crebachi-logo.png"
+          src={CrebachiLogo}
           alt="クリエイターのうえきばち"
           width={500}
           height={200}
@@ -22,7 +23,7 @@ import { Twitter } from "lucide-react";
           rel="noopener noreferrer"
           class="text-white hover:text-[#219e9b] transition-colors"
         >
-          <Twitter client:load class="h-6 w-6" />
+          <Twitter client:load className="h-6 w-6" />
           <span class="sr-only">X</span>
         </a>
       </div>

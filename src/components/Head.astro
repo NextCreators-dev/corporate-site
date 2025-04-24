@@ -1,0 +1,28 @@
+---
+import { SEO } from "astro-seo";
+---
+
+<SEO
+    title="株式会社クリエイターのうえきばち"
+    description="株式会社クリエイターのうえきばちは、ノーコードでゲーム制作ができるプラットフォームの開発や、クリエイターコミュニティ運営を手掛けています。"
+    charset="utf-8"
+    openGraph={{
+        basic: {
+            title: "株式会社クリエイターのうえきばち",
+            type: "website",
+            image: import.meta.env.SITE + "/OGP.png",
+            url: "https://corporate-site.com",
+        },
+    }}
+    twitter={{
+        creator: "@creator_pot",
+    }}
+    extend={{
+        link: [
+            {
+                rel: "icon",
+                href: "/favicon.ico",
+            },
+        ],
+    }}
+/>
