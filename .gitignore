@@ -22,3 +22,8 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# claude log
+claude_log/
+
+CLAUDE.md

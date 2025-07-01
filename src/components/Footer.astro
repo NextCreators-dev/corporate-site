@@ -1,31 +1,80 @@
 ---
 import { Image } from "astro:assets";
-import { Twitter } from "lucide-react";
+import { Twitter, MessageCircle, NotebookPen } from "lucide-react";
 import CrebachiLogo from "@public/crebachi-logo.png";
 ---
 
 <footer class="bg-gray-900 border-t">
   <div class="container mx-auto px-4 py-12">
-    <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <!-- ロゴ -->
       <div>
-        <Image
-          src={CrebachiLogo}
-          alt="クリエイターのうえきばち"
-          width={500}
-          height={200}
-          class="w-auto h-20"
-        />
-      </div>
-      <div class="flex items-center gap-6">
-        <a
-          href="https://twitter.com/creator_pot"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="text-white hover:text-[#219e9b] transition-colors"
-        >
-          <Twitter client:load className="h-6 w-6" />
-          <span class="sr-only">X</span>
+        <a href="#top" class="inline-block">
+          <Image
+            src={CrebachiLogo}
+            alt="クリエイターのうえきばち"
+            width={500}
+            height={200}
+            class="w-auto h-20"
+          />
         </a>
+      </div>
+      
+      <!-- ページ外リンク -->
+      <div>
+        <h3 class="text-white font-bold mb-4">リンク</h3>
+        <div class="flex flex-col gap-2">
+          <a
+            href="https://forms.gle/MrRY3fbb4bX8xBVL6"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-white hover:text-[#219e9b] transition-colors"
+          >
+            お問い合わせ
+          </a>
+          <a
+            href="https://nologic.creatorpot.net/ja"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-white hover:text-[#219e9b] transition-colors"
+          >
+            NoLogic公式HP
+          </a>
+        </div>
+      </div>
+      
+      <!-- SNSリンク -->
+      <div>
+        <h3 class="text-white font-bold mb-4">SNS</h3>
+        <div class="flex flex-col gap-2">
+          <a
+            href="https://twitter.com/creator_pot"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-white hover:text-[#219e9b] transition-colors flex items-center gap-2"
+          >
+            <Twitter client:load className="h-5 w-5" />
+            <span>X (Twitter)</span>
+          </a>
+          <a
+            href="https://discord.gg/3hy2UNmXca"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-white hover:text-[#219e9b] transition-colors flex items-center gap-2"
+          >
+            <MessageCircle client:load className="h-5 w-5" />
+            <span>Discord</span>
+          </a>
+          <a
+            href="https://note.com/creator_pot"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-white hover:text-[#219e9b] transition-colors flex items-center gap-2"
+          >
+            <NotebookPen client:load className="h-5 w-5" />
+            <span>note</span>
+          </a>
+        </div>
       </div>
     </div>
     <div class="mt-8 text-center text-sm text-white">
