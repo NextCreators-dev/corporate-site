@@ -1,0 +1,128 @@
+---
+// 信頼の証セクション（実績と信頼）
+// Overview セクションを統合し、企業紹介 + 3つの強み + 実績バッジを1セクションにまとめる
+---
+
+<section class="bg-[#111827] py-20 px-5 md:px-[120px]" data-section="trust">
+  <div class="max-w-7xl mx-auto flex flex-col items-center gap-12">
+    <!-- セクションバッジ + タイトル -->
+    <div class="flex flex-col items-center gap-4">
+      <div class="inline-flex items-center px-5 py-2 bg-emerald-500/15 text-emerald-500 text-xs font-bold rounded-full border border-emerald-500/25 tracking-[2px]">
+        TRACK RECORD
+      </div>
+      <h2 class="text-[24px] md:text-[32px] font-extrabold text-center">実績と信頼</h2>
+    </div>
+
+    <!-- 企業紹介文（旧Overviewから移設） -->
+    <p class="text-gray-300 text-base leading-relaxed text-center max-w-[900px]">
+      弊社には、キャラクターデザインやゲーム企画ができるエンジニアからモデラー、作曲家、シナリオライター、映像クリエイターなど多種多様なクリエイターが在籍しています。<br>
+      様々なクリエイターと連携したクリエイティビティと、Webアプリケーション開発の技術力を掛け合わせ、企画から設計・開発・運用まで一気通貫で対応します。
+    </p>
+
+    <!-- 3つの強み（旧Overviewから移設） -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
+      <div class="flex flex-col items-center gap-4 bg-[#0A0F1C] p-8 rounded-2xl">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        <h3 class="text-white font-bold">ワンストップ対応</h3>
+        <p class="text-gray-300 text-sm text-center leading-relaxed">企画・デザイン・開発まで一貫してお任せいただけます</p>
+      </div>
+      <div class="flex flex-col items-center gap-4 bg-[#0A0F1C] p-8 rounded-2xl">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>
+        <h3 class="text-white font-bold">クリエイティブ×テクノロジー</h3>
+        <p class="text-gray-300 text-sm text-center leading-relaxed">デザインとエンジニアリングの両方の視点で最適解を提案</p>
+      </div>
+      <div class="flex flex-col items-center gap-4 bg-[#0A0F1C] p-8 rounded-2xl">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>
+        <h3 class="text-white font-bold">スピード感ある納品</h3>
+        <p class="text-gray-300 text-sm text-center leading-relaxed">少数精鋭チームだからこそのスピードと柔軟性で対応</p>
+      </div>
+    </div>
+
+    <!-- 実績カード -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+      <!-- IPA未踏採択 -->
+      <div class="bg-[#0A0F1C] p-8 rounded-2xl border border-emerald-500/20 flex flex-col items-center gap-4 text-center transition-all duration-300 hover:border-emerald-500/40 hover:shadow-lg hover:shadow-emerald-500/5">
+        <div class="w-14 h-14 bg-emerald-500/15 rounded-xl flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
+        </div>
+        <div class="inline-flex items-center px-3 py-1 bg-emerald-500/10 text-emerald-500 text-[11px] font-semibold rounded border border-emerald-500/20">
+          国家プロジェクト採択
+        </div>
+        <h3 class="text-white text-lg font-bold">IPA未踏IT人材発掘・育成事業 2021年度採択</h3>
+        <p class="text-gray-300 text-sm leading-relaxed">経済産業省所管のIPAが実施する、突出したIT人材を発掘・育成する国家プロジェクト。2021年度に代表の技術力と構想力が認められ採択。</p>
+        <p class="text-gray-400 text-xs leading-relaxed">高い技術力を持つエンジニアが、御社のプロジェクトを直接担当します。</p>
+      </div>
+
+      <!-- NoLogic自社開発 -->
+      <div class="bg-[#0A0F1C] p-8 rounded-2xl border border-emerald-500/20 flex flex-col items-center gap-4 text-center transition-all duration-300 hover:border-emerald-500/40 hover:shadow-lg hover:shadow-emerald-500/5">
+        <div class="w-14 h-14 bg-emerald-500/15 rounded-xl flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        </div>
+        <!-- 要定期更新: ゲーム投稿数（現在200+、NoLogicダッシュボードで確認） -->
+        <p class="text-emerald-500 text-4xl font-black count-up" data-target="200">0</p>
+        <p class="text-gray-400 text-sm font-medium">ゲーム投稿数</p>
+        <h3 class="text-white text-lg font-bold">NoLogic 自社プロダクト開発</h3>
+        <p class="text-gray-300 text-sm leading-relaxed">ノーコードゲーム制作プラットフォーム（β版）。企画・設計・開発・運用まで自社で一気通貫で構築。</p>
+        <p class="text-gray-400 text-xs leading-relaxed">自社プロダクト開発で培った企画力と技術力を、受託案件にも活かします。</p>
+      </div>
+
+      <!-- コミュニティ運営 -->
+      <div class="bg-[#0A0F1C] p-8 rounded-2xl border border-emerald-500/20 flex flex-col items-center gap-4 text-center transition-all duration-300 hover:border-emerald-500/40 hover:shadow-lg hover:shadow-emerald-500/5">
+        <div class="w-14 h-14 bg-emerald-500/15 rounded-xl flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <!-- 要定期更新: コミュニティ参加者数（現在100+、Discordサーバー設定で確認） -->
+        <p class="text-emerald-500 text-4xl font-black count-up" data-target="100">0</p>
+        <p class="text-gray-400 text-sm font-medium">コミュニティ参加者</p>
+        <h3 class="text-white text-lg font-bold">クリエイターコミュニティ運営</h3>
+        <p class="text-gray-300 text-sm leading-relaxed">エンジニア・デザイナー・モデラー・音楽家・映像クリエイターなど多様な人材が参加。</p>
+        <p class="text-gray-400 text-xs leading-relaxed">制作リソースの柔軟な確保を実現し、多様なプロジェクトに対応します。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // カウントアップアニメーション
+  const countUpObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const el = entry.target as HTMLElement;
+          const target = parseInt(el.dataset.target || "0", 10);
+          const duration = 1500;
+          const startTime = performance.now();
+
+          function animate(currentTime: number) {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            // ease-out
+            const eased = 1 - Math.pow(1 - progress, 3);
+            const current = Math.floor(eased * target);
+            el.textContent = current + "+";
+
+            if (progress < 1) {
+              requestAnimationFrame(animate);
+            }
+          }
+
+          requestAnimationFrame(animate);
+          countUpObserver.unobserve(el);
+        }
+      });
+    },
+    { threshold: 0.1 }
+  );
+
+  // prefers-reduced-motion 対応
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  document.querySelectorAll(".count-up").forEach((el) => {
+    if (prefersReducedMotion) {
+      const target = (el as HTMLElement).dataset.target || "0";
+      el.textContent = target + "+";
+    } else {
+      countUpObserver.observe(el);
+    }
+  });
+</script>

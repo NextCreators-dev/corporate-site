@@ -3,9 +3,13 @@ import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
 import icon from 'astro-icon';
 import react from '@astrojs/react';
+import cloudflare from '@astrojs/cloudflare';
 
 // https://astro.build/config
 export default defineConfig({
+  adapter: cloudflare({
+    imageService: "compile",
+  }),
   integrations: [tailwind(), icon(), react()],
   site: "https://creatorpot.net",
 });

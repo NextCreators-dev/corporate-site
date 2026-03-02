@@ -1,0 +1,83 @@
+---
+import type { PortfolioItem } from "../data/portfolio";
+
+interface Props {
+  item: PortfolioItem;
+}
+
+const { item } = Astro.props;
+const isFeatured = item.featured ?? false;
+---
+
+<div
+  class:list={[
+    "bg-[#0A0F1C] rounded-2xl border flex flex-col overflow-hidden transition-all duration-300 hover:border-emerald-500/40",
+    isFeatured ? "border-emerald-500/30 md:col-span-2" : "border-[#1E293B]",
+  ]}
+>
+  <!-- 画像エリア -->
+  {item.image ? (
+    <div class="aspect-video w-full overflow-hidden bg-gradient-to-br from-emerald-900/20 to-[#0A0F1C]">
+      <img
+        src={item.image}
+        alt={item.title}
+        loading="lazy"
+        class="w-full h-full object-cover"
+      />
+    </div>
+  ) : (
+    <div class="aspect-video w-full bg-gradient-to-br from-emerald-900/20 to-[#0A0F1C] flex items-center justify-center">
+      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="opacity-30"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+    </div>
+  )}
+
+  <!-- コンテンツ -->
+  <div class="p-6 flex flex-col gap-3 flex-1">
+    <!-- バッジ -->
+    <div class="flex flex-wrap items-center gap-2">
+      <span class="inline-flex items-center px-3 py-1 bg-emerald-500/10 text-emerald-500 text-[11px] font-semibold rounded border border-emerald-500/20">
+        {item.categoryLabel}
+      </span>
+      {item.statusLabel && (
+        <span class="inline-flex items-center px-3 py-1 bg-amber-500/10 text-amber-400 text-[11px] font-semibold rounded border border-amber-500/20">
+          {item.statusLabel}
+        </span>
+      )}
+    </div>
+
+    <!-- タイトル・説明 -->
+    <h3 class="text-white text-lg font-bold">{item.title}</h3>
+    <p class="text-gray-300 text-sm leading-relaxed">{item.description}</p>
+
+    <!-- 実績数値 -->
+    {item.metrics && item.metrics.length > 0 && (
+      <div class="flex flex-wrap gap-3">
+        {item.metrics.map((metric) => (
+          <span class="text-emerald-500 text-sm font-semibold">{metric}</span>
+        ))}
+      </div>
+    )}
+
+    <!-- 技術タグ -->
+    <div class="flex flex-wrap gap-1.5 mt-auto pt-2">
+      {item.techStack.map((tech) => (
+        <span class="bg-white/5 text-gray-400 text-[11px] rounded px-2 py-0.5">
+          {tech}
+        </span>
+      ))}
+    </div>
+
+    <!-- リンク -->
+    {item.url && (
+      <a
+        href={item.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-emerald-500 text-sm font-medium hover:underline inline-flex items-center gap-1 mt-1"
+      >
+        サイトを見る
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>
+      </a>
+    )}
+  </div>
+</div>

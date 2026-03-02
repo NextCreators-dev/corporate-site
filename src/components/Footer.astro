@@ -1,86 +1,85 @@
 ---
-import { Image } from "astro:assets";
-import { Twitter, MessageCircle, NotebookPen } from "lucide-react";
-import CrebachiLogo from "@public/crebachi-logo.png";
+interface Props {
+  /** CTA表示を省略するか */
+  hideCta?: boolean;
+}
+
+const { hideCta = false } = Astro.props;
 ---
 
-<footer class="bg-gray-900 border-t">
-  <div class="container mx-auto px-4 py-12">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <!-- ロゴ -->
-      <div>
-        <a href="#top" class="inline-block">
-          <Image
-            src={CrebachiLogo}
-            alt="クリエイターのうえきばち"
-            width={500}
-            height={200}
-            class="w-auto h-20"
-          />
-        </a>
-      </div>
-      
-      <!-- ページ外リンク -->
-      <div>
-        <h3 class="text-white font-bold mb-4">リンク</h3>
-        <div class="flex flex-col gap-2">
+<footer class="bg-[#111827]">
+  {/* CTAセクション */}
+  {!hideCta && (
+    <div class="bg-[#0F172A] py-16 px-5 md:px-20">
+      <div class="max-w-4xl mx-auto text-center flex flex-col items-center gap-8">
+        <h2 class="text-2xl md:text-[32px] font-extrabold text-white">
+          クリエイターの"つくりたい"を、一緒に。
+        </h2>
+        <p class="text-gray-400 text-base">
+          ゲームを作りたい方も、制作を依頼したい方も、お気軽にどうぞ。
+        </p>
+        <div class="flex flex-wrap justify-center gap-4">
           <a
-            href="https://forms.gle/MrRY3fbb4bX8xBVL6"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-white hover:text-[#219e9b] transition-colors"
+            href="https://nologic.app"
+            class="inline-flex items-center px-9 py-4 bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-[15px] rounded-[10px] transition-colors"
           >
-            お問い合わせ
-          </a>
-          <a
-            href="https://nologic.creatorpot.net/ja"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-white hover:text-[#219e9b] transition-colors"
-          >
-            NoLogic公式HP
-          </a>
-        </div>
-      </div>
-      
-      <!-- SNSリンク -->
-      <div>
-        <h3 class="text-white font-bold mb-4">SNS</h3>
-        <div class="flex flex-col gap-2">
-          <a
-            href="https://twitter.com/creator_pot"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-white hover:text-[#219e9b] transition-colors flex items-center gap-2"
-          >
-            <Twitter client:load className="h-5 w-5" />
-            <span>X (Twitter)</span>
+            ゲームを作ってみる
           </a>
           <a
             href="https://discord.gg/3hy2UNmXca"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-white hover:text-[#219e9b] transition-colors flex items-center gap-2"
+            class="inline-flex items-center px-9 py-4 bg-white/10 hover:bg-white/20 text-emerald-500 font-semibold text-[15px] rounded-[10px] border border-emerald-500/40 transition-colors"
           >
-            <MessageCircle client:load className="h-5 w-5" />
-            <span>Discord</span>
+            コミュニティに参加
           </a>
           <a
-            href="https://note.com/creator_pot"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-white hover:text-[#219e9b] transition-colors flex items-center gap-2"
+            href="/techplantstudio#contact"
+            class="inline-flex items-center px-9 py-4 bg-white/10 hover:bg-white/20 text-white font-semibold text-[15px] rounded-[10px] border border-white/20 transition-colors"
           >
-            <NotebookPen client:load className="h-5 w-5" />
-            <span>note</span>
+            制作のご相談
           </a>
         </div>
       </div>
     </div>
-    <div class="mt-8 text-center text-sm text-white">
-      <p>
-        &copy; {new Date().getFullYear()} クリエイターのうえきばち All rights reserved.
-      </p>
+  )}
+
+  {/* フッター下部 */}
+  <div class="px-5 md:px-20 py-8">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        {/* ロゴ */}
+        <div class="flex items-center gap-2.5">
+          <div class="w-7 h-7 bg-emerald-500 rounded-md"></div>
+          <span class="text-white text-sm font-semibold">クリエイターのうえきばち</span>
+        </div>
+
+        {/* リンク */}
+        <div class="flex items-center gap-6">
+          <a href="https://nologic.app" class="text-gray-400 hover:text-white text-[13px] transition-colors">NoLogic</a>
+          <a href="https://discord.gg/3hy2UNmXca" class="text-gray-400 hover:text-white text-[13px] transition-colors">NextCreators</a>
+          <a href="/techplantstudio#contact" class="text-gray-400 hover:text-white text-[13px] transition-colors">お問い合わせ</a>
+          <a href="/privacy" class="text-gray-400 hover:text-white text-[13px] transition-colors">プライバシーポリシー</a>
+        </div>
+
+        {/* SNS */}
+        <div class="flex items-center gap-4">
+          <a href="https://twitter.com/creator_pot" target="_blank" rel="noopener noreferrer" class="text-gray-500 hover:text-white transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path></svg>
+          </a>
+          <a href="https://www.youtube.com/@creator_pot" target="_blank" rel="noopener noreferrer" class="text-gray-500 hover:text-white transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><path d="m10 15 5-3-5-3z"/></svg>
+          </a>
+          <a href="https://discord.gg/3hy2UNmXca" target="_blank" rel="noopener noreferrer" class="text-gray-500 hover:text-white transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      {/* コピーライト */}
+      <div class="text-center mt-8 pt-8 border-t border-gray-800">
+        <p class="text-gray-500 text-xs">
+          &copy; {new Date().getFullYear()} 株式会社クリエイターのうえきばち All rights reserved.
+        </p>
+      </div>
     </div>
   </div>
 </footer>

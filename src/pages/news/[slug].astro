@@ -1,0 +1,62 @@
+---
+import Layout from "@layouts/Layout.astro";
+import Navigation from "@components/Navigation.astro";
+import Footer from "@components/Footer.astro";
+import { newsItems } from "../../data/news";
+
+export function getStaticPaths() {
+  return newsItems.map((item) => ({
+    params: { slug: item.slug },
+    props: { item },
+  }));
+}
+
+const { item } = Astro.props;
+---
+
+<Layout title={`${item.title} | 株式会社クリエイターのうえきばち`}>
+  <main class="bg-[#0A0F1C] text-white">
+    <Navigation showBack={true} />
+
+    <!-- 記事ヘッダー -->
+    <section class="bg-[#111827] py-20 px-5 md:px-[120px]">
+      <div class="max-w-4xl mx-auto flex flex-col items-center gap-6 text-center pt-16">
+        <div class="inline-flex items-center gap-1.5 px-5 py-2 bg-emerald-500/15 text-emerald-500 text-xs font-bold rounded-full border border-emerald-500/25 tracking-[2px]">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 13v-2z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+          NEWS
+        </div>
+        <div class="flex items-center gap-4">
+          <span class="text-gray-500 text-[13px] font-medium">{item.date}</span>
+          <span class="inline-flex items-center px-3 py-1 bg-emerald-500/10 text-emerald-500 text-[11px] font-semibold rounded border border-emerald-500/20">
+            {item.category}
+          </span>
+        </div>
+        <h1 class="text-2xl md:text-[36px] font-black leading-tight">
+          {item.title}
+        </h1>
+      </div>
+    </section>
+
+    <!-- 記事本文 -->
+    <section class="bg-[#0A0F1C] py-16 px-5 md:px-[120px]">
+      <div class="max-w-4xl mx-auto">
+        <article class="prose prose-invert max-w-none space-y-6 text-[#C0C8D4] text-base leading-[2]">
+          <Fragment set:html={item.content} />
+        </article>
+
+        <!-- 一覧に戻る -->
+        <div class="mt-16 pt-8 border-t border-[#1E293B]">
+          <a
+            href="/news"
+            class="inline-flex items-center gap-2 text-emerald-500 text-sm font-medium hover:underline"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+            お知らせ一覧に戻る
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>

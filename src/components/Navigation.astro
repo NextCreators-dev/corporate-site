@@ -1,87 +1,83 @@
 ---
-import {Image} from 'astro:assets';
-import {Menu, X} from 'lucide-react';
+import { Image } from "astro:assets";
+import { Menu, X } from "lucide-react";
 import Logo from "@public/logo.png";
+
+interface Props {
+  /** トップページ以外の場合、戻るリンクを表示 */
+  showBack?: boolean;
+}
+
+const { showBack = false } = Astro.props;
 ---
 
-<header
-  class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b"
->
-  <div class="container mx-auto px-4">
+<header class="fixed top-0 left-0 right-0 z-50 bg-[#0A0F1C]/90 backdrop-blur-md">
+  <div class="max-w-7xl mx-auto px-5 md:px-20">
     <div class="flex items-center justify-between h-16">
-      <div class="flex items-center">
-        <Image
-          src={Logo}
-          alt="クリエイターのうえきばち"
-          width={200}
-          height={50}
-          class="w-auto h-8"
-        />
+      {/* ロゴエリア */}
+      <div class="flex items-center gap-2.5">
+        <a href="/" class="flex items-center gap-2.5">
+          <Image
+            src={Logo}
+            alt="クリエイターのうえきばち"
+            width={200}
+            height={50}
+            class="w-auto h-7"
+          />
+        </a>
       </div>
 
-      <!-- Desktop Navigation -->
-      <nav class="hidden md:flex items-center space-x-8">
-        <a
-          href="#vision"
-          class="text-gray-600 hover:text-[#219e9b] transition-colors"
-          >ビジョン</a
-        >
-        <a
-          href="#product"
-          class="text-gray-600 hover:text-[#219e9b] transition-colors"
-          >プロダクト</a
-        >
-        <a
-          href="#company"
-          class="text-gray-600 hover:text-[#219e9b] transition-colors"
-          >会社概要</a
-        >
-      </nav>
+      {showBack ? (
+        <a href="/" class="flex items-center gap-1.5 text-gray-400 hover:text-white transition-colors text-sm">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+          <span>トップに戻る</span>
+        </a>
+      ) : (
+        <>
+          {/* デスクトップナビゲーション */}
+          <nav class="hidden md:flex items-center space-x-8">
+            <a href="#product" class="text-gray-400 hover:text-white transition-colors text-sm">プロダクト</a>
+            <a href="#services" class="text-gray-400 hover:text-white transition-colors text-sm">サービス</a>
+            <a href="#vision" class="text-gray-400 hover:text-white transition-colors text-sm">ビジョン</a>
+            <a href="#company" class="text-gray-400 hover:text-white transition-colors text-sm">会社概要</a>
+          </nav>
 
-      <!-- Mobile Navigation -->
-      <div class="md:hidden">
-        <button
-          id="menu-toggle"
-          class="text-gray-600 hover:text-[#219e9b] transition-colors"
-        >
-          <Menu client:load className="h-6 w-6" />
-          <span class="sr-only">メニューを開く</span>
-        </button>
-      </div>
+          {/* モバイルメニューボタン */}
+          <div class="md:hidden">
+            <button
+              id="menu-toggle"
+              class="text-gray-400 hover:text-white transition-colors"
+            >
+              <Menu client:load className="h-6 w-6" />
+              <span class="sr-only">メニューを開く</span>
+            </button>
+          </div>
+        </>
+      )}
     </div>
   </div>
 </header>
 
+{/* モバイルメニュー */}
 <div
   id="mobile-menu"
-  class="fixed inset-0 bg-white z-50 transform translate-x-full transition-transform duration-300 ease-in-out"
+  class="fixed inset-0 bg-[#0A0F1C] z-50 transform translate-x-full transition-transform duration-300 ease-in-out"
 >
   <div class="flex flex-col h-full">
     <div class="flex justify-end p-4">
       <button
         id="close-menu"
-        class="text-gray-600 hover:text-[#219e9b] transition-colors"
+        class="text-gray-400 hover:text-white transition-colors"
       >
         <X client:load className="h-6 w-6" />
         <span class="sr-only">メニューを閉じる</span>
       </button>
     </div>
     <nav class="flex flex-col items-center space-y-8 mt-16">
-      <a
-        href="#vision"
-        class="text-xl text-gray-600 hover:text-[#219e9b] transition-colors"
-        >ビジョン</a
-      >
-      <a
-        href="#product"
-        class="text-xl text-gray-600 hover:text-[#219e9b] transition-colors"
-        >プロダクト</a
-      >
-      <a
-        href="#company"
-        class="text-xl text-gray-600 hover:text-[#219e9b] transition-colors"
-        >会社概要</a
-      >
+      <a href="#product" class="text-xl text-gray-400 hover:text-white transition-colors">プロダクト</a>
+      <a href="#services" class="text-xl text-gray-400 hover:text-white transition-colors">サービス</a>
+      <a href="#vision" class="text-xl text-gray-400 hover:text-white transition-colors">ビジョン</a>
+      <a href="#company" class="text-xl text-gray-400 hover:text-white transition-colors">会社概要</a>
     </nav>
   </div>
 </div>

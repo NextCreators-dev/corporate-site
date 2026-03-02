@@ -1,0 +1,630 @@
+---
+import Layout from "@layouts/Layout.astro";
+import Navigation from "@components/Navigation.astro";
+import TrustSection from "@components/TrustSection.astro";
+import PortfolioCard from "@components/PortfolioCard.astro";
+import heroBg from "@public/hero-bg.png";
+import { Image } from "astro:assets";
+import { portfolioItems } from "../data/portfolio";
+import { testimonials } from "../data/testimonials";
+import ContactForm from "@components/ContactForm";
+
+// 技術スタックデータ（ロゴSVGは /public/logos/ に配置後に有効化）
+const techStacks = [
+  { category: "フロントエンド", items: ["React", "Next.js", "Astro", "TypeScript", "Tailwind CSS", "Ruby on Rails"] },
+  { category: "バックエンド", items: ["Next.js(API Router)", "Hono.js","Ruby on Rails"] },
+  { category: "ゲーム・3D", items: ["Unity", "Blender"] },
+  { category: "デザイン", items: ["Figma", "Adobe Photoshop", "Pencil"] },
+  { category: "映像制作", items: ["Adobe Premire Pro", "Adobe After Effects", "AviUtl", "Remotion"] },
+  { category: "インフラ", items: ["Cloudflare", "AWS", "Firebase"] },
+];
+
+// FAQ データ
+const faqs = [
+  {
+    question: "どのような案件に対応していますか？",
+    answer: "ゲーム制作、Webサイト・Webアプリ開発、クリエイティブ制作、AI活用支援、イベント企画（音響・写真撮影含む）まで幅広く対応しています。特にゲーム制作とWebアプリ開発を得意としており、自社プロダクト「NoLogic」の開発経験を活かした提案が可能です。",
+  },
+  {
+    question: "料金の目安を教えてください。",
+    answer: "下記の参考価格帯をご覧ください。プロジェクトの規模・仕様により変動しますので、正式なお見積もりは無料ヒアリング後にご提示いたします。",
+  },
+  {
+    question: "納期はどのくらいですか？",
+    answer: "案件の規模によりますが、Webサイト制作で約1〜2ヶ月、Webアプリ開発で約2〜4ヶ月が目安です。短納期のご相談も承りますので、お気軽にご相談ください。",
+  },
+  {
+    question: "企画段階から相談できますか？",
+    answer: "はい、「やりたいことはあるけど形になっていない」という段階からご相談いただけます。ヒアリングを通じて要件を整理し、最適なプランをご提案します。",
+  },
+  {
+    question: "契約形態はどのようになりますか？",
+    answer: "基本的にはプロジェクト単位の請負契約です。要件定義後にお見積もりを提示し、ご合意いただいてからの着手となります。月額の準委任契約にも対応可能です。",
+  },
+  {
+    question: "保守・運用も対応してもらえますか？",
+    answer: "はい、納品後の保守・運用サポートも承ります。月額プランでのサーバー管理・コンテンツ更新・機能追加等、継続的なサポートが可能です。",
+  },
+  {
+    question: "リモートでの対応は可能ですか？",
+    answer: "はい、全国対応しています。打ち合わせはオンライン（Zoom / Google Meet）で行い、チャットツール（Slack / Discord）で日常的なコミュニケーションを取ります。",
+  },
+];
+
+// 参考価格データ
+const pricingItems = [
+  { name: "Webサイト制作", price: "30万円〜", duration: "1〜2ヶ月", note: "コーポレートサイト・LP等", featured: false },
+  { name: "Webアプリ開発", price: "50万円〜", duration: "2〜4ヶ月", note: "業務システム・SaaS等", featured: true },
+  { name: "ゲーム制作", price: "50万円〜", duration: "2〜6ヶ月", note: "ミニゲーム・教育ゲーム等", featured: true },
+  { name: "クリエイティブ制作", price: "10万円〜", duration: "2週間〜", note: "動画・バナー・LP等", featured: false },
+  { name: "AI活用コンサルティング", price: "30万円〜", duration: "1〜3ヶ月", note: "AI導入支援・PoC開発等", featured: false },
+  { name: "イベント企画・運営", price: "要相談", duration: "要相談", note: "ワークショップ・ハッカソン等", featured: false },
+];
+
+// メンバーデータ
+const members = [
+  { name: "山縣 帆高", role: "Webエンジニア / 映像クリエイター", desc: "Webサイトやアプリの企画・要件定義からデザイン・開発、映像制作まで担当。現在はNoLogicの開発手法をもとに、AI活用コンサルも担当。", isRepresentative: true },
+  { name: "リロル", role: "ゲームエンジニア / CGモデラー / イラストレーター", desc: "元ゲーム会社所属。「ゲームを全て自分で作りたい」という思いから、イラスト作成、アセット制作、CGモデル制作、Unityでのゲームプログラミングを担当。", isRepresentative: false },
+  { name: "nakachoco", role: "音楽家 / Webエンジニア", desc: "NoLogicで使用しているBGMの制作を担当。EDMからボーカロイド楽曲、編曲までマルチに作成できる音楽家。個人の開発経験を活かし、社内の作業自動化も担当。", isRepresentative: false },
+  { name: "佐藤 諒", role: "コミュニティ運営・ライター", desc: "個人で文章創作を行なっていた経験から、シナリオ制作やwebライティングを担当。また、全国最大規模の高専コミュニティの運営補助経験を活かし、クリエイターコミュニティの運営も担当。", isRepresentative: false },
+  { name: "坂部 凌央", role: "映像クリエイター", desc: "代表と一緒に学生時代にボーカロイドライブを作った経験から、MVを中心とした映像制作を担当。", isRepresentative: false },
+  { name: "しゃお", role: "イラストレーター / CGモデラー", desc: "CG技術を学ぶ専門学校にて背景モデリングを学ぶ。現在は、背景を中心としたモデリングや人物を中心としたイラスト制作を担当。", isRepresentative: false },
+];
+
+// 制作フローデータ
+const flowSteps = [
+  { num: 1, title: "お問い合わせ", desc: "フォームから60秒で送信完了。まずはお気軽にご相談ください", duration: "最短即日返信" },
+  { num: 2, title: "ヒアリング", desc: "オンラインで課題・目的・ご予算をお伺いし、最適なプランをご提案", duration: "約1週間" },
+  { num: 3, title: "企画・設計", desc: "要件定義・ワイヤーフレーム・技術選定を実施。NDA締結にも対応", duration: "1〜2週間" },
+  { num: 4, title: "制作・開発", desc: "デザイン・実装を進行。週次の進捗報告とフィードバック対応で安心", duration: "2〜8週間" },
+  { num: 5, title: "納品・運用", desc: "納品後の保守・改善もお任せください。月額サポートプランあり", duration: "継続サポート" },
+];
+---
+
+<Layout title="TechPlantStudio | 株式会社クリエイターのうえきばち">
+  <main class="bg-[#0A0F1C] text-white scroll-smooth">
+    <!-- ヘッダー -->
+    <Navigation showBack={true} />
+
+    <!-- 1. Hero Section -->
+    <section class="relative min-h-[520px] md:min-h-[560px] flex items-center justify-center overflow-hidden" data-section="hero">
+      <div class="absolute inset-0">
+        <Image
+          src={heroBg}
+          width={1920}
+          height={1080}
+          alt="TechPlantStudio"
+          class="w-full h-full object-cover"
+        />
+      </div>
+      <div class="absolute inset-0 bg-[#0A0F1C]/70"></div>
+      <div class="relative z-10 flex flex-col items-center text-center px-5 py-24 gap-6 max-w-4xl mx-auto">
+        <div class="inline-flex items-center px-5 py-2 bg-emerald-500/15 text-emerald-500 text-xs font-bold rounded-full border border-emerald-500/25 tracking-[2px]">
+          SERVICES
+        </div>
+        <h1 class="text-4xl md:text-5xl font-black leading-tight">企画・デザイン・開発、<br class="hidden sm:inline" />ワンストップで。</h1>
+        <p class="text-gray-300 text-base md:text-lg leading-relaxed max-w-[640px]">
+          「開発リソースが足りない」「どこに頼めばいいかわからない」——<br class="hidden md:inline" />
+          エンジニア・デザイナー・映像/音楽クリエイターが在籍する制作チームが、Webアプリからゲーム、クリエイティブ制作まで一気通貫で解決します。
+        </p>
+
+        <!-- IPA未踏バッジ -->
+        <div class="flex flex-col items-center gap-1">
+          <div class="inline-flex items-center gap-2 px-4 py-2 bg-amber-500/10 border border-amber-500/30 rounded-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
+            <span class="text-amber-400 text-xs md:text-sm font-semibold">IPA 未踏IT人材発掘・育成事業 2021年度採択</span>
+          </div>
+          <p class="text-gray-500 text-xs">独立行政法人IPA（情報処理推進機構）による、突出したIT人材を発掘・育成する国家プロジェクト</p>
+        </div>
+
+        <!-- CTAボタン -->
+        <div class="flex flex-col items-center gap-3 mt-2">
+          <div class="flex flex-col sm:flex-row items-center gap-4">
+            <a
+              href="#contact"
+              data-cta-location="hero"
+              class="inline-flex items-center gap-2.5 px-10 py-4 bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-lg rounded-xl transition-colors shadow-lg shadow-emerald-500/25"
+            >
+              まずは無料で相談する
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </a>
+            <a
+              href="#service-details"
+              class="inline-flex items-center gap-2 px-6 py-3 text-gray-400 hover:text-white text-sm font-medium transition-colors"
+            >
+              サービス内容を見る
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </a>
+          </div>
+          <p class="text-gray-500 text-xs">60秒で送信完了 · 強引な営業は一切しません</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. 信頼の証セクション（Overview統合） -->
+    <TrustSection />
+
+    <!-- 3. 対応領域セクション -->
+    <section id="service-details" class="bg-[#0A0F1C] py-20 px-5 md:px-[120px]" data-section="services">
+      <div class="max-w-7xl mx-auto flex flex-col items-center gap-12">
+        <h2 class="text-[24px] md:text-[32px] font-extrabold">対応領域</h2>
+
+        <!-- 得意領域（上段 2枚） -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+          <div class="bg-[#111827] p-8 rounded-2xl border border-emerald-500/40 flex flex-col gap-4 relative">
+            <span class="absolute top-4 right-4 inline-flex items-center px-3 py-1 bg-emerald-500/15 text-emerald-500 text-[11px] font-bold rounded-full">得意領域</span>
+            <div class="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" x2="10" y1="11" y2="11"/><line x1="8" x2="8" y1="9" y2="13"/><line x1="15" x2="15.01" y1="12" y2="12"/><line x1="18" x2="18.01" y1="10" y2="10"/><path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z"/></svg>
+            </div>
+            <h3 class="text-white text-lg font-bold">ゲーム制作</h3>
+            <p class="text-gray-300 text-sm leading-relaxed">NoLogicを活用したオリジナルゲームの企画・制作。教育機関向けのゲーミフィケーション教材や、企業のプロモーション用ミニゲームなど、目的に合わせたゲーム体験を設計します。</p>
+          </div>
+          <div class="bg-[#111827] p-8 rounded-2xl border border-emerald-500/40 flex flex-col gap-4 relative">
+            <span class="absolute top-4 right-4 inline-flex items-center px-3 py-1 bg-emerald-500/15 text-emerald-500 text-[11px] font-bold rounded-full">得意領域</span>
+            <div class="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            </div>
+            <h3 class="text-white text-lg font-bold">Webアプリ制作</h3>
+            <p class="text-gray-300 text-sm leading-relaxed">業務システム・SaaS・社内ツール等のWebアプリケーション開発。要件定義からUI設計・実装・テストまで、アジャイルで柔軟に進めます。</p>
+          </div>
+        </div>
+
+        <!-- その他の領域（下段 4枚） -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full">
+          <div class="bg-[#111827] p-8 rounded-2xl border border-[#1E293B] flex flex-col gap-4">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+            <h3 class="text-white text-lg font-bold">Webサイト制作</h3>
+            <p class="text-gray-300 text-sm leading-relaxed">コーポレートサイト・ランディングページ・採用サイト等の設計・構築。ブランドの世界観を活かしたデザインと、SEO・パフォーマンスを両立したモダンな実装を提供します。</p>
+          </div>
+          <div class="bg-[#111827] p-8 rounded-2xl border border-[#1E293B] flex flex-col gap-4">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"/><rect x="2" y="6" width="14" height="12" rx="2"/></svg>
+            <h3 class="text-white text-lg font-bold">クリエイティブ制作</h3>
+            <p class="text-gray-300 text-sm leading-relaxed">動画制作・LP・バナー・ビジュアル等のクリエイティブ制作。ターゲットに刺さるビジュアルコミュニケーションを企画から制作まで一括で対応します。</p>
+          </div>
+          <div class="bg-[#111827] p-8 rounded-2xl border border-[#1E293B] flex flex-col gap-4">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"/><path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4"/><path d="M17.599 6.5a3 3 0 0 0 .399-1.375"/><path d="M6.003 5.125A3 3 0 0 0 6.401 6.5"/><path d="M3.477 10.896a4 4 0 0 1 .585-.396"/><path d="M19.938 10.5a4 4 0 0 1 .585.396"/><path d="M6 18a4 4 0 0 1-1.967-.516"/><path d="M19.967 17.484A4 4 0 0 1 18 18"/></svg>
+            <h3 class="text-white text-lg font-bold">AI活用コンサルティング</h3>
+            <p class="text-gray-300 text-sm leading-relaxed">生成AIを活用した業務改善・プロダクト開発支援。ChatGPT / Claude等のLLM活用、画像生成AI、社内ナレッジベース構築など、AI導入の戦略策定から実装まで支援します。</p>
+          </div>
+          <div class="bg-[#111827] p-8 rounded-2xl border border-[#1E293B] flex flex-col gap-4">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+            <h3 class="text-white text-lg font-bold">イベント企画・運営</h3>
+            <p class="text-gray-300 text-sm leading-relaxed">ワークショップ・ハッカソン・展示会等のイベント企画・運営。音響オペレーションや写真・動画撮影にも対応可能。コミュニティ運営の知見を活かし、企画から当日の運営・記録まで一括でお任せいただけます。</p>
+          </div>
+        </div>
+
+        <!-- 技術スタック・使用ツール -->
+        <div class="w-full mt-4">
+          <h3 class="text-gray-500 text-xs font-semibold tracking-wider uppercase text-center mb-8">TECH STACK & TOOLS</h3>
+          <div class="flex flex-col gap-6">
+            {techStacks.map((group) => (
+              <div class="flex flex-col gap-3">
+                <p class="text-gray-500 text-xs font-semibold tracking-wider">{group.category}</p>
+                <div class="flex flex-wrap gap-3">
+                  {group.items.map((item) => (
+                    <span class="inline-flex items-center px-4 py-2 bg-[#111827] border border-[#1E293B] rounded-lg text-gray-300 text-sm hover:border-emerald-500/30 transition-colors">
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- 中間CTA -->
+        <div class="flex flex-col items-center gap-4 mt-12 pt-12 border-t border-gray-800" data-section="cta_middle">
+          <p class="text-gray-400 text-base">気になるサービスはありましたか？</p>
+          <a
+            href="#contact"
+            data-cta-location="middle"
+            class="inline-flex items-center gap-2.5 px-10 py-4 bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-base rounded-xl transition-colors"
+          >
+            まずは無料で相談する
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+          <p class="text-gray-500 text-xs">60秒で送信完了 · 強引な営業は一切しません</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. 実績・ポートフォリオセクション -->
+    {portfolioItems.length > 0 && (
+      <section class="bg-[#111827] py-20 px-5 md:px-[120px]" data-section="portfolio">
+        <div class="max-w-7xl mx-auto flex flex-col items-center gap-12">
+          <div class="flex flex-col items-center gap-4">
+            <div class="inline-flex items-center px-5 py-2 bg-emerald-500/15 text-emerald-500 text-xs font-bold rounded-full border border-emerald-500/25 tracking-[2px]">
+              WORKS
+            </div>
+            <h2 class="text-[24px] md:text-[32px] font-extrabold text-center">実績・ポートフォリオ</h2>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+            {portfolioItems.map((item) => (
+              <PortfolioCard item={item} />
+            ))}
+          </div>
+
+          <!-- テスティモニアル（データがある場合のみ表示） -->
+          {testimonials.length > 0 && (
+            <div class="w-full mt-8">
+              <h3 class="text-gray-500 text-xs font-semibold tracking-wider uppercase text-center mb-8">CLIENT VOICES</h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {testimonials.map((t) => (
+                  <div class="bg-[#0A0F1C] p-6 rounded-2xl border border-[#1E293B]">
+                    <p class="text-gray-300 text-sm leading-relaxed mb-4">「{t.quote}」</p>
+                    <div class="flex items-center gap-3">
+                      {t.avatar ? (
+                        <img src={t.avatar} alt={t.name} class="w-10 h-10 rounded-full object-cover" />
+                      ) : (
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500/30 to-[#111827]"></div>
+                      )}
+                      <div>
+                        <p class="text-white text-sm font-bold">{t.name}</p>
+                        <p class="text-gray-400 text-xs">{t.role}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+    )}
+
+    <!-- 5. メンバー紹介セクション -->
+    <section class="bg-[#0A0F1C] py-20 px-5 md:px-[120px]" data-section="team">
+      <div class="max-w-7xl mx-auto flex flex-col items-center gap-12">
+        <h2 class="text-[24px] md:text-[32px] font-extrabold">メンバー紹介</h2>
+        <p class="text-gray-300 text-base text-center">
+          少数精鋭のチームが、企画からデザイン・開発まで一貫して対応します。
+        </p>
+
+        <!-- 選択メンバーの詳細表示 -->
+        <div id="member-detail" class="w-full bg-[#111827] p-6 md:p-8 rounded-2xl border-l-2 border-emerald-500 transition-all duration-300">
+          <div class="flex flex-col md:flex-row items-center md:items-start gap-6">
+            <div class="w-32 h-32 md:w-40 md:h-40 rounded-full bg-gradient-to-br from-emerald-500/30 to-[#111827] overflow-hidden shrink-0"></div>
+            <div class="flex flex-col gap-2 text-center md:text-left">
+              <div class="flex items-center gap-2 justify-center md:justify-start">
+                <p id="detail-name" class="text-white text-xl font-bold">{members[0].name}</p>
+                <span id="detail-badge" class="inline-flex items-center px-2 py-0.5 bg-amber-500/15 text-amber-400 text-[10px] font-bold rounded">代表</span>
+              </div>
+              <p id="detail-role" class="text-emerald-500 text-sm font-semibold">{members[0].role}</p>
+              <p id="detail-desc" class="text-gray-300 text-sm leading-relaxed mt-2">{members[0].desc}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- メンバー一覧（クリックで詳細表示） -->
+        <div class="grid grid-cols-3 md:grid-cols-6 gap-4 md:gap-6 w-full">
+          {members.map((m, i) => (
+            <button
+              type="button"
+              class:list={[
+                "member-btn flex flex-col items-center gap-3 cursor-pointer rounded-xl p-3 transition-all duration-200",
+                i === 0 ? "bg-emerald-500/10 ring-2 ring-emerald-500/50" : "hover:bg-white/5",
+              ]}
+              data-index={i}
+              data-name={m.name}
+              data-role={m.role}
+              data-desc={m.desc}
+              data-representative={m.isRepresentative ? "true" : "false"}
+            >
+              <div class:list={[
+                "w-16 h-16 md:w-20 md:h-20 rounded-full bg-gradient-to-br from-emerald-500/30 to-[#111827] overflow-hidden shrink-0 transition-all duration-200",
+              ]}></div>
+              <div class="text-center">
+                <p class="text-white text-xs md:text-sm font-bold">{m.name}</p>
+                <p class="text-emerald-500 text-[10px] md:text-xs font-semibold leading-tight mt-1">{m.role}</p>
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. 制作フローセクション -->
+    <section class="bg-[#111827] py-20 px-5 md:px-[120px]" data-section="flow">
+      <div class="max-w-7xl mx-auto flex flex-col items-center gap-12">
+        <h2 class="text-[24px] md:text-[32px] font-extrabold">制作フロー</h2>
+
+        <!-- PC: 横並びグリッド（5ステップ + 4矢印 = 9列） -->
+        <div class="hidden md:grid md:grid-cols-9 gap-4 w-full items-start">
+          {flowSteps.map((step, i) => (
+            <>
+              <div class="flex flex-col items-center gap-3 md:col-span-1">
+                <div class="flex items-center justify-center w-12 h-12 bg-emerald-500 rounded-full text-white text-xl font-bold">{step.num}</div>
+                <h3 class="text-white font-bold text-center">{step.title}</h3>
+                <p class="text-emerald-500/70 text-xs font-medium">目安: {step.duration}</p>
+                <p class="text-gray-300 text-sm text-center leading-relaxed">{step.desc}</p>
+              </div>
+              {i < flowSteps.length - 1 && (
+                <div class="flex items-center justify-center md:col-span-1 pt-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                </div>
+              )}
+            </>
+          ))}
+        </div>
+
+        <!-- モバイル: 縦並び + 縦線接続 -->
+        <div class="flex flex-col items-center gap-0 w-full md:hidden">
+          {flowSteps.map((step, i) => (
+            <>
+              <div class="flex flex-col items-center gap-3 w-full">
+                <div class="flex items-center justify-center w-12 h-12 bg-emerald-500 rounded-full text-white text-xl font-bold">{step.num}</div>
+                <h3 class="text-white font-bold text-center">{step.title}</h3>
+                <p class="text-emerald-500/70 text-xs font-medium">目安: {step.duration}</p>
+                <p class="text-gray-300 text-sm text-center leading-relaxed">{step.desc}</p>
+              </div>
+              {i < flowSteps.length - 1 && (
+                <div class="flex justify-center py-2">
+                  <div class="w-0.5 h-8 bg-emerald-500/30"></div>
+                </div>
+              )}
+            </>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. FAQ / 参考価格セクション -->
+    <section class="bg-[#0A0F1C] py-20 px-5 md:px-[120px]" data-section="faq_pricing">
+      <div class="max-w-7xl mx-auto flex flex-col items-center gap-16">
+        <!-- FAQ -->
+        <div class="w-full max-w-3xl mx-auto">
+          <h2 class="text-[24px] md:text-[32px] font-extrabold text-center mb-8">よくあるご質問</h2>
+          <div class="flex flex-col">
+            {faqs.map((faq) => (
+              <details class="border-b border-[#1E293B] group">
+                <summary class="py-5 px-4 md:px-6 text-white font-semibold text-sm md:text-base cursor-pointer flex justify-between items-center hover:text-emerald-400 transition-colors list-none [&::-webkit-details-marker]:hidden">
+                  {faq.question}
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-500 transition-transform duration-300 group-open:rotate-180 shrink-0 ml-4"><path d="m6 9 6 6 6-6"/></svg>
+                </summary>
+                <div class="px-4 md:px-6 pb-5 text-gray-300 text-sm leading-relaxed">
+                  {faq.answer}
+                </div>
+              </details>
+            ))}
+          </div>
+        </div>
+
+        <!-- 参考価格帯 -->
+        <div class="w-full">
+          <h2 class="text-[24px] md:text-[32px] font-extrabold text-center mb-8">参考価格帯</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {pricingItems.map((item) => (
+              <div class:list={[
+                "bg-[#111827] p-6 rounded-2xl flex flex-col gap-3 border",
+                item.featured ? "border-emerald-500/30" : "border-[#1E293B]",
+              ]}>
+                <div class="flex items-center justify-between">
+                  <h3 class="text-white font-bold">{item.name}</h3>
+                  {item.featured && (
+                    <span class="inline-flex items-center px-2 py-0.5 bg-emerald-500/15 text-emerald-500 text-[10px] font-bold rounded">得意領域</span>
+                  )}
+                </div>
+                <p class="text-emerald-500 text-2xl font-black">{item.price}</p>
+                <div class="flex items-center gap-2 text-gray-400 text-sm">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  納期目安: {item.duration}
+                </div>
+                <p class="text-gray-400 text-xs">{item.note}</p>
+              </div>
+            ))}
+          </div>
+          <div class="text-gray-500 text-xs leading-relaxed mt-6 space-y-1">
+            <p>※ 上記は参考価格です。プロジェクトの規模・仕様・ご要望に応じてお見積もりいたします。</p>
+            <p>※ 正式なお見積もりは無料ヒアリング後にご提示いたします。お気軽にお問い合わせください。</p>
+            <p>※ 表示価格は税別です。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. お問い合わせセクション -->
+    <section id="contact" class="bg-[#0F172A] py-20 px-5 md:px-[120px]" data-section="cta_bottom">
+      <div class="max-w-2xl mx-auto flex flex-col items-center gap-8">
+        <div class="text-center flex flex-col gap-4">
+          <h2 class="text-[24px] md:text-[32px] font-extrabold">まずはお気軽にご相談ください</h2>
+          <p class="text-gray-300 text-base leading-relaxed">
+            「こんなこと頼めるかな？」でも大丈夫。<br />
+            ご予算・納期・ご要望に合わせて最適なプランをご提案いたします。
+          </p>
+        </div>
+        <ContactForm client:load />
+      </div>
+    </section>
+
+    <!-- フッター -->
+    <div class="bg-[#111827] py-8 px-5 md:px-[120px]">
+      <div class="text-center">
+        <p class="text-gray-500 text-xs">
+          &copy; {new Date().getFullYear()} 株式会社クリエイターのうえきばち All rights reserved.
+        </p>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<!-- スクロールアニメーション用CSS -->
+<style>
+  /* 初期状態（非表示） */
+  .animate-on-scroll {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 400ms ease-out, transform 400ms ease-out;
+  }
+
+  .animate-on-scroll.slide-left {
+    transform: translateX(-20px);
+  }
+
+  /* 表示状態 */
+  .animate-on-scroll.is-visible {
+    opacity: 1;
+    transform: translateY(0) translateX(0);
+  }
+
+  /* スタガー用ディレイ */
+  .animate-on-scroll[data-delay="1"] { transition-delay: 100ms; }
+  .animate-on-scroll[data-delay="2"] { transition-delay: 200ms; }
+  .animate-on-scroll[data-delay="3"] { transition-delay: 300ms; }
+  .animate-on-scroll[data-delay="4"] { transition-delay: 400ms; }
+  .animate-on-scroll[data-delay="5"] { transition-delay: 500ms; }
+
+  /* prefers-reduced-motion 対応 */
+  @media (prefers-reduced-motion: reduce) {
+    .animate-on-scroll {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  // ===========================
+  // スクロールアニメーション
+  // ===========================
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (!prefersReducedMotion) {
+    // アニメーション対象を自動検出してクラスを付与
+    document.querySelectorAll("section[data-section]").forEach((section) => {
+      // セクションタイトル（h2）
+      const h2 = section.querySelector("h2");
+      if (h2) h2.classList.add("animate-on-scroll");
+
+      // セクション直下の説明文（h2の次のp）
+      const desc = h2?.nextElementSibling;
+      if (desc && desc.tagName === "P") {
+        desc.classList.add("animate-on-scroll");
+        desc.dataset.delay = "1";
+      }
+
+      // グリッド内のカード要素にスタガーアニメーション
+      section.querySelectorAll(".grid > div, .grid > a").forEach((card, i) => {
+        card.classList.add("animate-on-scroll");
+        card.dataset.delay = String(Math.min(i + 1, 5));
+      });
+
+      // CTAボタン
+      section.querySelectorAll("a[data-cta-location]").forEach((cta) => {
+        cta.classList.add("animate-on-scroll");
+      });
+    });
+
+    // IntersectionObserverでアニメーション発火
+    const animObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            animObserver.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    document.querySelectorAll(".animate-on-scroll").forEach((el) => {
+      animObserver.observe(el);
+    });
+  }
+
+  // ===========================
+  // GA4 イベントトラッキング
+  // ===========================
+
+  // gtagラッパー（GA4タグ未設置でもエラーにならないようガード）
+  function trackEvent(eventName: string, params: Record<string, string> = {}) {
+    if (typeof window !== "undefined" && typeof (window as any).gtag === "function") {
+      (window as any).gtag("event", eventName, params);
+    }
+  }
+
+  // CTAクリックトラッキング
+  document.querySelectorAll("[data-cta-location]").forEach((el) => {
+    el.addEventListener("click", () => {
+      const location = (el as HTMLElement).dataset.ctaLocation || "";
+      trackEvent("cta_click", { cta_location: location });
+    });
+  });
+
+  // セクションimpressionトラッキング（IntersectionObserver）
+  const sectionObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const sectionName = (entry.target as HTMLElement).dataset.section;
+          if (sectionName) {
+            trackEvent("section_impression", { section_name: sectionName });
+          }
+          sectionObserver.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.1 }
+  );
+
+  document.querySelectorAll("section[data-section]").forEach((el) => {
+    sectionObserver.observe(el);
+  });
+
+  // ===========================
+  // メンバー詳細切り替え
+  // ===========================
+  const memberBtns = document.querySelectorAll(".member-btn");
+  const detailName = document.getElementById("detail-name");
+  const detailRole = document.getElementById("detail-role");
+  const detailDesc = document.getElementById("detail-desc");
+  const detailBadge = document.getElementById("detail-badge");
+  const detailPanel = document.getElementById("member-detail");
+
+  memberBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const el = btn as HTMLElement;
+
+      // 全ボタンのハイライトを解除
+      memberBtns.forEach((b) => {
+        b.classList.remove("bg-emerald-500/10", "ring-2", "ring-emerald-500/50");
+      });
+
+      // クリックされたボタンをハイライト
+      el.classList.add("bg-emerald-500/10", "ring-2", "ring-emerald-500/50");
+
+      // 詳細パネルを更新
+      if (detailName) detailName.textContent = el.dataset.name || "";
+      if (detailRole) detailRole.textContent = el.dataset.role || "";
+      if (detailDesc) detailDesc.textContent = el.dataset.desc || "";
+
+      // 代表バッジの表示切り替え
+      if (detailBadge) {
+        detailBadge.style.display = el.dataset.representative === "true" ? "" : "none";
+      }
+
+      // フェードアニメーション
+      if (detailPanel) {
+        detailPanel.style.opacity = "0";
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            detailPanel.style.opacity = "1";
+          });
+        });
+      }
+    });
+  });
+
+  // FAQアコーディオン開閉トラッキング
+  document.querySelectorAll("details").forEach((detail) => {
+    detail.addEventListener("toggle", () => {
+      if ((detail as HTMLDetailsElement).open) {
+        const summary = detail.querySelector("summary");
+        const questionText = summary?.textContent?.trim() || "";
+        trackEvent("faq_expand", { faq_question: questionText });
+      }
+    });
+  });
+</script>
