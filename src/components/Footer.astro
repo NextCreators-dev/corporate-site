@@ -21,19 +21,19 @@ const { hideCta = false } = Astro.props;
         <div class="flex flex-wrap justify-center gap-4">
           <a
             href="https://nologic.app"
-            class="inline-flex items-center px-9 py-4 bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-[15px] rounded-[10px] transition-colors"
+            class="inline-flex items-center justify-center px-9 py-4 bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-[15px] rounded-[10px] transition-colors min-w-[220px]"
           >
             ゲームを作ってみる
           </a>
           <a
             href="https://discord.gg/3hy2UNmXca"
-            class="inline-flex items-center px-9 py-4 bg-white/10 hover:bg-white/20 text-emerald-500 font-semibold text-[15px] rounded-[10px] border border-emerald-500/40 transition-colors"
+            class="inline-flex items-center justify-center px-9 py-4 bg-white/10 hover:bg-white/20 text-emerald-500 font-semibold text-[15px] rounded-[10px] border border-emerald-500/40 transition-colors min-w-[220px]"
           >
             コミュニティに参加
           </a>
           <a
             href="/techplantstudio#contact"
-            class="inline-flex items-center px-9 py-4 bg-white/10 hover:bg-white/20 text-white font-semibold text-[15px] rounded-[10px] border border-white/20 transition-colors"
+            class="inline-flex items-center justify-center px-9 py-4 bg-white/10 hover:bg-white/20 text-white font-semibold text-[15px] rounded-[10px] border border-white/20 transition-colors min-w-[220px]"
           >
             制作のご相談
           </a>
@@ -53,7 +53,7 @@ const { hideCta = false } = Astro.props;
         </div>
 
         {/* リンク */}
-        <div class="flex items-center gap-6">
+        <div class="flex flex-col md:flex-row items-center gap-4 md:gap-6">
           <a href="https://nologic.app" class="text-gray-400 hover:text-white text-[13px] transition-colors">NoLogic</a>
           <a href="https://discord.gg/3hy2UNmXca" class="text-gray-400 hover:text-white text-[13px] transition-colors">NextCreators</a>
           <a href="/techplantstudio#contact" class="text-gray-400 hover:text-white text-[13px] transition-colors">お問い合わせ</a>

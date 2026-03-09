@@ -257,7 +257,8 @@ export default function ContactForm() {
           onChange={handleChange}
           rows={5}
           placeholder={"例: 自社サービスのWebアプリを開発したいと考えています。\n要件はまだ固まっていませんが、企画段階からご相談可能でしょうか？"}
-          className={`bg-[#0A0F1C] border rounded-lg px-4 py-3 text-white text-sm placeholder:text-gray-600 focus:outline-none focus:ring-1 transition-colors resize-vertical min-h-[120px] ${
+          style={{ resize: "vertical" }}
+          className={`bg-[#0A0F1C] border rounded-lg px-4 py-3 text-white text-sm placeholder:text-gray-600 focus:outline-none focus:ring-1 transition-colors overflow-y-auto min-h-[120px] ${
             errors.message
               ? "border-red-400 focus:border-red-400 focus:ring-red-400"
               : "border-[#1E293B] focus:border-emerald-500 focus:ring-emerald-500"
