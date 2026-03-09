@@ -183,6 +183,28 @@
 
 ---
 
+## QA指摘対応（2026-03-10）
+
+> 参照: `docs/issues.md`
+
+### QA-1. トップページ＞SERVICES＞「ゲーム制作」カードの緑ボーダー常時表示 🤖 ✅
+
+- [x] `index.astro` SERVICES セクションの「ゲーム制作」カードの `border-emerald-500/20` を他カードと同じ `border-[#1E293B]` に統一
+
+### QA-2. 業務委託ページ＞TRACK RECORD＞ホバー時の緑ボーダー 🤖 ✅
+
+- [x] `TrustSection.astro` 実績カード3枚から `hover:border-emerald-500/40 hover:shadow-lg hover:shadow-emerald-500/5` を削除、ボーダーを `border-[#1E293B]` に統一
+
+### QA-3. 業務委託ページ＞TECH STACK & TOOLS＞ホバー時の緑ボーダー 🤖 ✅
+
+- [x] `techplantstudio.astro` TECH STACK & TOOLS の各ツール名から `hover:border-emerald-500/30 transition-colors` を削除
+
+### QA-4. 業務委託ページ＞相談フォーム＞テキストボックスのリサイズ不可 🤖 ✅
+
+- [x] `ContactForm.tsx` textarea に `style={{ resize: "vertical" }}` をインラインスタイルで明示的に指定、`overflow-y-auto` を追加
+
+---
+
 ## 横断タスク（全Phase共通）
 
 ### 品質確認 🤖
