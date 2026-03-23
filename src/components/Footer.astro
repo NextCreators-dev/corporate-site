@@ -1,4 +1,7 @@
 ---
+import { Image } from "astro:assets";
+import Logo from "@public/logo.png";
+
 interface Props {
   /** CTA表示を省略するか */
   hideCta?: boolean;
@@ -48,7 +51,13 @@ const { hideCta = false } = Astro.props;
       <div class="flex flex-col md:flex-row items-center justify-between gap-6">
         {/* ロゴ */}
         <div class="flex items-center gap-2.5">
-          <div class="w-7 h-7 bg-emerald-500 rounded-md"></div>
+          <Image
+            src={Logo}
+            alt="クリエイターのうえきばち"
+            width={200}
+            height={50}
+            class="w-auto h-7"
+          />
           <span class="text-white text-sm font-semibold">クリエイターのうえきばち</span>
         </div>
 
