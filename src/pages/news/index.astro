@@ -54,7 +54,7 @@ const categories = [...new Set(newsItems.map((item) => item.category))];
                 data-category={item.category}
                 class="news-item flex flex-col md:flex-row md:items-center gap-3 md:gap-6 py-5 border-b border-[#1E293B] hover:bg-white/[0.02] transition-colors -mx-4 px-4 rounded"
               >
-                <span class="text-gray-500 text-[13px] font-medium shrink-0">{item.date}</span>
+                <span class="text-gray-500 text-[13px] font-medium shrink-0 tabular-nums">{item.date}</span>
                 <span class="inline-flex items-center justify-center w-[4.5rem] py-1 bg-emerald-500/10 text-emerald-500 text-[11px] font-semibold rounded border border-emerald-500/20 shrink-0">
                   {item.category}
                 </span>
