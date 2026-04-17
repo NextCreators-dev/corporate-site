@@ -7,6 +7,13 @@ import {
 
 type FormErrors = Partial<Record<string, string>>;
 
+function getSubmissionErrorMessage() {
+  if (import.meta.env.DEV) {
+    return "ローカル確認時は `netlify dev` で Functions を起動してください。";
+  }
+  return "送信に失敗しました。時間をおいて再度お試しください。";
+}
+
 export default function ContactForm() {
   const [formData, setFormData] = useState({
     name: "",
@@ -15,42 +22,44 @@ export default function ContactForm() {
     message: "",
     company: "",
     budget: "",
-    website: "", // ハニーポット
+    website: "",
   });
   const [errors, setErrors] = useState<FormErrors>({});
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [serverError, setServerError] = useState("");
+
+  const clearFieldError = (field: string) => {
+    setErrors((prev) => {
+      if (!prev[field]) return prev;
+      const next = { ...prev };
+      delete next[field];
+      return next;
+    });
+  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    // 入力時にそのフィールドのエラーをクリア
-    if (errors[name]) {
-      setErrors((prev) => {
-        const next = { ...prev };
-        delete next[name];
-        return next;
-      });
+    clearFieldError(name);
+    if (serverError) {
+      setServerError("");
     }
   };
 
   const handleCategorySelect = (value: string) => {
     setFormData((prev) => ({ ...prev, category: value }));
-    if (errors.category) {
-      setErrors((prev) => {
-        const next = { ...prev };
-        delete next.category;
-        return next;
-      });
+    clearFieldError("category");
+    if (serverError) {
+      setServerError("");
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setServerError("");
 
-    // クライアント側バリデーション
     const result = contactSchema.safeParse(formData);
     if (!result.success) {
       const newErrors: FormErrors = {};
@@ -66,33 +75,34 @@ export default function ContactForm() {
 
     setStatus("submitting");
     setErrors({});
-    setServerError("");
 
     try {
-      const res = await fetch("/api/contact", {
+      const res = await fetch("/.netlify/functions/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(result.data),
       });
 
       const data = await res.json();
 
       if (data.success) {
         setStatus("success");
-      } else if (data.errors) {
+        return;
+      }
+
+      if (data.errors) {
         setErrors(data.errors);
         setStatus("idle");
       } else {
-        setServerError(data.error || "送信に失敗しました。");
+        setServerError(data.error || getSubmissionErrorMessage());
         setStatus("error");
       }
     } catch {
-      setServerError("通信エラーが発生しました。時間をおいて再度お試しください。");
+      setServerError(getSubmissionErrorMessage());
       setStatus("error");
     }
   };
 
-  // サンクス表示
   if (status === "success") {
     return (
       <div className="w-full bg-[#111827] p-8 md:p-12 rounded-2xl text-center">
@@ -117,9 +127,9 @@ export default function ContactForm() {
             お問い合わせありがとうございます
           </h3>
           <p className="text-gray-300 text-sm leading-relaxed max-w-md">
-            ご入力いただいたメールアドレスに確認メールをお送りしました。
+            お問い合わせを受け付けました。
             <br />
-            担当者より1営業日以内にご連絡いたします。
+            担当者より3営業日以内にご連絡いたします。
           </p>
         </div>
       </div>
@@ -349,7 +359,7 @@ export default function ContactForm() {
       </button>
 
       <p className="text-gray-500 text-xs text-center">
-        60秒で送信完了 · 強引な営業は一切しません · 通常1営業日以内にご返信
+        60秒で送信完了 · 強引な営業は一切しません · 通常3営業日以内にご返信
       </p>
     </form>
   );

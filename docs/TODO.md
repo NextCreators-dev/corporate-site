@@ -161,12 +161,28 @@
 - [x] 🤖 `faq_expand` イベント実装（`<details>` の `toggle` イベント監視）
 - [ ] 👤 GA4 Enhanced Measurement でスクロール深度計測を有効化
 
-### 3-3. 自前お問い合わせフォーム 🤖 + 👤
+### 3-3. お問い合わせフォーム（Netlify Functions + Netlify DB） 🤖 + 👤
 
-- [ ] 👤 フォーム要件の決定（項目数、バリデーション、通知先）
-- [ ] 🤖 サイト内埋め込みフォームの実装
-- [ ] 🤖 サンクスページの作成
-- [ ] 🤖 Google Forms リンクからの切り替え
+> 参照: `docs/netlify-contact-form-plan.md`
+
+- [x] 👤 フォーム要件の決定（項目数、バリデーション、通知先）
+- [x] 🤖 サイト内埋め込みフォーム UI の実装
+- [x] 🤖 同一ページ内サンクス表示の実装（独立サンクスページは未採用）
+- [新たx] 🤖 `techplantstudio` ページの Google Forms 導線をサイト内フォームに切り替え
+- [x] 🤖 成功メッセージと実際の通知結果の整合見直し
+- [x] 🤖 Netlify Forms への暫定切り替え（退避用）
+- [x] 🤖 Cloudflare Turnstile / D1 前提の実装を撤去または無効化
+- [ ] 👤 Netlify DB の作成・claim・接続確認
+- [ ] 👤 Functions 用環境変数の設定（Resend / Slack / DB 接続情報）
+- [x] 🤖 `netlify/functions/contact.ts` の新規実装
+- [x] 🤖 問い合わせ保存用のスキーマ定義追加（contacts テーブル）
+- [x] 🤖 Function 内のバリデーション・保存・エラーハンドリング実装
+- [x] 🤖 自動返信メール送信を Netlify Functions 経由で実装
+- [x] 🤖 管理者通知メール送信を Netlify Functions 経由で実装
+- [x] 🤖 Slack 通知の実装または切り替え要否の整理
+- [x] 🤖 `ContactForm.tsx` の送信先を `/.netlify/functions/contact` に変更
+- [x] 🤖 Netlify Forms 用の hidden form / 属性を撤去
+- [ ] 👤 本番相当環境での疎通確認（送信、DB 保存、自動返信、管理者通知）
 
 ### 3-4. テスティモニアル掲載 👤
 
@@ -211,7 +227,7 @@
 
 - [ ] モバイル（375px幅）での表示確認
 - [ ] デスクトップ（1280px幅）での表示確認
-- [ ] `yarn build` がエラーなく完了すること
+- [x] `npm run build` がエラーなく完了すること
 - [ ] Lighthouse Performance スコア90以上を維持
 - [ ] 主要ブラウザ（Chrome, Safari, Firefox）での表示確認
 
