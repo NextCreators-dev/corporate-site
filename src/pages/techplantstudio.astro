@@ -426,15 +426,12 @@ const flowSteps = [
 
     <!-- 8. お問い合わせセクション -->
     <section id="contact" class="bg-[#0F172A] py-20 px-5 md:px-[120px]" data-section="cta_bottom">
-      <div class="max-w-2xl mx-auto flex flex-col items-center gap-8">
-        <div class="text-center flex flex-col gap-4">
-          <h2 class="text-[24px] md:text-[32px] font-extrabold">まずはお気軽にご相談ください</h2>
-          <p class="text-gray-300 text-base leading-relaxed">
-            「こんなこと頼めるかな？」でも大丈夫。<br />
-            ご予算・納期・ご要望に合わせて最適なプランをご提案いたします。
-          </p>
-        </div>
-        <ContactForm client:load />
+      <div class="max-w-2xl mx-auto">
+        <ContactForm
+          client:load
+          heading="まずはお気軽にご相談ください"
+          description={"「こんなこと頼めるかな？」でも大丈夫。\nご予算・納期・ご要望に合わせて最適なプランをご提案いたします。"}
+        />
       </div>
     </section>
 

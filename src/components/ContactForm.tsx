@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import {
   CONTACT_CATEGORIES,
   BUDGET_OPTIONS,
@@ -7,6 +7,13 @@ import {
 
 type FormErrors = Partial<Record<string, string>>;
 
+interface ContactFormProps {
+  // セクション見出し（送信前のみ表示）
+  heading?: string;
+  // セクション説明文（送信前のみ表示。改行文字 \n は <br /> に変換される）
+  description?: string;
+}
+
 function getSubmissionErrorMessage() {
   if (import.meta.env.DEV) {
     return "ローカル確認時は `netlify dev` で Functions を起動してください。";
@@ -14,7 +21,18 @@ function getSubmissionErrorMessage() {
   return "送信に失敗しました。時間をおいて再度お試しください。";
 }
 
-export default function ContactForm() {
+// 改行文字を <br /> に変換して描画
+function renderMultiline(text: string) {
+  const lines = text.split("\n");
+  return lines.map((line, i) => (
+    <Fragment key={i}>
+      {line}
+      {i < lines.length - 1 && <br />}
+    </Fragment>
+  ));
+}
+
+export default function ContactForm({ heading, description }: ContactFormProps = {}) {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -130,6 +148,8 @@ export default function ContactForm() {
             お問い合わせを受け付けました。
             <br />
             担当者より3営業日以内にご連絡いたします。
+            <br />
+            今しばらくお待ちくださいませ。
           </p>
         </div>
       </div>
@@ -137,11 +157,26 @@ export default function ContactForm() {
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="w-full bg-[#111827] p-6 md:p-8 rounded-2xl flex flex-col gap-6"
-      noValidate
-    >
+    <div className="w-full flex flex-col items-center gap-8">
+      {(heading || description) && (
+        <div className="text-center flex flex-col gap-4">
+          {heading && (
+            <h2 className="text-[24px] md:text-[32px] font-extrabold">
+              {heading}
+            </h2>
+          )}
+          {description && (
+            <p className="text-gray-300 text-base leading-relaxed">
+              {renderMultiline(description)}
+            </p>
+          )}
+        </div>
+      )}
+      <form
+        onSubmit={handleSubmit}
+        className="w-full bg-[#111827] p-6 md:p-8 rounded-2xl flex flex-col gap-6"
+        noValidate
+      >
       {/* お名前（必須） */}
       <div className="flex flex-col gap-2">
         <label htmlFor="name" className="text-sm font-medium text-gray-300">
@@ -361,6 +396,7 @@ export default function ContactForm() {
       <p className="text-gray-500 text-xs text-center">
         60秒で送信完了 · 強引な営業は一切しません · 通常3営業日以内にご返信
       </p>
-    </form>
+      </form>
+    </div>
   );
 }
