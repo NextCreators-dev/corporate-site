@@ -4,6 +4,7 @@ import {
   BUDGET_OPTIONS,
   contactSchema,
 } from "../lib/validation";
+import { trackEvent } from "../lib/gtag";
 
 type FormErrors = Partial<Record<string, string>>;
 
@@ -88,6 +89,10 @@ export default function ContactForm({ heading, description }: ContactFormProps =
         }
       }
       setErrors(newErrors);
+      trackEvent("form_error", {
+        form_name: "contact",
+        reason: "client_validation",
+      });
       return;
     }
 
@@ -105,19 +110,41 @@ export default function ContactForm({ heading, description }: ContactFormProps =
 
       if (data.success) {
         setStatus("success");
+        // リード獲得を GA4 に通知。category / budget はユーザーセグメント分析用
+        trackEvent("generate_lead", {
+          form_name: "contact",
+          category: result.data.category,
+          budget: result.data.budget || "unspecified",
+        });
+        trackEvent("form_submit", {
+          form_name: "contact",
+          category: result.data.category,
+        });
         return;
       }
 
       if (data.errors) {
         setErrors(data.errors);
         setStatus("idle");
+        trackEvent("form_error", {
+          form_name: "contact",
+          reason: "server_validation",
+        });
       } else {
         setServerError(data.error || getSubmissionErrorMessage());
         setStatus("error");
+        trackEvent("form_error", {
+          form_name: "contact",
+          reason: "server_error",
+        });
       }
     } catch {
       setServerError(getSubmissionErrorMessage());
       setStatus("error");
+      trackEvent("form_error", {
+        form_name: "contact",
+        reason: "network",
+      });
     }
   };
 
