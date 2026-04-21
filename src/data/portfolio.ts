@@ -28,43 +28,31 @@ export interface PortfolioItem {
 
 export const portfolioItems: PortfolioItem[] = [
   {
-    title: "NoLogic",
-    category: "product",
-    categoryLabel: "自社プロダクト",
-    status: "beta",
-    statusLabel: "β版運用中",
-    description:
-      "ノーコードゲーム制作プラットフォーム。イラスト1枚からオリジナルゲームを生成。IPA未踏IT人材発掘・育成事業採択プロジェクト。",
-    techStack: ["TypeScript", "React", "Node.js", "WebSocket"],
-    image: "/portfolio/nologic.png",
-    url: "https://nologic.app",
-    metrics: ["ゲーム投稿 200件超", "サービス来訪者 400名超"],
-    featured: true,
-  },
-  {
-    title: "コーポレートサイト",
-    category: "product",
-    categoryLabel: "自社プロダクト",
+    title: "Comoreviアプリ・LP実装",
+    category: "client",
+    categoryLabel: "クライアントワーク",
     status: "released",
     statusLabel: "運用中",
     description:
-      "株式会社クリエイターのうえきばちのコーポレートサイト。ダークテーマのモダンなデザインとパフォーマンスを両立。",
-    techStack: ["Astro", "Tailwind CSS", "TypeScript"],
-    image: "/portfolio/corporate-site.png",
-    url: "https://creatorpot.net",
+      "児童発達支援・放課後等デイサービスの記録・勤怠・請求をクラウドで一元管理するアプリ。株式会社コモングランズと共同開発。",
+    techStack: ["React", "TypeScript", "Next.js"],
+    url: "https://comorevi.net/",
   },
-
-  // クライアントワークの追加例:
-  // {
-  //   title: "案件名",
-  //   category: "client",
-  //   categoryLabel: "クライアントワーク",
-  //   status: "released",
-  //   statusLabel: "納品済み",
-  //   description: "案件の概要を2-3行で記載",
-  //   techStack: ["使用技術1", "使用技術2"],
-  //   image: "/portfolio/project-name.png",
-  //   url: "https://example.com",
-  //   metrics: ["成果指標"],
-  // },
+  {
+    title: "STARTUP OASIS 1周年記念イベント出展",
+    category: "community",
+    categoryLabel: "イベント出展",
+    description:
+      "渋谷のコワーキングスペース「SHIBUYA STARTUP OASIS」の1周年記念イベントに出展。テンプレート基盤を使用したオリジナルゲームを開発しました。",
+    techStack: ["NoLogic", "TypeScript"],
+  },
+  {
+    title: "KOSEN GAME JAM 共同運営",
+    category: "community",
+    categoryLabel: "共同運営",
+    description:
+      "株式会社高専キャリア研究所、クリエイピア株式会社、株式会社クリエイターのうえきばちの3社で、オンラインのゲーム開発ハッカソンを開催しました。",
+    techStack: ["イベント運営", "ゲーム開発支援"],
+    url: "https://kosen-career.tech/event/kosengamejam",
+  },
 ];
