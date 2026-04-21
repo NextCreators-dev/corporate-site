@@ -1,5 +1,8 @@
 ---
 import { SEO } from "astro-seo";
+
+// Google Search Console 認証コード（Netlify等の環境変数で設定）
+const gscVerification = import.meta.env.PUBLIC_GSC_VERIFICATION;
 ---
 
 <SEO
@@ -23,6 +26,11 @@ import { SEO } from "astro-seo";
                 rel: "icon",
                 href: "/favicon.ico",
             },
+        ],
+        meta: [
+            ...(gscVerification
+                ? [{ name: "google-site-verification", content: gscVerification }]
+                : []),
         ],
     }}
 />
