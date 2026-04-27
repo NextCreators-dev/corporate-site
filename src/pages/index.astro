@@ -14,35 +14,79 @@ import { newsItems } from "../data/news";
     <Navigation />
 
     <!-- Hero Section -->
-    <section class="relative min-h-screen overflow-hidden bg-[#020B16] pt-24 pb-8 md:pt-28">
-      <div class="absolute inset-0 bg-[linear-gradient(116deg,#020713_0%,#071626_48%,#020914_100%)]"></div>
-      <div class="hero-drift absolute -inset-x-[20%] inset-y-0 bg-[radial-gradient(circle_at_16%_12%,rgba(54,96,154,0.16),transparent_30%)]"></div>
+    <section
+      class="relative min-h-screen overflow-hidden bg-[#020B16] pt-24 pb-8 md:pt-28"
+    >
+      <div
+        class="absolute inset-0 bg-[linear-gradient(116deg,#020713_0%,#071626_48%,#020914_100%)]"
+      >
+      </div>
+      <div
+        class="hero-drift absolute -inset-x-[20%] inset-y-0 bg-[radial-gradient(circle_at_16%_12%,rgba(54,96,154,0.16),transparent_30%)]"
+      >
+      </div>
 
-      <div class="relative z-10 mx-auto flex min-h-[calc(100vh-7rem)] max-w-[1140px] flex-col justify-between px-5 md:px-0">
-        <div class="grid flex-1 items-center gap-8 lg:grid-cols-[640px_minmax(420px,1fr)]">
+      <div
+        class="relative z-10 mx-auto flex min-h-[calc(100vh-7rem)] max-w-[1140px] flex-col justify-between px-5 md:px-0"
+      >
+        <div
+          class="grid flex-1 items-center gap-8 lg:grid-cols-[640px_minmax(420px,1fr)]"
+        >
           <div class="max-w-[900px] pt-8 md:pt-12 lg:pt-10">
-            <h1 class="hero-mincho text-[34px] font-extrabold leading-[1.52] tracking-[0.08em] text-white drop-shadow-[0_6px_18px_rgba(255,255,255,0.14)] md:text-[52px] lg:text-[64px]" data-anim-stagger="25">
-              {['誰もが', '創作に挑戦できる', '世界の実現'].map((line) => (
-                <span class="block whitespace-nowrap">
-                  {Array.from(line).map((ch) => (
-                    <span class="anim-char" data-char={ch}>{ch}</span>
-                  ))}
-                </span>
-              ))}
+            <h1
+              class="hero-mincho text-[34px] font-extrabold leading-[1.52] tracking-[0.08em] text-white drop-shadow-[0_6px_18px_rgba(255,255,255,0.14)] md:text-[52px] lg:text-[64px]"
+              data-anim-stagger="25"
+            >
+              {
+                ["誰もが", "創作に挑戦できる", "世界の実現"].map((line) => (
+                  <span class="block whitespace-nowrap">
+                    {Array.from(line).map((ch) => (
+                      <span class="anim-char" data-char={ch}>
+                        {ch}
+                      </span>
+                    ))}
+                  </span>
+                ))
+              }
             </h1>
-            <p class="mt-7 max-w-[590px] text-[14px] font-bold leading-[2.05] tracking-[0.13em] text-white/[0.9] md:text-[15px]" data-anim-stagger="10">
-              {Array.from('テクノロジーの力で、つくることのハードルを下げ、').map((ch) => (
-                <span class="anim-char" data-char={ch}>{ch}</span>
-              ))}<br class="hidden md:block" />
-              {Array.from('アイデアをカタチにする喜びをすべての人に。').map((ch) => (
-                <span class="anim-char" data-char={ch}>{ch}</span>
-              ))}<br />
-              {Array.from('わたしたちは、創作の可能性をひらき、').map((ch) => (
-                <span class="anim-char" data-char={ch}>{ch}</span>
-              ))}<br class="hidden md:block" />
-              {Array.from('クリエイターとともに未来を育てていきます。').map((ch) => (
-                <span class="anim-char" data-char={ch}>{ch}</span>
-              ))}
+            <p
+              class="mt-7 max-w-[590px] text-[14px] font-bold leading-[2.05] tracking-[0.13em] text-white/[0.9] md:text-[15px]"
+              data-anim-stagger="10"
+            >
+              {
+                Array.from(
+                  "テクノロジーの力で、つくることのハードルを下げ、",
+                ).map((ch) => (
+                  <span class="anim-char" data-char={ch}>
+                    {ch}
+                  </span>
+                ))
+              }<br class="hidden md:block" />
+              {
+                Array.from("アイデアをカタチにする喜びをすべての人に。").map(
+                  (ch) => (
+                    <span class="anim-char" data-char={ch}>
+                      {ch}
+                    </span>
+                  ),
+                )
+              }<br />
+              {
+                Array.from("わたしたちは、創作の可能性をひらき、").map((ch) => (
+                  <span class="anim-char" data-char={ch}>
+                    {ch}
+                  </span>
+                ))
+              }<br class="hidden md:block" />
+              {
+                Array.from(
+                  "誰もがクリエイターになれる世界を実現していきます。",
+                ).map((ch) => (
+                  <span class="anim-char" data-char={ch}>
+                    {ch}
+                  </span>
+                ))
+              }
             </p>
             <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
               <a
@@ -50,19 +94,45 @@ import { newsItems } from "../data/news";
                 class="inline-flex min-w-[220px] items-center justify-center gap-5 rounded-full border border-emerald-400 px-7 py-3.5 text-[15px] font-bold text-emerald-300 transition-colors hover:bg-emerald-400 hover:text-[#052016]"
               >
                 私たちについて
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  ><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"
+                  ></path></svg
+                >
               </a>
               <a
                 href="/essay"
                 class="inline-flex min-w-[240px] items-center justify-center gap-5 rounded-full border border-white/25 bg-white/[0.08] px-7 py-3.5 text-[15px] font-bold text-white transition-colors hover:border-white/50 hover:bg-white/20"
               >
                 クリエイターの皆様へ
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  ><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"
+                  ></path></svg
+                >
               </a>
             </div>
           </div>
 
-          <div class="relative mx-auto flex h-[330px] w-full max-w-[420px] items-center justify-center md:h-[440px] md:max-w-[500px] lg:-mr-10 lg:-mt-10 lg:h-[540px] lg:max-w-none">
+          <div
+            class="relative mx-auto flex h-[330px] w-full max-w-[420px] items-center justify-center md:h-[440px] md:max-w-[500px] lg:-mr-10 lg:-mt-10 lg:h-[540px] lg:max-w-none"
+          >
             <img
               src="/hero-pic.png"
               alt=""
@@ -73,66 +143,183 @@ import { newsItems } from "../data/news";
         </div>
 
         <div class="grid gap-4 pb-7 md:grid-cols-3 md:gap-4">
-          <div class="flex min-h-[120px] items-center gap-5 rounded-[10px] border border-white/[0.13] bg-white/[0.055] px-5 py-4 shadow-[0_24px_80px_rgba(0,0,0,0.32)] backdrop-blur-xl">
-            <span class="flex h-[72px] w-[72px] flex-shrink-0 items-center justify-center rounded-[4px] bg-[#06111F] text-emerald-400 shadow-inner shadow-white/5">
-              <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><path d="m21 16-9 5-9-5V8l9-5 9 5Z"/><path d="m3.3 7.7 8.7 4.8 8.7-4.8"/><path d="M12 22V12"/></svg>
+          <div
+            class="flex min-h-[120px] items-center gap-5 rounded-[10px] border border-white/[0.13] bg-white/[0.055] px-5 py-4 shadow-[0_24px_80px_rgba(0,0,0,0.32)] backdrop-blur-xl"
+          >
+            <span
+              class="flex h-[72px] w-[72px] flex-shrink-0 items-center justify-center rounded-[4px] bg-[#06111F] text-emerald-400 shadow-inner shadow-white/5"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="34"
+                height="34"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.65"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                ><path d="m21 16-9 5-9-5V8l9-5 9 5Z"></path><path
+                  d="m3.3 7.7 8.7 4.8 8.7-4.8"></path><path d="M12 22V12"
+                ></path></svg
+              >
             </span>
             <span>
-              <span class="block text-[13px] font-black leading-relaxed tracking-[0.04em] text-white">ノーコードゲーム制作プラットフォームの開発</span>
-              <span class="mt-2 block text-[11px] font-bold leading-[1.9] text-white/[0.68]">誰でも直感的にゲームをつくれる<br class="hidden xl:block" />ノーコードツールを開発・提供しています。</span>
+              <span
+                class="block text-[13px] font-black leading-relaxed tracking-[0.04em] text-white"
+                >ノーコードゲーム制作プラットフォームの開発</span
+              >
+              <span
+                class="mt-2 block text-[11px] font-bold leading-[1.9] text-white/[0.68]"
+                >誰でも直感的にゲームをつくれる<br
+                  class="hidden xl:block"
+                />ノーコードツールを開発・提供しています。</span
+              >
             </span>
           </div>
-          <div class="flex min-h-[120px] items-center gap-5 rounded-[10px] border border-white/[0.13] bg-white/[0.055] px-5 py-4 shadow-[0_24px_80px_rgba(0,0,0,0.32)] backdrop-blur-xl">
-            <span class="flex h-[72px] w-[72px] flex-shrink-0 items-center justify-center rounded-[4px] bg-[#06111F] text-emerald-400 shadow-inner shadow-white/5">
-              <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <div
+            class="flex min-h-[120px] items-center gap-5 rounded-[10px] border border-white/[0.13] bg-white/[0.055] px-5 py-4 shadow-[0_24px_80px_rgba(0,0,0,0.32)] backdrop-blur-xl"
+          >
+            <span
+              class="flex h-[72px] w-[72px] flex-shrink-0 items-center justify-center rounded-[4px] bg-[#06111F] text-emerald-400 shadow-inner shadow-white/5"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="34"
+                height="34"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.65"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                ><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"
+                ></path><circle cx="9" cy="7" r="4"></circle><path
+                  d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path
+                  d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg
+              >
             </span>
             <span>
-              <span class="block text-[13px] font-black leading-relaxed tracking-[0.04em] text-white">クリエイターコミュニティの運営</span>
-              <span class="mt-2 block text-[11px] font-bold leading-[1.9] text-white/[0.68]">つくる人同士がつながり、学び合い、<br class="hidden xl:block" />一緒に成長できる場をつくっています。</span>
+              <span
+                class="block text-[13px] font-black leading-relaxed tracking-[0.04em] text-white"
+                >クリエイターコミュニティの運営</span
+              >
+              <span
+                class="mt-2 block text-[11px] font-bold leading-[1.9] text-white/[0.68]"
+                >つくる人同士がつながり、学び合い、<br
+                  class="hidden xl:block"
+                />一緒に成長できる場をつくっています。</span
+              >
             </span>
           </div>
-          <div class="flex min-h-[120px] items-center gap-5 rounded-[10px] border border-white/[0.13] bg-white/[0.055] px-5 py-4 shadow-[0_24px_80px_rgba(0,0,0,0.32)] backdrop-blur-xl">
-            <span class="flex h-[72px] w-[72px] flex-shrink-0 items-center justify-center rounded-[4px] bg-[#06111F] text-emerald-400 shadow-inner shadow-white/5">
-              <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/></svg>
+          <div
+            class="flex min-h-[120px] items-center gap-5 rounded-[10px] border border-white/[0.13] bg-white/[0.055] px-5 py-4 shadow-[0_24px_80px_rgba(0,0,0,0.32)] backdrop-blur-xl"
+          >
+            <span
+              class="flex h-[72px] w-[72px] flex-shrink-0 items-center justify-center rounded-[4px] bg-[#06111F] text-emerald-400 shadow-inner shadow-white/5"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="34"
+                height="34"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.65"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                ><path d="m16 18 6-6-6-6"></path><path d="m8 6-6 6 6 6"
+                ></path></svg
+              >
             </span>
             <span>
-              <span class="block text-[13px] font-black leading-relaxed tracking-[0.04em] text-white">受託開発</span>
-              <span class="mt-2 block text-[11px] font-bold leading-[1.9] text-white/[0.68]">企画・設計から開発・運用まで、<br class="hidden xl:block" />お客様の課題解決を技術で支援します。</span>
+              <span
+                class="block text-[13px] font-black leading-relaxed tracking-[0.04em] text-white"
+                >受託開発</span
+              >
+              <span
+                class="mt-2 block text-[11px] font-bold leading-[1.9] text-white/[0.68]"
+                >企画・設計から開発・運用まで、<br
+                  class="hidden xl:block"
+                />お客様の課題解決を技術で支援します。</span
+              >
             </span>
           </div>
         </div>
       </div>
 
-      <div class="absolute bottom-12 right-8 hidden flex-col items-center gap-4 text-emerald-400 xl:flex">
-        <span class="[writing-mode:vertical-rl] text-[11px] font-black tracking-[0.28em]">SCROLL</span>
+      <div
+        class="absolute bottom-12 right-8 hidden flex-col items-center gap-4 text-emerald-400 xl:flex"
+      >
+        <span
+          class="[writing-mode:vertical-rl] text-[11px] font-black tracking-[0.28em]"
+          >SCROLL</span
+        >
         <span class="h-11 w-px bg-emerald-400"></span>
       </div>
     </section>
 
     <!-- News Section -->
-    <section class="bg-[#111827] border-y border-[#1E293B] py-12 px-5 md:px-[120px]">
+    <section
+      class="bg-[#111827] border-y border-[#1E293B] py-12 px-5 md:px-[120px]"
+    >
       <div class="max-w-7xl mx-auto flex flex-col gap-6">
         <div class="flex flex-col items-center gap-4">
-          <div class="inline-flex items-center gap-1.5 bg-emerald-500 text-white text-xs font-bold px-4 py-1.5 rounded-full tracking-wider">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 13v-2z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+          <div
+            class="inline-flex items-center gap-1.5 bg-emerald-500 text-white text-xs font-bold px-4 py-1.5 rounded-full tracking-wider"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              ><path d="m3 11 18-5v12L3 13v-2z"></path><path
+                d="M11.6 16.8a3 3 0 1 1-5.8-1.6"></path></svg
+            >
             NEWS
           </div>
-          <a href="/news" class="flex items-center gap-1.5 text-emerald-500 text-[13px] font-medium hover:underline">
+          <a
+            href="/news"
+            class="flex items-center gap-1.5 text-emerald-500 text-[13px] font-medium hover:underline"
+          >
             一覧を見る
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg
+            >
           </a>
         </div>
         <div class="flex flex-col">
-          {newsItems.slice(0, 3).map((item, i) => (
-            <a
-              href={`/news/${item.slug}`}
-              class={`flex flex-col md:flex-row md:items-center gap-3 md:gap-6 py-5 hover:bg-white/[0.02] transition-colors -mx-4 px-4 rounded ${i < newsItems.slice(0, 3).length - 1 ? 'border-b border-[#1E293B]' : ''}`}
-            >
-              <span class="text-gray-500 text-[13px] font-medium">{item.date}</span>
-              <span class="inline-flex w-fit items-center px-3 py-1 bg-emerald-500/10 text-emerald-500 text-[11px] font-semibold rounded border border-emerald-500/20">{item.category}</span>
-              <span class="text-white text-[15px] font-medium">{item.title}</span>
-            </a>
-          ))}
+          {
+            newsItems.slice(0, 3).map((item, i) => (
+              <a
+                href={`/news/${item.slug}`}
+                class={`flex flex-col md:flex-row md:items-center gap-3 md:gap-6 py-5 hover:bg-white/[0.02] transition-colors -mx-4 px-4 rounded ${i < newsItems.slice(0, 3).length - 1 ? "border-b border-[#1E293B]" : ""}`}
+              >
+                <span class="text-gray-500 text-[13px] font-medium">
+                  {item.date}
+                </span>
+                <span class="inline-flex w-fit items-center px-3 py-1 bg-emerald-500/10 text-emerald-500 text-[11px] font-semibold rounded border border-emerald-500/20">
+                  {item.category}
+                </span>
+                <span class="text-white text-[15px] font-medium">
+                  {item.title}
+                </span>
+              </a>
+            ))
+          }
         </div>
       </div>
     </section>
@@ -140,23 +327,34 @@ import { newsItems } from "../data/news";
     <!-- Metrics Section -->
     <section class="bg-[#111827] py-[60px] px-5 md:px-[120px]">
       <div class="max-w-7xl mx-auto flex flex-col items-center gap-10">
-        <div class="inline-flex items-center px-5 py-2 bg-emerald-500/15 text-emerald-500 text-xs font-bold rounded-full border border-emerald-500/25 tracking-[2px]">
+        <div
+          class="inline-flex items-center px-5 py-2 bg-emerald-500/15 text-emerald-500 text-xs font-bold rounded-full border border-emerald-500/25 tracking-[2px]"
+        >
           TRACK RECORD
         </div>
-        <div class="flex flex-col md:flex-row items-center justify-center w-full gap-8 md:gap-0">
+        <div
+          class="flex flex-col md:flex-row items-center justify-center w-full gap-8 md:gap-0"
+        >
           <div class="flex flex-1 flex-col items-center gap-2">
             <span class="text-emerald-500 text-5xl font-black">200+</span>
-            <span class="text-gray-400 text-[15px] font-medium">オリジナルゲームが誕生</span>
+            <span class="text-gray-400 text-[15px] font-medium"
+              >オリジナルゲームが誕生</span
+            >
           </div>
-          <div class="hidden md:block w-px h-[60px] bg-[#1E293B] flex-shrink-0"></div>
+          <div class="hidden md:block w-px h-[60px] bg-[#1E293B] flex-shrink-0">
+          </div>
           <div class="flex flex-1 flex-col items-center gap-2">
             <span class="text-emerald-500 text-5xl font-black">100+</span>
-            <span class="text-gray-400 text-[15px] font-medium">クリエイターが参加中</span>
+            <span class="text-gray-400 text-[15px] font-medium"
+              >クリエイターが参加中</span
+            >
           </div>
-          <div class="hidden md:block w-px h-[60px] bg-[#1E293B] flex-shrink-0"></div>
+          <div class="hidden md:block w-px h-[60px] bg-[#1E293B] flex-shrink-0">
+          </div>
           <div class="flex flex-1 flex-col items-center gap-2">
             <span class="text-emerald-500 text-5xl font-black">5</span>
-            <span class="text-gray-400 text-[15px] font-medium">連携企業数</span>
+            <span class="text-gray-400 text-[15px] font-medium">連携企業数</span
+            >
           </div>
         </div>
       </div>
@@ -166,47 +364,165 @@ import { newsItems } from "../data/news";
     <section id="product" class="bg-[#0A0F1C] py-[100px] px-5 md:px-[120px]">
       <div class="max-w-7xl mx-auto flex flex-col items-center gap-[60px]">
         {/* エッセイへのリンクボタン */}
-        <a href="/essay" class="inline-flex items-center gap-2 px-7 py-3 bg-white/10 hover:bg-white/15 text-white font-semibold text-sm rounded-full border border-white/20 transition-colors">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.838a.5.5 0 0 1-.62-.62l.838-2.872a2 2 0 0 1 .506-.854z"/></svg>
+        <a
+          href="/essay"
+          class="inline-flex items-center gap-2 px-7 py-3 bg-white/10 hover:bg-white/15 text-white font-semibold text-sm rounded-full border border-white/20 transition-colors"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><path d="M12 20h9"></path><path
+              d="M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.838a.5.5 0 0 1-.62-.62l.838-2.872a2 2 0 0 1 .506-.854z"
+            ></path></svg
+          >
           クリエイターに向けたメッセージ
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="text-gray-400"
+            ><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg
+          >
         </a>
 
         {/* バッジ */}
-        <div class="inline-flex items-center px-5 py-2 bg-emerald-500/15 text-emerald-500 text-xs font-bold rounded-full border border-emerald-500/25 tracking-[2px]">
+        <div
+          class="inline-flex items-center px-5 py-2 bg-emerald-500/15 text-emerald-500 text-xs font-bold rounded-full border border-emerald-500/25 tracking-[2px]"
+        >
           PRODUCT
         </div>
 
-        <h2 class="text-3xl md:text-4xl font-extrabold text-center max-w-[900px]">
+        <h2
+          class="text-3xl md:text-4xl font-extrabold text-center max-w-[900px]"
+        >
           NoLogic — ノーコードゲーム制作プラットフォーム
         </h2>
         <p class="text-white/90 text-xl font-medium text-center">
           「ゲームを作りたいけど、コードは書けない」を解決する
         </p>
-        <p class="text-gray-400 text-[17px] leading-relaxed text-center max-w-[800px]">
-          プログラミングができなくても大丈夫。あなたのイラスト1枚が、遊べるゲームになります。<br />
+        <p
+          class="text-gray-400 text-[17px] leading-relaxed text-center max-w-[800px]"
+        >
+          プログラミングができなくても大丈夫。あなたのイラスト1枚が、遊べるゲームになります。<br
+          />
           作ったゲームはSNSでシェア・公開できます。アップロードした作品の著作権はあなたのものです。
         </p>
 
         {/* ステップ */}
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-[1100px]">
-          <div class="flex flex-col items-center gap-5 bg-[#111827] p-8 rounded-2xl border border-[#1E293B]">
-            <div class="flex items-center justify-center w-12 h-12 bg-emerald-500 rounded-full text-white text-xl font-bold">1</div>
-            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
-            <h3 class="text-white text-lg font-bold text-center">イラストをアップロード</h3>
-            <p class="text-gray-400 text-sm text-center leading-relaxed">お手持ちのイラストや写真をドラッグ&ドロップ</p>
+        <div
+          class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-[1100px]"
+        >
+          <div
+            class="flex flex-col items-center gap-5 bg-[#111827] p-8 rounded-2xl border border-[#1E293B]"
+          >
+            <div
+              class="flex items-center justify-center w-12 h-12 bg-emerald-500 rounded-full text-white text-xl font-bold"
+            >
+              1
+            </div>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="40"
+              height="40"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#10B981"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              ><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
+              ></path><polyline points="17 8 12 3 7 8"></polyline><line
+                x1="12"
+                x2="12"
+                y1="3"
+                y2="15"></line></svg
+            >
+            <h3 class="text-white text-lg font-bold text-center">
+              イラストをアップロード
+            </h3>
+            <p class="text-gray-400 text-sm text-center leading-relaxed">
+              お手持ちのイラストや写真をドラッグ&ドロップ
+            </p>
           </div>
-          <div class="flex flex-col items-center gap-5 bg-[#111827] p-8 rounded-2xl border border-[#1E293B]">
-            <div class="flex items-center justify-center w-12 h-12 bg-emerald-500 rounded-full text-white text-xl font-bold">2</div>
-            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="7" x="3" y="3" rx="1"/><rect width="9" height="7" x="3" y="14" rx="1"/><rect width="5" height="7" x="16" y="14" rx="1"/></svg>
-            <h3 class="text-white text-lg font-bold text-center">テンプレートを選ぶ</h3>
-            <p class="text-gray-400 text-sm text-center leading-relaxed">豊富なゲームテンプレートから好きなジャンルを選択</p>
+          <div
+            class="flex flex-col items-center gap-5 bg-[#111827] p-8 rounded-2xl border border-[#1E293B]"
+          >
+            <div
+              class="flex items-center justify-center w-12 h-12 bg-emerald-500 rounded-full text-white text-xl font-bold"
+            >
+              2
+            </div>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="40"
+              height="40"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#10B981"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              ><rect width="18" height="7" x="3" y="3" rx="1"></rect><rect
+                width="9"
+                height="7"
+                x="3"
+                y="14"
+                rx="1"></rect><rect width="5" height="7" x="16" y="14" rx="1"
+              ></rect></svg
+            >
+            <h3 class="text-white text-lg font-bold text-center">
+              テンプレートを選ぶ
+            </h3>
+            <p class="text-gray-400 text-sm text-center leading-relaxed">
+              豊富なゲームテンプレートから好きなジャンルを選択
+            </p>
           </div>
-          <div class="flex flex-col items-center gap-5 bg-[#111827] p-8 rounded-2xl border border-[#1E293B]">
-            <div class="flex items-center justify-center w-12 h-12 bg-emerald-500 rounded-full text-white text-xl font-bold">3</div>
-            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" x2="10" y1="11" y2="11"/><line x1="8" x2="8" y1="9" y2="13"/><line x1="15" x2="15.01" y1="12" y2="12"/><line x1="18" x2="18.01" y1="10" y2="10"/><path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z"/></svg>
-            <h3 class="text-white text-lg font-bold text-center">ゲーム完成！すぐに公開</h3>
-            <p class="text-gray-400 text-sm text-center leading-relaxed">自動でゲームが生成され、SNSでシェア・公開できる</p>
+          <div
+            class="flex flex-col items-center gap-5 bg-[#111827] p-8 rounded-2xl border border-[#1E293B]"
+          >
+            <div
+              class="flex items-center justify-center w-12 h-12 bg-emerald-500 rounded-full text-white text-xl font-bold"
+            >
+              3
+            </div>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="40"
+              height="40"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#10B981"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              ><line x1="6" x2="10" y1="11" y2="11"></line><line
+                x1="8"
+                x2="8"
+                y1="9"
+                y2="13"></line><line x1="15" x2="15.01" y1="12" y2="12"
+              ></line><line x1="18" x2="18.01" y1="10" y2="10"></line><path
+                d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z"
+              ></path></svg
+            >
+            <h3 class="text-white text-lg font-bold text-center">
+              ゲーム完成！すぐに公開
+            </h3>
+            <p class="text-gray-400 text-sm text-center leading-relaxed">
+              自動でゲームが生成され、SNSでシェア・公開できる
+            </p>
           </div>
         </div>
 
@@ -215,7 +531,18 @@ import { newsItems } from "../data/news";
           class="inline-flex items-center gap-2.5 px-12 py-[18px] bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-base rounded-xl transition-colors"
         >
           イラストをアップして試してみる
-          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg
+          >
         </a>
       </div>
     </section>
@@ -223,7 +550,9 @@ import { newsItems } from "../data/news";
     <!-- NextCreators Section -->
     <section id="community" class="bg-[#111827] py-[100px] px-5 md:px-[120px]">
       <div class="max-w-7xl mx-auto flex flex-col items-center gap-[60px]">
-        <div class="inline-flex items-center px-5 py-2 bg-emerald-500/15 text-emerald-500 text-xs font-bold rounded-full border border-emerald-500/25 tracking-[2px]">
+        <div
+          class="inline-flex items-center px-5 py-2 bg-emerald-500/15 text-emerald-500 text-xs font-bold rounded-full border border-emerald-500/25 tracking-[2px]"
+        >
           COMMUNITY
         </div>
         <h2 class="text-3xl md:text-4xl font-extrabold text-center">
@@ -232,8 +561,11 @@ import { newsItems } from "../data/news";
         <p class="text-white/90 text-xl font-medium text-center">
           ひとりで創り続ける孤独、もう終わりにしませんか。
         </p>
-        <p class="text-gray-400 text-[17px] leading-relaxed text-center max-w-[700px]">
-          作品を見せる相手がいない、モチベが続かない...そんな悩みを持つ100名以上のクリエイターが集まっています。<br />
+        <p
+          class="text-gray-400 text-[17px] leading-relaxed text-center max-w-[700px]"
+        >
+          作品を見せる相手がいない、モチベが続かない...そんな悩みを持つ100名以上のクリエイターが集まっています。<br
+          />
           初心者歓迎、見学だけでもOKです。
         </p>
 
@@ -241,36 +573,92 @@ import { newsItems } from "../data/news";
           {/* メリットカード */}
           <div class="flex flex-col gap-6">
             <div class="flex gap-4 bg-[#0A0F1C] p-6 rounded-xl">
-              <div class="flex-shrink-0 w-12 h-12 bg-emerald-500/15 rounded-xl flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              <div
+                class="flex-shrink-0 w-12 h-12 bg-emerald-500/15 rounded-xl flex items-center justify-center"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#10B981"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  ><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"
+                  ></path><circle cx="9" cy="7" r="4"></circle><path
+                    d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path
+                    d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg
+                >
               </div>
               <div>
                 <h4 class="text-white font-bold mb-1.5">作品の共有</h4>
-                <p class="text-gray-400 text-sm">制作中の作品を気軽に投稿。仲間からリアルなフィードバックがもらえる。</p>
+                <p class="text-gray-400 text-sm">
+                  制作中の作品を気軽に投稿。仲間からリアルなフィードバックがもらえる。
+                </p>
               </div>
             </div>
             <div class="flex gap-4 bg-[#0A0F1C] p-6 rounded-xl">
-              <div class="flex-shrink-0 w-12 h-12 bg-emerald-500/15 rounded-xl flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
+              <div
+                class="flex-shrink-0 w-12 h-12 bg-emerald-500/15 rounded-xl flex items-center justify-center"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#10B981"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  ><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg
+                >
               </div>
               <div>
                 <h4 class="text-white font-bold mb-1.5">相談・質問</h4>
-                <p class="text-gray-400 text-sm">技術的な質問や創作の悩みを、経験豊富なメンバーに相談できる。</p>
+                <p class="text-gray-400 text-sm">
+                  技術的な質問や創作の悩みを、経験豊富なメンバーに相談できる。
+                </p>
               </div>
             </div>
             <div class="flex gap-4 bg-[#0A0F1C] p-6 rounded-xl">
-              <div class="flex-shrink-0 w-12 h-12 bg-emerald-500/15 rounded-xl flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+              <div
+                class="flex-shrink-0 w-12 h-12 bg-emerald-500/15 rounded-xl flex items-center justify-center"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#10B981"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  ><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path
+                    d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"
+                  ></path><path
+                    d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"
+                  ></path><path
+                    d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"
+                  ></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg
+                >
               </div>
               <div>
                 <h4 class="text-white font-bold mb-1.5">イベント・交流</h4>
-                <p class="text-gray-400 text-sm">定期的なイベントや勉強会で、ジャンルを超えた交流ができる。</p>
+                <p class="text-gray-400 text-sm">
+                  定期的なイベントや勉強会で、ジャンルを超えた交流ができる。
+                </p>
               </div>
             </div>
           </div>
 
           {/* コミュニティイメージ */}
-          <div class="rounded-2xl overflow-hidden bg-gradient-to-br from-emerald-900/30 to-[#111827]">
+          <div
+            class="rounded-2xl overflow-hidden bg-gradient-to-br from-emerald-900/30 to-[#111827]"
+          >
             <Image
               src={nextCreatorLogo}
               width={540}
@@ -286,7 +674,18 @@ import { newsItems } from "../data/news";
           class="inline-flex items-center gap-2.5 px-12 py-[18px] bg-white/10 hover:bg-white/15 text-emerald-500 font-bold text-base rounded-xl border border-emerald-500/40 transition-colors"
         >
           コミュニティに参加する（無料）
-          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg
+          >
         </a>
       </div>
     </section>
@@ -294,7 +693,9 @@ import { newsItems } from "../data/news";
     <!-- TechPlant Studio Section -->
     <section id="services" class="bg-[#0A0F1C] py-[100px] px-5 md:px-[120px]">
       <div class="max-w-7xl mx-auto flex flex-col items-center gap-[60px]">
-        <div class="inline-flex items-center px-5 py-2 bg-emerald-500/15 text-emerald-500 text-xs font-bold rounded-full border border-emerald-500/25 tracking-[2px]">
+        <div
+          class="inline-flex items-center px-5 py-2 bg-emerald-500/15 text-emerald-500 text-xs font-bold rounded-full border border-emerald-500/25 tracking-[2px]"
+        >
           SERVICES
         </div>
         <h2 class="text-3xl md:text-4xl font-extrabold text-center">
@@ -303,46 +704,158 @@ import { newsItems } from "../data/news";
         <p class="text-white/90 text-xl font-medium text-center">
           ゲーム・Web・AIで、御社のアイデアを形に。
         </p>
-        <p class="text-gray-400 text-[17px] leading-relaxed text-center max-w-[700px]">
+        <p
+          class="text-gray-400 text-[17px] leading-relaxed text-center max-w-[700px]"
+        >
           ゲームを使ったプロモーション、AIを組み込んだサービス開発など<br />
           企画から納品まで伴走します。まずはお気軽にご相談ください。
         </p>
 
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 w-full">
-          <div class="flex flex-col gap-4 bg-[#111827] p-7 rounded-2xl border border-[#1E293B]">
-            <div class="w-11 h-11 bg-emerald-500/15 rounded-[10px] flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" x2="10" y1="11" y2="11"/><line x1="8" x2="8" y1="9" y2="13"/><line x1="15" x2="15.01" y1="12" y2="12"/><line x1="18" x2="18.01" y1="10" y2="10"/><path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z"/></svg>
+        <div
+          class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 w-full"
+        >
+          <div
+            class="flex flex-col gap-4 bg-[#111827] p-7 rounded-2xl border border-[#1E293B]"
+          >
+            <div
+              class="w-11 h-11 bg-emerald-500/15 rounded-[10px] flex items-center justify-center"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#10B981"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                ><line x1="6" x2="10" y1="11" y2="11"></line><line
+                  x1="8"
+                  x2="8"
+                  y1="9"
+                  y2="13"></line><line x1="15" x2="15.01" y1="12" y2="12"
+                ></line><line x1="18" x2="18.01" y1="10" y2="10"></line><path
+                  d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z"
+                ></path></svg
+              >
             </div>
             <h3 class="text-white text-base font-bold">ゲーム制作</h3>
-            <p class="text-gray-400 text-[13px] leading-relaxed">NoLogicを活用したオリジナルゲームの企画・制作</p>
+            <p class="text-gray-400 text-[13px] leading-relaxed">
+              NoLogicを活用したオリジナルゲームの企画・制作
+            </p>
           </div>
-          <div class="flex flex-col gap-4 bg-[#111827] p-7 rounded-2xl border border-[#1E293B]">
-            <div class="w-11 h-11 bg-emerald-500/15 rounded-[10px] flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+          <div
+            class="flex flex-col gap-4 bg-[#111827] p-7 rounded-2xl border border-[#1E293B]"
+          >
+            <div
+              class="w-11 h-11 bg-emerald-500/15 rounded-[10px] flex items-center justify-center"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#10B981"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                ><circle cx="12" cy="12" r="10"></circle><path
+                  d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"
+                ></path><path d="M2 12h20"></path></svg
+              >
             </div>
             <h3 class="text-white text-base font-bold">Webサイト制作</h3>
-            <p class="text-gray-400 text-[13px] leading-relaxed">コーポレートサイト・LP等の設計・構築</p>
+            <p class="text-gray-400 text-[13px] leading-relaxed">
+              コーポレートサイト・LP等の設計・構築
+            </p>
           </div>
-          <div class="flex flex-col gap-4 bg-[#111827] p-7 rounded-2xl border border-[#1E293B]">
-            <div class="w-11 h-11 bg-emerald-500/15 rounded-[10px] flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"/><rect x="2" y="6" width="14" height="12" rx="2"/></svg>
+          <div
+            class="flex flex-col gap-4 bg-[#111827] p-7 rounded-2xl border border-[#1E293B]"
+          >
+            <div
+              class="w-11 h-11 bg-emerald-500/15 rounded-[10px] flex items-center justify-center"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#10B981"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                ><path
+                  d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"
+                ></path><rect x="2" y="6" width="14" height="12" rx="2"
+                ></rect></svg
+              >
             </div>
             <h3 class="text-white text-base font-bold">クリエイティブ制作</h3>
-            <p class="text-gray-400 text-[13px] leading-relaxed">動画・LP・ビジュアル等のクリエイティブ制作</p>
+            <p class="text-gray-400 text-[13px] leading-relaxed">
+              動画・LP・ビジュアル等のクリエイティブ制作
+            </p>
           </div>
-          <div class="flex flex-col gap-4 bg-[#111827] p-7 rounded-2xl border border-[#1E293B]">
-            <div class="w-11 h-11 bg-emerald-500/15 rounded-[10px] flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          <div
+            class="flex flex-col gap-4 bg-[#111827] p-7 rounded-2xl border border-[#1E293B]"
+          >
+            <div
+              class="w-11 h-11 bg-emerald-500/15 rounded-[10px] flex items-center justify-center"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#10B981"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                ><polyline points="16 18 22 12 16 6"></polyline><polyline
+                  points="8 6 2 12 8 18"></polyline></svg
+              >
             </div>
             <h3 class="text-white text-base font-bold">Webアプリ制作</h3>
-            <p class="text-gray-400 text-[13px] leading-relaxed">Webアプリケーションの企画・設計・開発</p>
+            <p class="text-gray-400 text-[13px] leading-relaxed">
+              Webアプリケーションの企画・設計・開発
+            </p>
           </div>
-          <div class="flex flex-col gap-4 bg-[#111827] p-7 rounded-2xl border border-[#1E293B]">
-            <div class="w-11 h-11 bg-emerald-500/15 rounded-[10px] flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"/><path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4"/><path d="M17.599 6.5a3 3 0 0 0 .399-1.375"/><path d="M6.003 5.125A3 3 0 0 0 6.401 6.5"/><path d="M3.477 10.896a4 4 0 0 1 .585-.396"/><path d="M19.938 10.5a4 4 0 0 1 .585.396"/><path d="M6 18a4 4 0 0 1-1.967-.516"/><path d="M19.967 17.484A4 4 0 0 1 18 18"/></svg>
+          <div
+            class="flex flex-col gap-4 bg-[#111827] p-7 rounded-2xl border border-[#1E293B]"
+          >
+            <div
+              class="w-11 h-11 bg-emerald-500/15 rounded-[10px] flex items-center justify-center"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#10B981"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                ><path
+                  d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"
+                ></path><path
+                  d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"
+                ></path><path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4"
+                ></path><path d="M17.599 6.5a3 3 0 0 0 .399-1.375"></path><path
+                  d="M6.003 5.125A3 3 0 0 0 6.401 6.5"></path><path
+                  d="M3.477 10.896a4 4 0 0 1 .585-.396"></path><path
+                  d="M19.938 10.5a4 4 0 0 1 .585.396"></path><path
+                  d="M6 18a4 4 0 0 1-1.967-.516"></path><path
+                  d="M19.967 17.484A4 4 0 0 1 18 18"></path></svg
+              >
             </div>
             <h3 class="text-white text-base font-bold">AI活用コンサル</h3>
-            <p class="text-gray-400 text-[13px] leading-relaxed">生成AI等を活用した業務改善・プロダクト開発支援</p>
+            <p class="text-gray-400 text-[13px] leading-relaxed">
+              生成AI等を活用した業務改善・プロダクト開発支援
+            </p>
           </div>
         </div>
 
@@ -351,7 +864,18 @@ import { newsItems } from "../data/news";
           class="inline-flex items-center gap-2.5 px-12 py-[18px] bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-lg rounded-xl transition-colors"
         >
           詳細を見る
-          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg
+          >
         </a>
       </div>
     </section>
@@ -359,7 +883,9 @@ import { newsItems } from "../data/news";
     <!-- Vision & CEO Section -->
     <section id="vision" class="bg-[#111827] py-[100px] px-5 md:px-[120px]">
       <div class="max-w-7xl mx-auto flex flex-col items-center gap-[60px]">
-        <div class="inline-flex items-center px-5 py-2 bg-emerald-500/15 text-emerald-500 text-xs font-bold rounded-full border border-emerald-500/25 tracking-[2px]">
+        <div
+          class="inline-flex items-center px-5 py-2 bg-emerald-500/15 text-emerald-500 text-xs font-bold rounded-full border border-emerald-500/25 tracking-[2px]"
+        >
           VISION
         </div>
 
@@ -377,12 +903,14 @@ import { newsItems } from "../data/news";
           <div class="flex flex-col gap-5">
             <p class="text-white text-xl font-medium leading-relaxed">
               きっかけは、同級生の退学でした。<br />
-              ゲームを作り続けていた友人が、ある日突然家庭環境のせいで創作ができなくなり、退学する。<br />
+              ゲームを作り続けていた友人が、ある日突然家庭環境のせいで創作ができなくなり、退学する。<br
+              />
               そんな原体験がきっかけで、私はこの会社を創業しました。
             </p>
-            <p class="text-white font-semibold">代表取締役  山縣 帆高</p>
+            <p class="text-white font-semibold">代表取締役 山縣 帆高</p>
             <p class="text-gray-400 text-sm leading-relaxed">
-              IPA未踏IT人材発掘・育成事業 採択。クリエイターの創造性を最大限に活かすプロダクト開発に注力。
+              IPA未踏IT人材発掘・育成事業
+              採択。クリエイターの創造性を最大限に活かすプロダクト開発に注力。
             </p>
           </div>
         </div>
@@ -390,17 +918,61 @@ import { newsItems } from "../data/news";
         {/* VMV カード */}
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
           <div class="bg-[#0A0F1C] p-8 rounded-2xl flex flex-col gap-3">
-            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="28"
+              height="28"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#10B981"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              ><path
+                d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"
+              ></path><circle cx="12" cy="12" r="3"></circle></svg
+            >
             <h3 class="text-emerald-500 text-lg font-bold">Vision</h3>
-            <p class="text-gray-400 text-sm leading-relaxed">誰もが制作に挑戦できる世界の実現</p>
+            <p class="text-gray-400 text-sm leading-relaxed">
+              誰もが制作に挑戦できる世界の実現
+            </p>
           </div>
           <div class="bg-[#0A0F1C] p-8 rounded-2xl flex flex-col gap-3">
-            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="28"
+              height="28"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#10B981"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              ><circle cx="12" cy="12" r="10"></circle><circle
+                cx="12"
+                cy="12"
+                r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg
+            >
             <h3 class="text-emerald-500 text-lg font-bold">Mission</h3>
-            <p class="text-gray-400 text-sm leading-relaxed">創作における環境的ハードルを破壊する</p>
+            <p class="text-gray-400 text-sm leading-relaxed">
+              創作における環境的ハードルを破壊する
+            </p>
           </div>
           <div class="bg-[#0A0F1C] p-8 rounded-2xl flex flex-col gap-3">
-            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="28"
+              height="28"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#10B981"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              ><path
+                d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"
+              ></path></svg
+            >
             <h3 class="text-emerald-500 text-lg font-bold">Value</h3>
             <p class="text-gray-400 text-sm leading-relaxed">
               クリエイターのインナーサークルに居続けながら<br />
@@ -415,37 +987,72 @@ import { newsItems } from "../data/news";
     <!-- Company Info Section -->
     <section id="company" class="bg-[#0A0F1C] py-20 px-5 md:px-[120px]">
       <div class="max-w-7xl mx-auto flex flex-col items-center gap-12">
-        <div class="inline-flex items-center px-5 py-2 bg-emerald-500/15 text-emerald-500 text-xs font-bold rounded-full border border-emerald-500/25 tracking-[2px]">
+        <div
+          class="inline-flex items-center px-5 py-2 bg-emerald-500/15 text-emerald-500 text-xs font-bold rounded-full border border-emerald-500/25 tracking-[2px]"
+        >
           COMPANY
         </div>
         <h2 class="text-3xl md:text-4xl font-extrabold">会社概要</h2>
 
         <div class="w-full max-w-[900px]">
           <div class="flex py-5 border-b border-[#1E293B]">
-            <span class="w-[200px] flex-shrink-0 text-gray-400 text-sm font-semibold">会社名</span>
-            <span class="text-white text-sm">株式会社クリエイターのうえきばち</span>
+            <span
+              class="w-[200px] flex-shrink-0 text-gray-400 text-sm font-semibold"
+              >会社名</span
+            >
+            <span class="text-white text-sm"
+              >株式会社クリエイターのうえきばち</span
+            >
           </div>
           <div class="flex py-5 border-b border-[#1E293B]">
-            <span class="w-[200px] flex-shrink-0 text-gray-400 text-sm font-semibold">設立</span>
+            <span
+              class="w-[200px] flex-shrink-0 text-gray-400 text-sm font-semibold"
+              >設立</span
+            >
             <span class="text-white text-sm">2024年11月</span>
           </div>
           <div class="flex py-5 border-b border-[#1E293B]">
-            <span class="w-[200px] flex-shrink-0 text-gray-400 text-sm font-semibold">代表取締役</span>
+            <span
+              class="w-[200px] flex-shrink-0 text-gray-400 text-sm font-semibold"
+              >代表取締役</span
+            >
             <span class="text-white text-sm">山縣 帆高</span>
           </div>
           <div class="flex py-5 border-b border-[#1E293B]">
-            <span class="w-[200px] flex-shrink-0 text-gray-400 text-sm font-semibold">所在地</span>
-            <span class="text-white text-sm">東京都千代田区神田神保町3丁目21-7 英弘ビル3F みらいスタジオ</span>
+            <span
+              class="w-[200px] flex-shrink-0 text-gray-400 text-sm font-semibold"
+              >所在地</span
+            >
+            <span class="text-white text-sm"
+              >東京都千代田区神田神保町3丁目21-7 英弘ビル3F みらいスタジオ</span
+            >
           </div>
           <div class="flex py-5 border-b border-[#1E293B]">
-            <span class="w-[200px] flex-shrink-0 text-gray-400 text-sm font-semibold">事業内容</span>
-            <span class="text-white text-sm leading-relaxed">ゲーム制作プラットフォーム運営 / クリエイティブ制作 / Webアプリ開発 / AI活用コンサルティング</span>
+            <span
+              class="w-[200px] flex-shrink-0 text-gray-400 text-sm font-semibold"
+              >事業内容</span
+            >
+            <span class="text-white text-sm leading-relaxed"
+              >ゲーム制作プラットフォーム運営 / クリエイティブ制作 /
+              Webアプリ開発 / AI活用コンサルティング</span
+            >
           </div>
           <div class="flex py-5">
-            <span class="w-[200px] flex-shrink-0 text-gray-400 text-sm font-semibold">URL</span>
+            <span
+              class="w-[200px] flex-shrink-0 text-gray-400 text-sm font-semibold"
+              >URL</span
+            >
             <span class="flex flex-col gap-1">
-              <a href="https://creatorpot.net" class="text-emerald-500 text-sm hover:underline">https://creatorpot.net</a>
-              <a href="https://nologic.app" class="text-emerald-500 text-sm hover:underline">https://nologic.app</a>
+              <a
+                href="https://creatorpot.net"
+                class="text-emerald-500 text-sm hover:underline"
+                >https://creatorpot.net</a
+              >
+              <a
+                href="https://nologic.app"
+                class="text-emerald-500 text-sm hover:underline"
+                >https://nologic.app</a
+              >
             </span>
           </div>
         </div>
@@ -465,8 +1072,13 @@ import { newsItems } from "../data/news";
   }
 
   @keyframes hero-drift {
-    0%, 100% { transform: translateX(-15%); }
-    50% { transform: translateX(15%); }
+    0%,
+    100% {
+      transform: translateX(-15%);
+    }
+    50% {
+      transform: translateX(15%);
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -489,33 +1101,41 @@ import { newsItems } from "../data/news";
   };
 
   const animateTextGroups = () => {
-    const groups = document.querySelectorAll<HTMLElement>('[data-anim-stagger]');
+    const groups = document.querySelectorAll<HTMLElement>(
+      "[data-anim-stagger]",
+    );
     if (groups.length === 0) return;
 
     // モーション低減設定の場合はアニメーションせず、最終文字のまま表示
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     groups.forEach((group) => {
       const stagger = Number(group.dataset.animStagger) || 25;
-      const chars = group.querySelectorAll<HTMLElement>('.anim-char');
+      const chars = group.querySelectorAll<HTMLElement>(".anim-char");
       chars.forEach((el, i) => {
-        const target = el.dataset.char ?? el.textContent ?? '';
+        const target = el.dataset.char ?? el.textContent ?? "";
         const startDelay = i * stagger;
         for (let t = 0; t < TICKS; t++) {
-          window.setTimeout(() => {
-            el.textContent = randomKanji();
-          }, startDelay + t * STEP_MS);
+          window.setTimeout(
+            () => {
+              el.textContent = randomKanji();
+            },
+            startDelay + t * STEP_MS,
+          );
         }
-        window.setTimeout(() => {
-          el.textContent = target;
-        }, startDelay + TICKS * STEP_MS);
+        window.setTimeout(
+          () => {
+            el.textContent = target;
+          },
+          startDelay + TICKS * STEP_MS,
+        );
       });
     });
   };
 
   // DOM 構築後に開始
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', animateTextGroups);
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", animateTextGroups);
   } else {
     animateTextGroups();
   }
