@@ -3,8 +3,6 @@ import Layout from "@layouts/Layout.astro";
 import { Image } from "astro:assets";
 import Navigation from "@components/Navigation.astro";
 import Footer from "@components/Footer.astro";
-import heroBg from "@public/hero-bg.png";
-import noLogicLogo from "@public/nologic-logo.png";
 import nextCreatorLogo from "@public/nextcreator-logo.png";
 import CEOPhoto from "@public/ceo-photo.png";
 import { newsItems } from "../data/news";
@@ -16,49 +14,98 @@ import { newsItems } from "../data/news";
     <Navigation />
 
     <!-- Hero Section -->
-    <section class="relative min-h-[720px] flex items-center justify-center overflow-hidden">
-      <div class="absolute inset-0">
-        <Image
-          src={heroBg}
-          width={1920}
-          height={1080}
-          alt="クリエイティブな背景"
-          class="w-full h-full object-cover"
-        />
-      </div>
-      <div class="absolute inset-0 bg-[#0A0F1C]/60"></div>
-      <div class="relative z-10 flex flex-col items-center text-center px-5 py-24 gap-6 max-w-[900px]">
-        <p class="text-emerald-500 font-medium text-lg tracking-wider">
-          ゲームを作りたいのに、コードが書けない人へ。
-        </p>
-        <h1 class="text-4xl md:text-[56px] font-black leading-tight">
-          イラスト1枚で、あなたのキャラが<br />ゲームになる。
-        </h1>
-        <p class="text-white/80 text-base md:text-[17px] leading-relaxed max-w-[700px]">
-          プログラミング不要。テンプレートを選んで、キャラをアップロードするだけ。<br />
-          無料で、今日から始められます。
-        </p>
-        <div class="flex flex-wrap items-center justify-center gap-4 mt-4">
-          <div class="flex flex-col items-center gap-2">
-            <a
-              href="https://nologic.app"
-              class="inline-flex items-center justify-center gap-2.5 w-[280px] py-[18px] bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-lg rounded-xl transition-colors"
-            >
-              無料で今すぐ試す
-              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-            </a>
-            <span class="text-white/50 text-xs">登録不要・5分で完成</span>
+    <section class="relative min-h-screen overflow-hidden bg-[#020B16] pt-24 pb-8 md:pt-28">
+      <div class="absolute inset-0 bg-[linear-gradient(116deg,#020713_0%,#071626_48%,#020914_100%)]"></div>
+      <div class="hero-drift absolute -inset-x-[20%] inset-y-0 bg-[radial-gradient(circle_at_16%_12%,rgba(54,96,154,0.16),transparent_30%)]"></div>
+
+      <div class="relative z-10 mx-auto flex min-h-[calc(100vh-7rem)] max-w-[1140px] flex-col justify-between px-5 md:px-0">
+        <div class="grid flex-1 items-center gap-8 lg:grid-cols-[640px_minmax(420px,1fr)]">
+          <div class="max-w-[900px] pt-8 md:pt-12 lg:pt-10">
+            <h1 class="hero-mincho text-[34px] font-extrabold leading-[1.52] tracking-[0.08em] text-white drop-shadow-[0_6px_18px_rgba(255,255,255,0.14)] md:text-[52px] lg:text-[64px]" data-anim-stagger="25">
+              {['誰もが', '創作に挑戦できる', '世界の実現'].map((line) => (
+                <span class="block whitespace-nowrap">
+                  {Array.from(line).map((ch) => (
+                    <span class="anim-char" data-char={ch}>{ch}</span>
+                  ))}
+                </span>
+              ))}
+            </h1>
+            <p class="mt-7 max-w-[590px] text-[14px] font-bold leading-[2.05] tracking-[0.13em] text-white/[0.9] md:text-[15px]" data-anim-stagger="10">
+              {Array.from('テクノロジーの力で、つくることのハードルを下げ、').map((ch) => (
+                <span class="anim-char" data-char={ch}>{ch}</span>
+              ))}<br class="hidden md:block" />
+              {Array.from('アイデアをカタチにする喜びをすべての人に。').map((ch) => (
+                <span class="anim-char" data-char={ch}>{ch}</span>
+              ))}<br />
+              {Array.from('わたしたちは、創作の可能性をひらき、').map((ch) => (
+                <span class="anim-char" data-char={ch}>{ch}</span>
+              ))}<br class="hidden md:block" />
+              {Array.from('クリエイターとともに未来を育てていきます。').map((ch) => (
+                <span class="anim-char" data-char={ch}>{ch}</span>
+              ))}
+            </p>
+            <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <a
+                href="#vision"
+                class="inline-flex min-w-[220px] items-center justify-center gap-5 rounded-full border border-emerald-400 px-7 py-3.5 text-[15px] font-bold text-emerald-300 transition-colors hover:bg-emerald-400 hover:text-[#052016]"
+              >
+                私たちについて
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </a>
+              <a
+                href="/essay"
+                class="inline-flex min-w-[240px] items-center justify-center gap-5 rounded-full border border-white/25 bg-white/[0.08] px-7 py-3.5 text-[15px] font-bold text-white transition-colors hover:border-white/50 hover:bg-white/20"
+              >
+                クリエイターの皆様へ
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </a>
+            </div>
           </div>
-          <div class="flex flex-col items-center gap-2">
-            <a
-              href="https://discord.gg/3hy2UNmXca"
-              class="inline-flex items-center justify-center gap-2.5 w-[280px] py-[18px] bg-white/10 hover:bg-white/20 text-emerald-500 font-semibold text-lg rounded-xl border border-emerald-500/40 transition-colors"
-            >
-              仲間を見つける（Discord）
-            </a>
-            <span class="text-white/50 text-xs">ROM専OK・初心者歓迎</span>
+
+          <div class="relative mx-auto flex h-[330px] w-full max-w-[420px] items-center justify-center md:h-[440px] md:max-w-[500px] lg:-mr-10 lg:-mt-10 lg:h-[540px] lg:max-w-none">
+            <img
+              src="/hero-pic.png"
+              alt=""
+              class="relative h-[280px] w-[280px] object-contain md:h-[360px] md:w-[360px] lg:h-[400px] lg:w-[400px]"
+              loading="eager"
+            />
           </div>
         </div>
+
+        <div class="grid gap-4 pb-7 md:grid-cols-3 md:gap-4">
+          <div class="flex min-h-[120px] items-center gap-5 rounded-[10px] border border-white/[0.13] bg-white/[0.055] px-5 py-4 shadow-[0_24px_80px_rgba(0,0,0,0.32)] backdrop-blur-xl">
+            <span class="flex h-[72px] w-[72px] flex-shrink-0 items-center justify-center rounded-[4px] bg-[#06111F] text-emerald-400 shadow-inner shadow-white/5">
+              <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><path d="m21 16-9 5-9-5V8l9-5 9 5Z"/><path d="m3.3 7.7 8.7 4.8 8.7-4.8"/><path d="M12 22V12"/></svg>
+            </span>
+            <span>
+              <span class="block text-[13px] font-black leading-relaxed tracking-[0.04em] text-white">ノーコードゲーム制作プラットフォームの開発</span>
+              <span class="mt-2 block text-[11px] font-bold leading-[1.9] text-white/[0.68]">誰でも直感的にゲームをつくれる<br class="hidden xl:block" />ノーコードツールを開発・提供しています。</span>
+            </span>
+          </div>
+          <div class="flex min-h-[120px] items-center gap-5 rounded-[10px] border border-white/[0.13] bg-white/[0.055] px-5 py-4 shadow-[0_24px_80px_rgba(0,0,0,0.32)] backdrop-blur-xl">
+            <span class="flex h-[72px] w-[72px] flex-shrink-0 items-center justify-center rounded-[4px] bg-[#06111F] text-emerald-400 shadow-inner shadow-white/5">
+              <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </span>
+            <span>
+              <span class="block text-[13px] font-black leading-relaxed tracking-[0.04em] text-white">クリエイターコミュニティの運営</span>
+              <span class="mt-2 block text-[11px] font-bold leading-[1.9] text-white/[0.68]">つくる人同士がつながり、学び合い、<br class="hidden xl:block" />一緒に成長できる場をつくっています。</span>
+            </span>
+          </div>
+          <div class="flex min-h-[120px] items-center gap-5 rounded-[10px] border border-white/[0.13] bg-white/[0.055] px-5 py-4 shadow-[0_24px_80px_rgba(0,0,0,0.32)] backdrop-blur-xl">
+            <span class="flex h-[72px] w-[72px] flex-shrink-0 items-center justify-center rounded-[4px] bg-[#06111F] text-emerald-400 shadow-inner shadow-white/5">
+              <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/></svg>
+            </span>
+            <span>
+              <span class="block text-[13px] font-black leading-relaxed tracking-[0.04em] text-white">受託開発</span>
+              <span class="mt-2 block text-[11px] font-bold leading-[1.9] text-white/[0.68]">企画・設計から開発・運用まで、<br class="hidden xl:block" />お客様の課題解決を技術で支援します。</span>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="absolute bottom-12 right-8 hidden flex-col items-center gap-4 text-emerald-400 xl:flex">
+        <span class="[writing-mode:vertical-rl] text-[11px] font-black tracking-[0.28em]">SCROLL</span>
+        <span class="h-11 w-px bg-emerald-400"></span>
       </div>
     </section>
 
@@ -96,23 +143,20 @@ import { newsItems } from "../data/news";
         <div class="inline-flex items-center px-5 py-2 bg-emerald-500/15 text-emerald-500 text-xs font-bold rounded-full border border-emerald-500/25 tracking-[2px]">
           TRACK RECORD
         </div>
-        <div class="flex flex-col md:flex-row items-center justify-around w-full gap-8">
-          <div class="flex flex-col items-center gap-2">
+        <div class="flex flex-col md:flex-row items-center justify-center w-full gap-8 md:gap-0">
+          <div class="flex flex-1 flex-col items-center gap-2">
             <span class="text-emerald-500 text-5xl font-black">200+</span>
             <span class="text-gray-400 text-[15px] font-medium">オリジナルゲームが誕生</span>
           </div>
-          <div class="hidden md:block w-px h-[60px] bg-[#1E293B]"></div>
-          <div class="flex flex-col items-center gap-2">
+          <div class="hidden md:block w-px h-[60px] bg-[#1E293B] flex-shrink-0"></div>
+          <div class="flex flex-1 flex-col items-center gap-2">
             <span class="text-emerald-500 text-5xl font-black">100+</span>
             <span class="text-gray-400 text-[15px] font-medium">クリエイターが参加中</span>
           </div>
-          <div class="hidden md:block w-px h-[60px] bg-[#1E293B]"></div>
-          <div class="flex flex-col items-center gap-3">
-            <div class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 rounded-lg border border-emerald-500/20">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
-              <span class="text-emerald-500 text-lg font-bold">IPA 未踏事業 採択</span>
-            </div>
-            <span class="text-gray-400 text-[15px] font-medium">IT人材発掘・育成事業</span>
+          <div class="hidden md:block w-px h-[60px] bg-[#1E293B] flex-shrink-0"></div>
+          <div class="flex flex-1 flex-col items-center gap-2">
+            <span class="text-emerald-500 text-5xl font-black">5</span>
+            <span class="text-gray-400 text-[15px] font-medium">連携企業数</span>
           </div>
         </div>
       </div>
@@ -166,39 +210,6 @@ import { newsItems } from "../data/news";
           </div>
         </div>
 
-        {/* ゲームギャラリー */}
-        <h3 class="text-white text-[22px] font-bold">NoLogicで作られたゲーム</h3>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 w-full max-w-[1200px]">
-          <div class="bg-[#111827] rounded-2xl border border-[#1E293B] overflow-hidden">
-            <div class="h-[180px] bg-gradient-to-br from-emerald-900/40 to-[#111827]"></div>
-            <div class="p-5">
-              <p class="text-white text-[15px] font-semibold">ファンタジークエスト</p>
-              <p class="text-gray-500 text-[13px] mt-1">RPG・アドベンチャー</p>
-            </div>
-          </div>
-          <div class="bg-[#111827] rounded-2xl border border-[#1E293B] overflow-hidden">
-            <div class="h-[180px] bg-gradient-to-br from-blue-900/40 to-[#111827]"></div>
-            <div class="p-5">
-              <p class="text-white text-[15px] font-semibold">パズルパラダイス</p>
-              <p class="text-gray-500 text-[13px] mt-1">パズル・カジュアル</p>
-            </div>
-          </div>
-          <div class="bg-[#111827] rounded-2xl border border-[#1E293B] overflow-hidden">
-            <div class="h-[180px] bg-gradient-to-br from-red-900/40 to-[#111827]"></div>
-            <div class="p-5">
-              <p class="text-white text-[15px] font-semibold">バトルランナー</p>
-              <p class="text-gray-500 text-[13px] mt-1">アクション・プラットフォーマー</p>
-            </div>
-          </div>
-          <div class="bg-[#111827] rounded-2xl border border-[#1E293B] overflow-hidden">
-            <div class="h-[180px] bg-gradient-to-br from-purple-900/40 to-[#111827]"></div>
-            <div class="p-5">
-              <p class="text-white text-[15px] font-semibold">星降る夜の物語</p>
-              <p class="text-gray-500 text-[13px] mt-1">ノベル・ストーリー</p>
-            </div>
-          </div>
-        </div>
-
         <a
           href="https://nologic.app"
           class="inline-flex items-center gap-2.5 px-12 py-[18px] bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-base rounded-xl transition-colors"
@@ -210,7 +221,7 @@ import { newsItems } from "../data/news";
     </section>
 
     <!-- NextCreators Section -->
-    <section class="bg-[#111827] py-[100px] px-5 md:px-[120px]">
+    <section id="community" class="bg-[#111827] py-[100px] px-5 md:px-[120px]">
       <div class="max-w-7xl mx-auto flex flex-col items-center gap-[60px]">
         <div class="inline-flex items-center px-5 py-2 bg-emerald-500/15 text-emerald-500 text-xs font-bold rounded-full border border-emerald-500/25 tracking-[2px]">
           COMMUNITY
@@ -222,7 +233,7 @@ import { newsItems } from "../data/news";
           ひとりで創り続ける孤独、もう終わりにしませんか。
         </p>
         <p class="text-gray-400 text-[17px] leading-relaxed text-center max-w-[700px]">
-          作品を見せる相手がいない、モチベが続かない——そんな悩みを持つ100名以上のクリエイターが集まっています。<br />
+          作品を見せる相手がいない、モチベが続かない...そんな悩みを持つ100名以上のクリエイターが集まっています。<br />
           初心者歓迎、見学だけでもOKです。
         </p>
 
@@ -293,7 +304,7 @@ import { newsItems } from "../data/news";
           ゲーム・Web・AIで、御社のアイデアを形に。
         </p>
         <p class="text-gray-400 text-[17px] leading-relaxed text-center max-w-[700px]">
-          ゲームを使ったプロモーション、AIを組み込んだサービス開発——<br />
+          ゲームを使ったプロモーション、AIを組み込んだサービス開発など<br />
           企画から納品まで伴走します。まずはお気軽にご相談ください。
         </p>
 
@@ -364,7 +375,7 @@ import { newsItems } from "../data/news";
             </div>
           </div>
           <div class="flex flex-col gap-5">
-            <p class="text-white text-xl italic font-medium leading-relaxed">
+            <p class="text-white text-xl font-medium leading-relaxed">
               きっかけは、同級生の退学でした。<br />
               ゲームを作り続けていた友人が、ある日突然家庭環境のせいで創作ができなくなり、退学する。<br />
               そんな原体験がきっかけで、私はこの会社を創業しました。
@@ -445,3 +456,73 @@ import { newsItems } from "../data/news";
   <!-- フッター -->
   <Footer />
 </Layout>
+
+<style>
+  /* ヒーロー背景のラディアルグラデーションを横方向にゆっくり振動させる */
+  .hero-drift {
+    animation: hero-drift 28s ease-in-out infinite;
+    will-change: transform;
+  }
+
+  @keyframes hero-drift {
+    0%, 100% { transform: translateX(-15%); }
+    50% { transform: translateX(15%); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-drift {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  // テキストアニメーション
+  // data-anim-stagger 属性を持つ親要素の配下にある .anim-char を対象に、
+  // 各文字を CJK統合漢字 のランダム文字で 6回切り替えてから最終文字に着地させる
+  const TICKS = 6;
+  const STEP_MS = 50;
+
+  const randomKanji = () => {
+    const code = 0x4e00 + Math.floor(Math.random() * (0x9fff - 0x4e00));
+    return String.fromCodePoint(code);
+  };
+
+  const animateTextGroups = () => {
+    const groups = document.querySelectorAll<HTMLElement>('[data-anim-stagger]');
+    if (groups.length === 0) return;
+
+    // モーション低減設定の場合はアニメーションせず、最終文字のまま表示
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    groups.forEach((group) => {
+      const stagger = Number(group.dataset.animStagger) || 25;
+      const chars = group.querySelectorAll<HTMLElement>('.anim-char');
+      chars.forEach((el, i) => {
+        const target = el.dataset.char ?? el.textContent ?? '';
+        const startDelay = i * stagger;
+        for (let t = 0; t < TICKS; t++) {
+          window.setTimeout(() => {
+            el.textContent = randomKanji();
+          }, startDelay + t * STEP_MS);
+        }
+        window.setTimeout(() => {
+          el.textContent = target;
+        }, startDelay + TICKS * STEP_MS);
+      });
+    });
+  };
+
+  // DOM 構築後に開始
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', animateTextGroups);
+  } else {
+    animateTextGroups();
+  }
+</script>
+
+<style>
+  .hero-mincho {
+    font-family: "Shippori Mincho", "Noto Serif JP", serif;
+  }
+</style>

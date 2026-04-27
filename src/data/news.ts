@@ -12,7 +12,8 @@ export const newsItems: NewsItem[] = [
     slug: "nextcreators-100-members",
     date: "2026.01.05",
     category: "お知らせ",
-    title: "クリエイター支援コミュニティ「NextCreators」のDiscordサーバー参加者が100名を突破",
+    title:
+      "クリエイター支援コミュニティ「NextCreators」のDiscordサーバー参加者が100名を突破",
     excerpt:
       "株式会社クリエイターのうえきばちが運営するクリエイター支援コミュニティ「NextCreators」のDiscordサーバー参加者が100名を突破しました。イラストレーター、ゲームクリエイター、作曲家、写真家など多様なジャンルのクリエイターが交流しています。",
     content: `
@@ -27,6 +28,7 @@ export const newsItems: NewsItem[] = [
         <li>写真家・フォトグラファー</li>
         <li>映像クリエイター・動画編集者</li>
         <li>Webエンジニア・プログラマー</li>
+        <li>CGモデラー</li>
       </ul>
 
       <h3>コミュニティでできること</h3>
@@ -44,7 +46,8 @@ export const newsItems: NewsItem[] = [
     slug: "nologic-official-release",
     date: "2025.11.01",
     category: "リリース",
-    title: "ノーコードでオリジナルゲームが作れるWebアプリ「NoLogic」を正式リリース",
+    title:
+      "ノーコードでオリジナルゲームが作れるWebアプリ「NoLogic」を正式リリース",
     excerpt:
       "株式会社クリエイターのうえきばちは、プログラミング不要・イラスト1枚からオリジナルゲームを制作できるノーコードゲーム制作プラットフォーム『NoLogic（ノーロジック）』を2025年11月1日に正式リリースしました。",
     content: `
@@ -58,18 +61,17 @@ export const newsItems: NewsItem[] = [
         <li><strong>豊富なゲームテンプレート</strong>：アクション、シューティング、リズムゲームなど多彩なジャンルに対応</li>
         <li><strong>約5分でゲーム完成</strong>：初めての方でも短時間でWebゲームを公開可能</li>
         <li><strong>ブラウザで即プレイ</strong>：作ったゲームはURLで共有でき、スマホ・PCどちらからも遊べる</li>
-        <li><strong>著作権はクリエイターに帰属</strong>：アップロードした作品の権利は制作者のもの</li>
       </ul>
 
       <h3>こんな方におすすめ</h3>
       <ul>
         <li>「うちの子（オリジナルキャラクター）」のゲームを作ってみたいイラストレーター</li>
-        <li>プログラミングを学ばずにゲームクリエイターとして活動を始めたい方</li>
+        <li>プログラミングは勉強中だけれど、まず実際にゲームを作ってみたい方</li>
         <li>SNSで話題を作るミニゲームを制作したい企業・個人</li>
         <li>学校・教育機関でゲーム開発を体験したい学生・指導者</li>
       </ul>
 
-      <p>NoLogicは、IPA（独立行政法人情報処理推進機構）の未踏IT人材発掘・育成事業に採択されたプロジェクトから生まれました。ノーコード・ローコード開発の潮流の中でも、「ゲーム制作の民主化」という独自の領域に挑戦しています。</p>
+      <p>ただゲームが作れるで終わらず、投稿されたゲーム・キャラクターを中心にコミュニティが形成されていく。そんなサービスを目指し引き続き取り組んで参ります。</p>
 
       <p>詳細は下記のプレスリリースをご覧ください。</p>
       <p><a href="https://prtimes.jp/main/html/rd/p/000000004.000160338.html" target="_blank" rel="noopener noreferrer" class="text-emerald-500 hover:underline">プレスリリース（PR TIMES）を読む</a></p>
@@ -79,7 +81,8 @@ export const newsItems: NewsItem[] = [
     slug: "kosen-career-game-dev",
     date: "2025.07.29",
     category: "お知らせ",
-    title: "高専生のゲーム開発を支援するDiscordコミュニティ「高専キャリアゲーム開発部」の運営を3社共同で開始",
+    title:
+      "高専生のゲーム開発を支援するDiscordコミュニティ「高専キャリアゲーム開発部」の運営を3社共同で開始",
     excerpt:
       "株式会社高専キャリア研究所、クリエイピア株式会社、株式会社クリエイターのうえきばちの3社は、高専生・高専卒業生を対象としたゲーム開発支援Discordコミュニティ「高専キャリアゲーム開発部」の共同運営を開始しました。",
     content: `
@@ -129,7 +132,6 @@ export const newsItems: NewsItem[] = [
       <h3>クローズドテスターからの主なフィードバック</h3>
       <ul>
         <li>「イラスト1枚からゲームになる体験が想像以上に楽しい」</li>
-        <li>「ノーコードとは思えないほどカスタマイズ性が高い」</li>
         <li>「テンプレートのジャンル追加を期待したい」</li>
         <li>「SNSでゲームをシェアしやすい仕組みが欲しい」</li>
       </ul>
@@ -141,7 +143,8 @@ export const newsItems: NewsItem[] = [
     slug: "mirai-studio-investment",
     date: "2025.04.04",
     category: "お知らせ",
-    title: "株式会社みらいスタジオが株式会社クリエイターのうえきばちの株主として参画",
+    title:
+      "株式会社みらいスタジオが株式会社クリエイターのうえきばちの株主として参画",
     excerpt:
       "株式会社クリエイターのうえきばちは、スタートアップスタジオ「株式会社みらいスタジオ」からのカーブアウトを経て設立されたスタートアップです。この度、みらいスタジオが株主として正式に参画しました。",
     content: `
@@ -162,7 +165,6 @@ export const newsItems: NewsItem[] = [
       <ul>
         <li>ノーコードゲーム制作プラットフォーム「NoLogic」のプロダクト開発</li>
         <li>クリエイター支援コミュニティ「NextCreators」の拡大</li>
-        <li>ゲーム・Web・AI分野における受託開発事業「TechPlant Studio」の体制強化</li>
       </ul>
 
       <p>引き続き、「環境のせいで創作を諦めない世界」の実現に向け、クリエイターの皆さまの「つくりたい」を支援するプロダクト開発に注力してまいります。</p>
@@ -175,7 +177,8 @@ export const newsItems: NewsItem[] = [
     slug: "uchinoko-game-service",
     date: "2025.03.07",
     category: "サービス",
-    title: "「うちの子ゲーム制作代行」サービスを開始 ― オリジナルキャラクターのゲームを制作代行",
+    title:
+      "「うちの子ゲーム制作代行」サービスを開始 ― オリジナルキャラクターのゲームを制作代行",
     excerpt:
       "株式会社クリエイターのうえきばちは、オリジナルキャラクター（うちの子）を主役としたゲームを制作代行するサービスを開始しました。ゲーム制作未経験の方でも、自分のキャラクターを使ったオリジナルゲームが手に入ります。",
     content: `
@@ -205,7 +208,8 @@ export const newsItems: NewsItem[] = [
     slug: "company-establishment",
     date: "2024.11.29",
     category: "お知らせ",
-    title: "クリエイター支援スタートアップ「株式会社クリエイターのうえきばち」を設立",
+    title:
+      "クリエイター支援スタートアップ「株式会社クリエイターのうえきばち」を設立",
     excerpt:
       "2024年11月29日、クリエイター支援を目的としたスタートアップ「株式会社クリエイターのうえきばち」を東京都千代田区に設立しました。ノーコードゲーム制作プラットフォームとクリエイターコミュニティ運営を軸に事業を展開します。",
     content: `
@@ -226,7 +230,6 @@ export const newsItems: NewsItem[] = [
       <ul>
         <li>ノーコードゲーム制作プラットフォーム「<strong>NoLogic</strong>」の開発・運営</li>
         <li>クリエイター支援コミュニティ「<strong>NextCreators</strong>」の企画・運営</li>
-        <li>ゲーム・Web・AI分野の受託開発スタジオ「<strong>TechPlant Studio</strong>」の運営</li>
         <li>オリジナルキャラクターを活かした「うちの子ゲーム制作代行」サービス</li>
       </ul>
 

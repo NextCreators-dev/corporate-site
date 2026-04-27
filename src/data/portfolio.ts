@@ -32,10 +32,11 @@ export const portfolioItems: PortfolioItem[] = [
     category: "client",
     categoryLabel: "クライアントワーク",
     status: "released",
-    statusLabel: "運用中",
+    statusLabel: "開発中",
     description:
       "児童発達支援・放課後等デイサービスの記録・勤怠・請求をクラウドで一元管理するアプリ。株式会社コモングランズと共同開発。",
-    techStack: ["React", "TypeScript", "Next.js"],
+    techStack: ["Next.js", "TypeScript", "GAS"],
+    image: "/portfolio/comorevi.png",
     url: "https://comorevi.net/",
   },
   {
@@ -44,7 +45,8 @@ export const portfolioItems: PortfolioItem[] = [
     categoryLabel: "イベント出展",
     description:
       "渋谷のコワーキングスペース「SHIBUYA STARTUP OASIS」の1周年記念イベントに出展。テンプレート基盤を使用したオリジナルゲームを開発しました。",
-    techStack: ["NoLogic", "TypeScript"],
+    techStack: ["Unity", "C#"],
+    image: "/portfolio/oasis.png",
   },
   {
     title: "KOSEN GAME JAM 共同運営",
@@ -53,6 +55,7 @@ export const portfolioItems: PortfolioItem[] = [
     description:
       "株式会社高専キャリア研究所、クリエイピア株式会社、株式会社クリエイターのうえきばちの3社で、オンラインのゲーム開発ハッカソンを開催しました。",
     techStack: ["イベント運営", "ゲーム開発支援"],
+    image: "/portfolio/game-dev.png",
     url: "https://kosen-career.tech/event/kosengamejam",
   },
 ];
