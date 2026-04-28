@@ -5,6 +5,7 @@ import Navigation from "@components/Navigation.astro";
 import Footer from "@components/Footer.astro";
 import nextCreatorLogo from "@public/nextcreator-logo.png";
 import CEOPhoto from "@public/ceo-photo.png";
+import heroBg from "../assets/hero-bg.png";
 import { newsItems } from "../data/news";
 ---
 
@@ -17,12 +18,17 @@ import { newsItems } from "../data/news";
     <section
       class="relative min-h-screen overflow-hidden bg-[#020B16] pt-24 pb-8 md:pt-28"
     >
-      <!-- 背景画像 -->
-      <div
-        class="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style="background-image: url('/hero-bg.png');"
-      >
-      </div>
+      <!-- 背景画像 (Astro Image で WebP/AVIF を自動生成し、優先読み込み) -->
+      <Image
+        src={heroBg}
+        alt=""
+        widths={[768, 1280, 1920]}
+        sizes="100vw"
+        formats={["avif", "webp"]}
+        loading="eager"
+        fetchpriority="high"
+        class="absolute inset-0 h-full w-full object-cover"
+      />
       <!-- 文字可読性確保用の暗色オーバーレイ -->
       <div class="absolute inset-0 bg-black/60"></div>
 
