@@ -58,21 +58,39 @@ const gaMeasurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
 
 {
     gaMeasurementId && (
-        <>
-            <script
-                is:inline
-                async
-                src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`}
-            />
-            <script is:inline define:vars={{ gaMeasurementId }}>
-                window.dataLayer = window.dataLayer || [];
-                function gtag() {
-                    window.dataLayer.push(arguments);
+        <script is:inline define:vars={{ gaMeasurementId }}>
+            // GTM/GA4 を load 後に遅延注入してパフォーマンスへの影響を回避する
+            // ページビューは config 呼び出し時点で送信されるため、遅延しても計測は正しく行われる
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+                window.dataLayer.push(arguments);
+            }
+            window.gtag = gtag;
+            gtag("js", new Date());
+            gtag("config", gaMeasurementId);
+
+            function loadGtag() {
+                var s = document.createElement("script");
+                s.async = true;
+                s.src =
+                    "https://www.googletagmanager.com/gtag/js?id=" +
+                    gaMeasurementId;
+                document.head.appendChild(s);
+            }
+
+            // load 後にアイドル時間で読み込み。直帰計測ロスを抑えるため timeout を設定
+            function schedule() {
+                if ("requestIdleCallback" in window) {
+                    window.requestIdleCallback(loadGtag, { timeout: 1500 });
+                } else {
+                    setTimeout(loadGtag, 200);
                 }
-                window.gtag = gtag;
-                gtag("js", new Date());
-                gtag("config", gaMeasurementId);
-            </script>
-        </>
+            }
+            if (document.readyState === "complete") {
+                schedule();
+            } else {
+                window.addEventListener("load", schedule, { once: true });
+            }
+        </script>
     )
 }
