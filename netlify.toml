@@ -2,5 +2,10 @@
   command = "yarn build"
   publish = "dist"
 
+# ビルド・Functions ランタイムを Node.js 22 に固定
+[build.environment]
+  NODE_VERSION = "22"
+
 [functions]
   directory = "netlify/functions"
+  node_bundler = "esbuild"
