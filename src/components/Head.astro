@@ -37,13 +37,24 @@ const gaMeasurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
     }}
 />
 
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<!-- Shippori Mincho はヒーロー H1 のみで使用（weight:800 / 文字サブセット） -->
+<!-- Shippori Mincho 800（ヒーロー H1 専用 / 必要文字のみサブセット）を自己ホスト -->
+<!-- レンダーブロックを避けるため preload + インライン @font-face で読み込み、font-display: optional で CLS=0 を担保 -->
 <link
-    href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@800&text=%E8%AA%B0%E3%82%82%E3%81%8C%E5%89%B5%E4%BD%9C%E3%81%AB%E6%8C%91%E6%88%A6%E3%81%A7%E3%81%8D%E3%82%8B%E4%B8%96%E7%95%8C%E3%81%AE%E5%AE%9F%E7%8F%BE&display=swap"
-    rel="stylesheet"
+    rel="preload"
+    href="/fonts/shippori-mincho-800-subset.woff2"
+    as="font"
+    type="font/woff2"
+    crossorigin
 />
+<style is:inline>
+    @font-face {
+        font-family: "Shippori Mincho";
+        font-style: normal;
+        font-weight: 800;
+        font-display: optional;
+        src: url("/fonts/shippori-mincho-800-subset.woff2") format("woff2");
+    }
+</style>
 
 {
     gaMeasurementId && (
