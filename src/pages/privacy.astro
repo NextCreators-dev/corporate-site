@@ -1,0 +1,31 @@
+---
+import Layout from "@layouts/Layout.astro";
+import Navigation from "@components/Navigation.astro";
+import Footer from "@components/Footer.astro";
+---
+
+<Layout title="プライバシーポリシー | 株式会社クリエイターのうえきばち">
+  <div class="flex flex-col min-h-screen">
+    <main class="bg-[#0A0F1C] text-white flex-1">
+      <Navigation showBack={true} />
+
+      <!-- ヘッダー -->
+      <section class="bg-[#111827] py-20 px-5 md:px-[120px]">
+        <div class="max-w-4xl mx-auto flex flex-col items-center gap-6 text-center pt-16">
+          <h1 class="text-3xl md:text-[44px] font-black leading-tight">
+            プライバシーポリシー
+          </h1>
+        </div>
+      </section>
+
+      <!-- 本文 -->
+      <section class="bg-[#0A0F1C] py-16 px-5 md:px-[120px]">
+        <div class="max-w-4xl mx-auto prose prose-invert max-w-none text-[#C0C8D4] text-base leading-[2]">
+          <!-- ここにプライバシーポリシーを記入 -->
+        </div>
+      </section>
+    </main>
+
+    <Footer hideCta={true} />
+  </div>
+</Layout>
