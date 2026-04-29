@@ -9,4 +9,8 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   integrations: [tailwind(), icon(), react(), sitemap()],
   site: "https://creatorpot.net",
+  build: {
+    // CSS をインライン化してレンダーブロックを回避（LCP 改善）
+    inlineStylesheets: "always",
+  },
 });

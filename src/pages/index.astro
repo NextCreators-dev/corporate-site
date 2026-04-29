@@ -19,12 +19,14 @@ import { newsItems } from "../data/news";
       class="relative min-h-screen overflow-hidden bg-[#020B16] pt-24 pb-8 md:pt-28"
     >
       <!-- 背景画像 (Astro Image で WebP/AVIF を自動生成し、優先読み込み) -->
+      <!-- 上から bg-black/60 のオーバーレイを重ねるため、圧縮を強めても視覚劣化しにくい -->
       <Image
         src={heroBg}
         alt=""
         widths={[768, 1280, 1920]}
         sizes="100vw"
         formats={["avif", "webp"]}
+        quality={60}
         loading="eager"
         fetchpriority="high"
         class="absolute inset-0 h-full w-full object-cover"
