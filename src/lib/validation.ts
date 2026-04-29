@@ -8,6 +8,9 @@ export const CONTACT_CATEGORIES = [
   { value: "creative", label: "クリエイティブ制作" },
   { value: "ai", label: "AI活用コンサルティング" },
   { value: "event", label: "イベント企画・運営" },
+  { value: "doujin", label: "お品書き・PV制作" },
+  { value: "game-support", label: "ゲーム制作代行" },
+  { value: "community", label: "コミュニティ運営サポート" },
   { value: "other", label: "その他" },
 ] as const;
 
@@ -22,8 +25,12 @@ export const BUDGET_OPTIONS = [
   { value: "undecided", label: "未定・相談したい" },
 ] as const;
 
-const validCategories = new Set<string>(CONTACT_CATEGORIES.map((category) => category.value));
-const validBudgets = new Set<string>(BUDGET_OPTIONS.map((budget) => budget.value));
+const validCategories = new Set<string>(
+  CONTACT_CATEGORIES.map((category) => category.value),
+);
+const validBudgets = new Set<string>(
+  BUDGET_OPTIONS.map((budget) => budget.value),
+);
 
 // バリデーションスキーマ
 export const contactSchema = z.object({
@@ -40,7 +47,10 @@ export const contactSchema = z.object({
   category: z
     .string()
     .trim()
-    .refine((value) => validCategories.has(value), "お問い合わせ種別を選択してください"),
+    .refine(
+      (value) => validCategories.has(value),
+      "お問い合わせ種別を選択してください",
+    ),
   message: z
     .string()
     .trim()

@@ -55,18 +55,21 @@ const faqs = [
 const pricingItems = [
   { name: "Webアプリ開発", price: "50万円〜", duration: "1〜3ヶ月", note: "業務システム・SaaS等。顧客との対話を大事にしながら、必要な箇所で生成AIをフルに活用し、本当に必要なものをスピーディーに実装します。デザイン案の作成からリリース後の運用保守まで、柔軟な対応を行うことが可能です。", featured: true },
   { name: "ゲーム企画立案・開発", price: "50万円〜", duration: "1〜4ヶ月", note: "ミニゲーム・教育ゲーム等。ゲームの企画提案から素材・BGM制作、開発まで全て内製し、ブランドに合った世界観を素早く形にし、リリース後の改善まで見据えた設計が可能です。", featured: true },
-  { name: "Webサイト制作", price: "15万円〜", duration: "3日〜2週間", note: "コーポレートサイト・LP等。デザインの提案〜実装・運用提案、打ち合わせから運用まで、窓口は私たち一つだけで対応いたします。", featured: false },
+  { name: "Webサイト制作", price: "15万円〜", duration: "3日〜2週間", note: "コーポレートサイト・LP等。デザインの提案〜実装・運用提案、打ち合わせから運用まで、窓口は私たち一つだけで対応いたします。", featured: true },
   { name: "クリエイティブ制作", price: "10万円〜", duration: "1週間〜", note: "動画・バナー・ポスター等。必要な素材まで含めて丸ごとお任せいただけます。", featured: false },
   { name: "AI活用コンサルティング", price: "月5万円〜", duration: "要相談", note: "自社サービスでも生成AIを日々活用しているチームが、現場目線で導入をお手伝いします。PoC開発から運用ルール・ガイドライン策定まで、「導入して終わり」にならない設計が得意です。", featured: false },
-  { name: "イベント企画・運営", price: "15万円〜", duration: "要相談", note: "ワークショップ・ハッカソン・交流会・勉強会等。クリエイターコミュニティの運営経験を活かし、参加者が「また来たい」と思えるイベントを企画・運営します。写真撮影や音響周りのみの対応も可能です。", featured: false },
+  { name: "イベント企画・運営", price: "15万円〜", duration: "要相談", note: "ワークショップ・ハッカソン・交流会・勉強会等。クリエイターコミュニティの運営経験を活かし、参加者が「また来たい」と思えるイベントを企画・運営します。写真撮影や音響周りなどの技術的な対応も可能です。", featured: false },
+  { name: "同人イベントにおけるお品書き・PV制作", price: "1万円〜", duration: "3日〜", note: "同人イベントに複数参加したことあるメンバーが、お品書きの作成や紹介PVのサポートをいたします。同人イベント参加のアドバイス等も可能なので、お気軽にご相談ください。", featured: false },
+  { name: "イラストレーター・Vtuber向けゲーム制作代行", price: "5万円〜", duration: "2週間〜", note: "自分のキャラクターを使ったゲームを作りたい！というイラストレーターやVtuberの方向けに、ゲームの企画立案から開発・リリースまでを伴走いたします。", featured: false },
+  { name: "コミュニティ運営サポート", price: "要相談", duration: "要相談", note: "NextCreatorsの運営経験を元に、Discordサーバーの運営のサポートやルール立案、運用サポートなどをサポートいたします。自分のファンサーバーの運用に困っている個人Vtuberの方におすすめです。", featured: false }
 ];
 
 // メンバーデータ
 const members = [
   { name: "山縣 帆高", role: "Webエンジニア / 映像クリエイター", desc: "Webサイトやアプリの企画・要件定義からデザイン・開発、映像制作まで担当。現在はNoLogicの開発手法をもとに、AI活用コンサルも担当。", isRepresentative: true ,avatar: "/members/hoppy.png"},
-  { name: "リロル", role: "ゲームエンジニア / CGモデラー / イラストレーター", desc: `元ゲーム会社所属。「ゲームを全て自分で作りたい」という思いから、イラスト作成、アセット制作、CGモデル制作、Unityでのゲームプログラミングを担当。<br><a href="https://skima.jp/profile?id=43669"  target="_blank" class="text-emerald-400
+  { name: "リロル", role: "ゲームエンジニア / CGモデラー / イラストレーター", desc: `元ゲーム会社所属。「ゲームを全て自分で作りたい」という思いから、イラスト作成、アセット制作、CGモデル制作、Unityでのゲームプログラミングを担当。pixel artによるゲーム背景<br><a href="https://skima.jp/profile?id=43669"  target="_blank" class="text-emerald-400
   underline">SKIMA</a>`, isRepresentative: false ,avatar: "/members/riroru.png"},
-  { name: "nakachoco", role: "音楽家 / Webエンジニア", desc: "NoLogicで使用しているBGMの制作を担当。EDMからボーカロイド楽曲、編曲までマルチに作成できる音楽家。個人の開発経験を活かし、社内の作業自動化も担当。", isRepresentative: false ,avatar: "/members/nakahcoco.png"},
+  { name: "nakachoco", role: "音楽家 / Webエンジニア", desc: `NoLogicで使用しているBGMの制作を担当。EDMからボーカロイド楽曲、編曲までマルチに作成できる音楽家。個人の開発経験を活かし、社内の作業自動化も担当。<br/><a href="https://skeb.jp/@nakachoco" target="_blank" class="text-emerald-400 underline">Skeb</a>`, isRepresentative: false ,avatar: "/members/nakahcoco.png"},
   { name: "佐藤 諒", role: "コミュニティ運営・ライター", desc: "個人で文章創作を行なっていた経験から、シナリオ制作やwebライティングを担当。また、全国最大規模の高専コミュニティの運営補助経験を活かし、クリエイターコミュニティの運営も担当。", isRepresentative: false ,avatar: "/members/uyo.png"},
   { name: "坂部 凌央", role: "映像クリエイター", desc: "代表と一緒に学生時代にボーカロイドライブを作った経験から、MVを中心とした映像制作を担当。", isRepresentative: false ,avatar: "/members/ryou.png"},
   { name: "Xia0", role: "イラストレーター / CGモデラー", desc: `デジタルハリウッド大阪にて、ジェネラリストとしてモデリングやゲームエンジン、デザイン基礎などを学ぶ。現在は室内を中心とした背景モデリングや、漫画、人物イラスト等を制作。経年劣化など質感や使用感にこだわりがある。<br/><a href="https://www.foriio.com/works/1890759" target="_blank" class="text-emerald-400 underline">portfolio</a><br/><a href="https://x.com/Xia0_0x0" target="_blank" class="text-emerald-400 underline">SNS(Twitter)</a>`, isRepresentative: false ,avatar: "/members/xia0.jpg"},];
@@ -434,7 +437,7 @@ const flowSteps = [
         <ContactForm
           client:load
           heading="まずはお気軽にご相談ください"
-          description={"「こんなこと頼めるかな？」でも大丈夫。\nご予算・納期・ご要望に合わせて最適なプランをご提案いたします。"}
+          description={"「こんなこと頼めるかな？」でも大丈夫。\nご予算・納期・ご要望に合わせて最適なプランをご提案いたします。\n法人だけでなく、個人からのご依頼も大歓迎です！"}
         />
       </div>
     </section>
