@@ -9,3 +9,9 @@
 [functions]
   directory = "netlify/functions"
   node_bundler = "esbuild"
+
+# 自己ホストフォントの長期キャッシュ（不変アセット）
+[[headers]]
+  for = "/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

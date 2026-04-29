@@ -23,10 +23,10 @@ import { newsItems } from "../data/news";
       <Image
         src={heroBg}
         alt=""
-        widths={[768, 1280, 1920]}
+        widths={[640, 1024, 1600]}
         sizes="100vw"
         formats={["avif", "webp"]}
-        quality={60}
+        quality={45}
         loading="eager"
         fetchpriority="high"
         class="absolute inset-0 h-full w-full object-cover"
@@ -1066,6 +1066,22 @@ import { newsItems } from "../data/news";
     return String.fromCodePoint(code);
   };
 
+  // 各 tick の DOM 書込を 1 フレームにまとめてレイアウト無効化を最小化する
+  type Pending = { el: HTMLElement; text: string };
+  let pendingWrites: Pending[] = [];
+  let rafScheduled = false;
+  const scheduleWrite = (el: HTMLElement, text: string) => {
+    pendingWrites.push({ el, text });
+    if (rafScheduled) return;
+    rafScheduled = true;
+    requestAnimationFrame(() => {
+      const batch = pendingWrites;
+      pendingWrites = [];
+      rafScheduled = false;
+      for (const { el, text } of batch) el.textContent = text;
+    });
+  };
+
   const animateTextGroups = () => {
     const groups = document.querySelectorAll<HTMLElement>(
       "[data-anim-stagger]",
@@ -1084,14 +1100,14 @@ import { newsItems } from "../data/news";
         for (let t = 0; t < TICKS; t++) {
           window.setTimeout(
             () => {
-              el.textContent = randomKanji();
+              scheduleWrite(el, randomKanji());
             },
             startDelay + t * STEP_MS,
           );
         }
         window.setTimeout(
           () => {
-            el.textContent = target;
+            scheduleWrite(el, target);
           },
           startDelay + TICKS * STEP_MS,
         );
@@ -1110,5 +1126,12 @@ import { newsItems } from "../data/news";
 <style>
   .hero-mincho {
     font-family: "Shippori Mincho", "Noto Serif JP", serif;
+    /* フォント切替や文字差し替え時のリフローを局所化し、H1 の高さも先に確定させる */
+    contain: layout;
+    min-height: calc(1.52em * 3);
+  }
+  /* 文字アニメ中の幅変化を周囲に波及させない */
+  [data-anim-stagger] {
+    contain: layout;
   }
 </style>
