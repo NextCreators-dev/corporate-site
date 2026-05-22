@@ -1,6 +1,20 @@
 ---
 import { SEO } from "astro-seo";
 
+interface Props {
+    title?: string;
+    description?: string;
+}
+
+// ページ固有のタイトル・ディスクリプションを受け取り、未指定時はサイト共通の既定値にフォールバックする
+const defaultTitle = "株式会社クリエイターのうえきばち";
+const defaultDescription =
+    "株式会社クリエイターのうえきばちは、ノーコードでゲーム制作ができるプラットフォームの開発や、クリエイターコミュニティ運営を手掛けています。";
+const { title = defaultTitle, description = defaultDescription } = Astro.props;
+
+// 各ページの canonical URL（クエリ・ハッシュは除外）
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
+
 // Google Search Console 認証コード（Netlify等の環境変数で設定）
 const gscVerification = import.meta.env.PUBLIC_GSC_VERIFICATION;
 // GA4 測定ID（例: G-XXXXXXXXXX）。環境変数で設定されていない場合はタグを出力しない
@@ -8,15 +22,19 @@ const gaMeasurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
 ---
 
 <SEO
-    title="株式会社クリエイターのうえきばち"
-    description="株式会社クリエイターのうえきばちは、ノーコードでゲーム制作ができるプラットフォームの開発や、クリエイターコミュニティ運営を手掛けています。"
+    title={title}
+    description={description}
     charset="utf-8"
     openGraph={{
         basic: {
-            title: "株式会社クリエイターのうえきばち",
+            title: title,
             type: "website",
             image: import.meta.env.SITE + "/OGP.png",
-            url: "https://corporate-site.com",
+            url: canonicalUrl,
+        },
+        optional: {
+            description: description,
+            siteName: defaultTitle,
         },
     }}
     twitter={{

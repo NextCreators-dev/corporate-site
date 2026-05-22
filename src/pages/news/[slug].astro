@@ -14,7 +14,10 @@ export function getStaticPaths() {
 const { item } = Astro.props;
 ---
 
-<Layout title={`${item.title} | 株式会社クリエイターのうえきばち`}>
+<Layout
+  title={`${item.title} | 株式会社クリエイターのうえきばち`}
+  description={item.excerpt}
+>
   <main class="bg-[#0A0F1C] text-white">
     <Navigation showBack={true} />
 

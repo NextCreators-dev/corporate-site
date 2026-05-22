@@ -7,7 +7,10 @@ import { newsItems } from "../../data/news";
 const categories = [...new Set(newsItems.map((item) => item.category))];
 ---
 
-<Layout title="お知らせ | 株式会社クリエイターのうえきばち">
+<Layout
+  title="お知らせ | 株式会社クリエイターのうえきばち"
+  description="株式会社クリエイターのうえきばちのお知らせ・リリース情報の一覧です。NoLogicや会社の最新情報、コミュニティ運営に関するニュースを掲載しています。"
+>
   <div class="flex flex-col min-h-screen">
     <main class="bg-[#0A0F1C] text-white flex-1">
       <Navigation showBack={true} />
