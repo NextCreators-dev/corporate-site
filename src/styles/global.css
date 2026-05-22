@@ -1,0 +1,17 @@
+@import 'tailwindcss';
+
+/*
+  Tailwind CSS v4 では border のデフォルト色が `currentcolor` に変更されたため、
+  v3 と同じ見た目を保つための互換スタイルを追加している。
+  将来このスタイルを削除する場合は、デフォルト色に依存している要素へ
+  明示的に border 色ユーティリティを指定する必要がある。
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}

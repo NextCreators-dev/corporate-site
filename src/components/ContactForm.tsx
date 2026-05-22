@@ -223,7 +223,7 @@ export default function ContactForm({
             value={formData.name}
             onChange={handleChange}
             placeholder="山田 太郎"
-            className={`bg-[#0A0F1C] border rounded-lg px-4 py-3 text-white text-sm placeholder:text-gray-600 focus:outline-none focus:ring-1 transition-colors ${
+            className={`bg-[#0A0F1C] border rounded-lg px-4 py-3 text-white text-sm placeholder:text-gray-600 focus:outline-hidden focus:ring-1 transition-colors ${
               errors.name
                 ? "border-red-400 focus:border-red-400 focus:ring-red-400"
                 : "border-[#1E293B] focus:border-emerald-500 focus:ring-emerald-500"
@@ -245,7 +245,7 @@ export default function ContactForm({
             value={formData.email}
             onChange={handleChange}
             placeholder="example@company.com"
-            className={`bg-[#0A0F1C] border rounded-lg px-4 py-3 text-white text-sm placeholder:text-gray-600 focus:outline-none focus:ring-1 transition-colors ${
+            className={`bg-[#0A0F1C] border rounded-lg px-4 py-3 text-white text-sm placeholder:text-gray-600 focus:outline-hidden focus:ring-1 transition-colors ${
               errors.email
                 ? "border-red-400 focus:border-red-400 focus:ring-red-400"
                 : "border-[#1E293B] focus:border-emerald-500 focus:ring-emerald-500"
@@ -272,7 +272,7 @@ export default function ContactForm({
             value={formData.company}
             onChange={handleChange}
             placeholder="株式会社〇〇"
-            className="bg-[#0A0F1C] border border-[#1E293B] rounded-lg px-4 py-3 text-white text-sm placeholder:text-gray-600 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors"
+            className="bg-[#0A0F1C] border border-[#1E293B] rounded-lg px-4 py-3 text-white text-sm placeholder:text-gray-600 focus:outline-hidden focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors"
           />
         </div>
 
@@ -313,7 +313,7 @@ export default function ContactForm({
             name="budget"
             value={formData.budget}
             onChange={handleChange}
-            className="bg-[#0A0F1C] border border-[#1E293B] rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors appearance-none"
+            className="bg-[#0A0F1C] border border-[#1E293B] rounded-lg px-4 py-3 text-white text-sm focus:outline-hidden focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors appearance-none"
             style={{
               backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")`,
               backgroundRepeat: "no-repeat",
@@ -347,7 +347,7 @@ export default function ContactForm({
               "例: 自社サービスのWebアプリを開発したいと考えています。\n要件はまだ固まっていませんが、企画段階からご相談可能でしょうか？"
             }
             style={{ resize: "vertical" }}
-            className={`bg-[#0A0F1C] border rounded-lg px-4 py-3 text-white text-sm placeholder:text-gray-600 focus:outline-none focus:ring-1 transition-colors overflow-y-auto min-h-[120px] ${
+            className={`bg-[#0A0F1C] border rounded-lg px-4 py-3 text-white text-sm placeholder:text-gray-600 focus:outline-hidden focus:ring-1 transition-colors overflow-y-auto min-h-[120px] ${
               errors.message
                 ? "border-red-400 focus:border-red-400 focus:ring-red-400"
                 : "border-[#1E293B] focus:border-emerald-500 focus:ring-emerald-500"
