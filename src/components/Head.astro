@@ -1,43 +1,69 @@
 ---
 import { SEO } from "astro-seo";
+import { organizationSchema, websiteSchema } from "../lib/seo";
 
 interface Props {
     title?: string;
     description?: string;
+    /** OGPタイプ（記事ページは "article"） */
+    type?: "website" | "article";
+    /** OGP画像URL（未指定時は共通の OGP.png） */
+    image?: string;
+    /** インデックスを拒否する場合 true */
+    noindex?: boolean;
+    /** ページ固有の構造化データ（JSON-LD）配列 */
+    jsonLd?: object[];
 }
 
 // ページ固有のタイトル・ディスクリプションを受け取り、未指定時はサイト共通の既定値にフォールバックする
 const defaultTitle = "株式会社クリエイターのうえきばち";
 const defaultDescription =
     "株式会社クリエイターのうえきばちは、ノーコードでゲーム制作ができるプラットフォームの開発や、クリエイターコミュニティ運営を手掛けています。";
-const { title = defaultTitle, description = defaultDescription } = Astro.props;
+const {
+    title = defaultTitle,
+    description = defaultDescription,
+    type = "website",
+    image,
+    noindex = false,
+    jsonLd = [],
+} = Astro.props;
 
 // 各ページの canonical URL（クエリ・ハッシュは除外）
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
+const ogImage = image ?? import.meta.env.SITE + "/OGP.png";
 
 // Google Search Console 認証コード（Netlify等の環境変数で設定）
 const gscVerification = import.meta.env.PUBLIC_GSC_VERIFICATION;
 // GA4 測定ID（例: G-XXXXXXXXXX）。環境変数で設定されていない場合はタグを出力しない
 const gaMeasurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
+
+// 全ページ共通の構造化データ（Organization / WebSite）+ ページ固有の構造化データ
+const schemas = [organizationSchema(), websiteSchema(), ...jsonLd];
 ---
 
 <SEO
     title={title}
     description={description}
     charset="utf-8"
+    canonical={canonicalUrl}
+    noindex={noindex}
+    nofollow={noindex}
     openGraph={{
         basic: {
             title: title,
-            type: "website",
-            image: import.meta.env.SITE + "/OGP.png",
+            type: type,
+            image: ogImage,
             url: canonicalUrl,
         },
         optional: {
             description: description,
             siteName: defaultTitle,
+            locale: "ja_JP",
         },
     }}
     twitter={{
+        card: "summary_large_image",
+        site: "@creator_pot",
         creator: "@creator_pot",
     }}
     extend={{
@@ -54,6 +80,13 @@ const gaMeasurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
         ],
     }}
 />
+
+<!-- 構造化データ（JSON-LD） -->
+{
+    schemas.map((schema) => (
+        <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+    ))
+}
 
 <!-- Shippori Mincho 800（ヒーロー H1 専用 / 必要文字のみサブセット）を自己ホスト -->
 <!-- レンダーブロックを避けるため preload + インライン @font-face で読み込み、font-display: optional で CLS=0 を担保 -->

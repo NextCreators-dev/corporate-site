@@ -3,13 +3,21 @@ import Layout from "@layouts/Layout.astro";
 import Navigation from "@components/Navigation.astro";
 import Footer from "@components/Footer.astro";
 import { newsItems } from "../../data/news";
+import { SITE, breadcrumbSchema } from "../../lib/seo";
 
 const categories = [...new Set(newsItems.map((item) => item.category))];
+
+// パンくず（トップ → お知らせ）の構造化データ
+const breadcrumb = breadcrumbSchema([
+  { name: "ホーム", url: `${SITE.url}/` },
+  { name: "お知らせ", url: `${SITE.url}/news/` },
+]);
 ---
 
 <Layout
   title="お知らせ | 株式会社クリエイターのうえきばち"
   description="株式会社クリエイターのうえきばちのお知らせ・リリース情報の一覧です。NoLogicや会社の最新情報、コミュニティ運営に関するニュースを掲載しています。"
+  jsonLd={[breadcrumb]}
 >
   <div class="flex flex-col min-h-screen">
     <main class="bg-[#0A0F1C] text-white flex-1">
