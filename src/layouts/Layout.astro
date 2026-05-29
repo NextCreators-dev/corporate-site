@@ -4,16 +4,21 @@ import Head from "@components/Head.astro";
 interface Props {
   title?: string;
   description?: string;
+  type?: "website" | "article";
+  image?: string;
+  noindex?: boolean;
+  jsonLd?: object[];
 }
 
-const { title, description } = Astro.props;
+// 受け取ったSEO情報をそのまま Head へ受け渡す
+const props = Astro.props;
 ---
 
 <!doctype html>
 <html lang="ja">
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <Head title={title} description={description} />
+    <Head {...props} />
   </head>
   <body>
     <slot />

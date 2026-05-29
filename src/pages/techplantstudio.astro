@@ -8,6 +8,7 @@ import { Image } from "astro:assets";
 import { portfolioItems } from "../data/portfolio";
 import { testimonials } from "../data/testimonials";
 import ContactForm from "@components/ContactForm";
+import { SITE, faqSchema, breadcrumbSchema } from "../lib/seo";
 
 // 技術スタックデータ（ロゴSVGは /public/logos/ に配置後に有効化）
 const techStacks = [
@@ -82,11 +83,21 @@ const flowSteps = [
   { num: 4, title: "制作・開発", desc: "デザイン・実装を進行。週次の進捗報告とフィードバック対応で安心", duration: "1〜8週間" },
   { num: 5, title: "納品・運用", desc: "納品後の保守・改善もお任せください。月額サポートプランあり", duration: "継続サポート" },
 ];
+
+// よくある質問（FAQPage）とパンくずの構造化データ
+const jsonLd = [
+  faqSchema(faqs),
+  breadcrumbSchema([
+    { name: "ホーム", url: `${SITE.url}/` },
+    { name: "TechPlantStudio", url: `${SITE.url}/techplantstudio/` },
+  ]),
+];
 ---
 
 <Layout
   title="TechPlantStudio | 株式会社クリエイターのうえきばち"
   description="TechPlantStudio（テックプラントスタジオ）は、株式会社クリエイターのうえきばちが提供する受託開発・技術支援サービスです。Webアプリやゲーム開発を中心に、企画から実装・運用までを伴走します。"
+  jsonLd={jsonLd}
 >
   <main class="bg-[#0A0F1C] text-white scroll-smooth">
     <!-- ヘッダー -->
