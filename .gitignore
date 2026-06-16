@@ -29,3 +29,6 @@ claude_log/
 CLAUDE.md
 # Local Netlify folder
 .netlify
+
+# Playwright MCP の一時出力
+.playwright-mcp/

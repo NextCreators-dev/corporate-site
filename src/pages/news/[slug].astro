@@ -46,7 +46,7 @@ const jsonLd = [
         </div>
         <div class="flex items-center gap-4">
           <span class="text-gray-500 text-[13px] font-medium">{item.date}</span>
-          <span class="inline-flex items-center px-3 py-1 bg-emerald-500/10 text-emerald-500 text-[11px] font-semibold rounded border border-emerald-500/20">
+          <span class="inline-flex items-center px-3 py-1 bg-emerald-500/10 text-emerald-500 text-[11px] font-semibold rounded-sm border border-emerald-500/20">
             {item.category}
           </span>
         </div>
@@ -59,7 +59,7 @@ const jsonLd = [
     <!-- 記事本文 -->
     <section class="bg-[#0A0F1C] py-16 px-5 md:px-[120px]">
       <div class="max-w-4xl mx-auto">
-        <article class="article-body max-w-none text-[#C0C8D4] text-base leading-[2]">
+        <article class="article-body max-w-none text-[#C0C8D4] text-base leading-loose">
           <Fragment set:html={item.content} />
         </article>
 

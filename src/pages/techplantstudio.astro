@@ -275,7 +275,7 @@ const jsonLd = [
                       {t.avatar ? (
                         <img src={t.avatar} alt={t.name} class="w-10 h-10 rounded-full object-cover" />
                       ) : (
-                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500/30 to-[#111827]"></div>
+                        <div class="w-10 h-10 rounded-full bg-linear-to-br from-emerald-500/30 to-[#111827]"></div>
                       )}
                       <div>
                         <p class="text-white text-sm font-bold">{t.name}</p>
@@ -302,13 +302,13 @@ const jsonLd = [
         <!-- 選択メンバーの詳細表示 -->
         <div id="member-detail" class="w-full bg-[#111827] p-6 md:p-8 rounded-2xl border-l-2 border-emerald-500 transition-all duration-300">
           <div class="flex flex-col md:flex-row items-center md:items-start gap-6">
-            <div id="detail-avatar" class="w-32 h-32 md:w-40 md:h-40 rounded-full bg-gradient-to-br from-emerald-500/30 to-[#111827] overflow-hidden shrink-0">
+            <div id="detail-avatar" class="w-32 h-32 md:w-40 md:h-40 rounded-full bg-linear-to-br from-emerald-500/30 to-[#111827] overflow-hidden shrink-0">
               {members[0].avatar && <img src={members[0].avatar} alt={members[0].name} class="w-full h-full object-cover" />}
             </div>
             <div class="flex flex-col gap-2 text-center md:text-left">
               <div class="flex items-center gap-2 justify-center md:justify-start">
                 <p id="detail-name" class="text-white text-xl font-bold">{members[0].name}</p>
-                <span id="detail-badge" class="inline-flex items-center px-2 py-0.5 bg-amber-500/15 text-amber-400 text-[10px] font-bold rounded">代表</span>
+                <span id="detail-badge" class="inline-flex items-center px-2 py-0.5 bg-amber-500/15 text-amber-400 text-[10px] font-bold rounded-sm">代表</span>
               </div>
               <p id="detail-role" class="text-emerald-500 text-sm font-semibold">{members[0].role}</p>
               <p id="detail-desc" class="text-gray-300 text-sm leading-relaxed mt-2" set:html={members[0].desc} />
@@ -333,7 +333,7 @@ const jsonLd = [
               data-avatar={m.avatar || ""}
             >
               <div class:list={[
-                "w-16 h-16 md:w-20 md:h-20 rounded-full bg-gradient-to-br from-emerald-500/30 to-[#111827] overflow-hidden shrink-0 transition-all duration-200",
+                "w-16 h-16 md:w-20 md:h-20 rounded-full bg-linear-to-br from-emerald-500/30 to-[#111827] overflow-hidden shrink-0 transition-all duration-200",
               ]}>
                 {m.avatar && <img src={m.avatar} alt={m.name} class="w-full h-full object-cover" />}
               </div>
@@ -425,7 +425,7 @@ const jsonLd = [
                 <div class="flex items-center justify-between">
                   <h3 class="text-white font-bold">{item.name}</h3>
                   {item.featured && (
-                    <span class="inline-flex items-center px-2 py-0.5 bg-emerald-500/15 text-emerald-500 text-[10px] font-bold rounded">得意領域</span>
+                    <span class="inline-flex items-center px-2 py-0.5 bg-emerald-500/15 text-emerald-500 text-[10px] font-bold rounded-sm">得意領域</span>
                   )}
                 </div>
                 <p class="text-emerald-500 text-2xl font-black">{item.price}</p>
