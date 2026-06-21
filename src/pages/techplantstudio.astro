@@ -84,8 +84,36 @@ const flowSteps = [
   { num: 5, title: "納品・運用", desc: "納品後の保守・改善もお任せください。月額サポートプランあり", duration: "継続サポート" },
 ];
 
-// よくある質問（FAQPage）とパンくずの構造化データ
+// 受託メニュー（参考価格）を OfferCatalog として構造化し、
+// AI検索や検索エンジンが「どのサービスをいくらで提供しているか」を一覧で抽出できるようにする。
+const offerCatalog = {
+  "@type": "OfferCatalog",
+  name: "TechPlant Studio 提供メニュー",
+  itemListElement: pricingItems.map((p) => ({
+    "@type": "Offer",
+    itemOffered: { "@type": "Service", name: p.name },
+    description:
+      p.price === "要相談" ? "要相談" : `${p.price}（目安納期: ${p.duration}）`,
+  })),
+};
+
+// 受託開発（Service）— このページを正規の提供元ページとし、提供メニューを内包させる
+const serviceJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: "TechPlant Studio（受託開発スタジオ）",
+  description:
+    "ゲーム制作・Webアプリ開発を軸に、Webサイト・クリエイティブ制作・AI活用コンサルティング・イベント企画まで、企画から納品・運用まで一気通貫で対応する受託開発スタジオです。",
+  url: `${SITE.url}/techplantstudio/`,
+  serviceType: "受託開発",
+  provider: { "@type": "Organization", name: SITE.name, url: SITE.url },
+  areaServed: "JP",
+  hasOfferCatalog: offerCatalog,
+};
+
+// 提供サービス（Service）・よくある質問（FAQPage）・パンくずの構造化データ
 const jsonLd = [
+  serviceJsonLd,
   faqSchema(faqs),
   breadcrumbSchema([
     { name: "ホーム", url: `${SITE.url}/` },
@@ -410,6 +438,15 @@ const jsonLd = [
                 </div>
               </details>
             ))}
+          </div>
+          <div class="mt-6 text-center">
+            <a
+              href="/column/webapp-outsourcing-guide"
+              class="text-emerald-500 text-sm font-medium hover:underline inline-flex items-center gap-1.5"
+            >
+              関連コラム: Webアプリ開発を外注するときの進め方と費用の目安
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </a>
           </div>
         </div>
 

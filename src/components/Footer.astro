@@ -78,6 +78,26 @@ const { hideCta = false } = Astro.props;
             >NextCreators</a
           >
           <a
+            href="/works"
+            class="text-gray-400 hover:text-white text-[13px] transition-colors"
+            >導入事例</a
+          >
+          <a
+            href="/column"
+            class="text-gray-400 hover:text-white text-[13px] transition-colors"
+            >コラム</a
+          >
+          <a
+            href="/news"
+            class="text-gray-400 hover:text-white text-[13px] transition-colors"
+            >お知らせ</a
+          >
+          <a
+            href="/faq"
+            class="text-gray-400 hover:text-white text-[13px] transition-colors"
+            >よくある質問</a
+          >
+          <a
             href="/techplantstudio#contact"
             class="text-gray-400 hover:text-white text-[13px] transition-colors"
             >お問い合わせ</a
@@ -148,3 +168,17 @@ const { hideCta = false } = Astro.props;
     </div>
   </div>
 </footer>
+
+<script>
+  // data-cta 属性を持つCTAのクリックをGA4イベント（cta_click）として送信する。
+  // gtag 未ロード時は何もしない。LP側のCTAは別途 LPScripts で計測している。
+  document.addEventListener("click", (e) => {
+    const target = e.target as HTMLElement | null;
+    const el = target?.closest?.("[data-cta]");
+    if (!el) return;
+    const gtag = (window as any).gtag;
+    if (typeof gtag === "function") {
+      gtag("event", "cta_click", { cta_id: el.getAttribute("data-cta") || "unknown" });
+    }
+  });
+</script>

@@ -1,0 +1,103 @@
+---
+// よくある質問（横断ハブ）。会社・サービス横断のFAQを1ページに集約し、FAQPage構造化データを出力する。
+import Layout from "@layouts/Layout.astro";
+import Navigation from "@components/Navigation.astro";
+import Footer from "@components/Footer.astro";
+import Breadcrumb from "@components/Breadcrumb.astro";
+import FaqList from "@components/lp/FaqList.astro";
+import { faqGroups } from "../data/faq";
+import { SITE, faqSchema, breadcrumbSchema } from "../lib/seo";
+
+// 全グループのQ&Aを1つの FAQPage にまとめる
+const allFaqs = faqGroups.flatMap((g) => g.items);
+
+const jsonLd = [
+  faqSchema(allFaqs),
+  breadcrumbSchema([
+    { name: "ホーム", url: `${SITE.url}/` },
+    { name: "よくある質問", url: `${SITE.url}/faq/` },
+  ]),
+];
+---
+
+<Layout
+  title="よくある質問 | 株式会社クリエイターのうえきばち"
+  description="株式会社クリエイターのうえきばちへのよくある質問。会社の概要や問い合わせ方法、NoLogic・NextCreators、受託開発・コミュニティ運営代行・イベント制作・業務AI化の費用や進め方をまとめています。"
+  jsonLd={jsonLd}
+>
+  <div class="flex flex-col min-h-screen">
+    <main class="bg-[#0A0F1C] text-white flex-1">
+      <Navigation showBack={true} />
+
+      <!-- ヘッダー -->
+      <section class="bg-[#111827] py-20 px-5 md:px-[120px]">
+        <div
+          class="max-w-3xl mx-auto flex flex-col items-center gap-6 text-center pt-16"
+        >
+          <div
+            class="inline-flex items-center px-5 py-2 bg-emerald-500/15 text-emerald-500 text-xs font-bold rounded-full border border-emerald-500/25 tracking-[2px]"
+          >
+            FAQ
+          </div>
+          <h1 class="text-3xl md:text-[44px] font-black leading-tight">
+            よくある質問
+          </h1>
+          <p class="text-gray-300 text-base leading-relaxed max-w-[640px]">
+            会社やサービスについて、よくいただく質問をまとめました。ここにない内容は、お問い合わせフォームからお気軽にご相談ください。
+          </p>
+        </div>
+      </section>
+
+      <!-- FAQ本体 -->
+      <section class="bg-[#0A0F1C] py-12 px-5 md:px-[120px]">
+        <div class="max-w-3xl mx-auto flex flex-col gap-12">
+          <Breadcrumb
+            items={[{ name: "ホーム", href: "/" }, { name: "よくある質問" }]}
+          />
+
+          {
+            faqGroups.map((group) => (
+              <div class="flex flex-col gap-5">
+                <h2 class="text-xl font-extrabold text-white border-l-4 border-emerald-500 pl-3">
+                  {group.category}
+                </h2>
+                <FaqList faqs={group.items} />
+              </div>
+            ))
+          }
+
+          <!-- お問い合わせ導線 -->
+          <div
+            class="rounded-2xl border border-[#1E293B] bg-[#111827] p-7 md:p-9 flex flex-col items-center text-center gap-5"
+          >
+            <p class="text-gray-300 text-sm leading-relaxed">
+              知りたいことが見つからなければ、直接おたずねください。企画段階のご相談でも構いません。
+            </p>
+            <a
+              href="/techplantstudio#contact"
+              data-cta="faq_contact"
+              class="inline-flex items-center gap-2.5 px-9 py-3.5 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-[15px] rounded-xl transition-colors"
+            >
+              お問い合わせフォームへ
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+                ><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg
+              >
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <Footer />
+  </div>
+</Layout>

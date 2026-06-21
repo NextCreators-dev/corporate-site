@@ -1,0 +1,47 @@
+---
+// 日程調整CTAボタン（要件定義 §3-3 / §5-2）
+// メインCTA = 日程調整リンク。フォーム往復を殺し、その場で日程を確定させる。
+// schedule_click 計測（§3-7）は data 属性経由で LPScripts.astro が拾う。
+
+interface Props {
+  /** 日程調整リンク（担当別予約枠 / 現状はプレースホルダ） */
+  href: string;
+  /** cta_location 計測値（Hero / 中間 / 最下部） */
+  location: "hero" | "middle" | "bottom";
+  /** ボタン文言（B2B向けに簡潔に） */
+  label?: string;
+  /** 補助マイクロコピー（不要なら空文字を渡す） */
+  microcopy?: string;
+  /** サイズ（Hero は lg、中間/最下部は md） */
+  size?: "lg" | "md";
+}
+
+const {
+  href,
+  location,
+  label = "無料相談の日程を選ぶ",
+  microcopy = "相談は無料・強引な営業は一切しません",
+  size = "lg",
+} = Astro.props;
+
+// 外部URL（http/https）の場合のみ新規タブで開く。ページ内アンカー/内部パスは同一タブ。
+const isExternal = /^https?:\/\//.test(href);
+const pad = size === "lg" ? "px-10 py-4 text-lg" : "px-8 py-3.5 text-base";
+---
+
+<div class="flex flex-col items-center gap-3">
+  <a
+    href={href}
+    data-cta-location={location}
+    data-schedule-cta
+    {...(isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+    class:list={[
+      "inline-flex items-center justify-center gap-2.5 w-full max-w-[320px] sm:w-auto bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl transition-colors shadow-lg shadow-emerald-500/25 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-[#0A0F1C]",
+      pad,
+    ]}
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="m9 16 2 2 4-4"/></svg>
+    {label}
+  </a>
+  {microcopy && <p class="text-gray-500 text-xs text-center">{microcopy}</p>}
+</div>
