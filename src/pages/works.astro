@@ -1,0 +1,185 @@
+---
+// 導入事例・制作実績の一覧（MOFU: 検討段階の判断材料）
+// portfolio.ts を基に、caseStudy（課題→取り組み→成果）があれば詳しく表示する。
+import Layout from "@layouts/Layout.astro";
+import Navigation from "@components/Navigation.astro";
+import Footer from "@components/Footer.astro";
+import { portfolioItems } from "../data/portfolio";
+import { SITE, breadcrumbSchema } from "../lib/seo";
+
+// 課題→取り組み→成果の見出しラベル
+const caseLabels = [
+  { key: "challenge", label: "課題" },
+  { key: "approach", label: "取り組み" },
+  { key: "result", label: "成果" },
+] as const;
+
+// パンくず＋制作実績の一覧（ItemList）の構造化データ
+const itemList = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  name: "導入事例・制作実績",
+  itemListElement: portfolioItems.map((item, i) => ({
+    "@type": "ListItem",
+    position: i + 1,
+    item: {
+      "@type": "CreativeWork",
+      name: item.title,
+      description: item.description,
+      ...(item.url ? { url: item.url } : {}),
+    },
+  })),
+};
+
+const jsonLd = [
+  itemList,
+  breadcrumbSchema([
+    { name: "ホーム", url: `${SITE.url}/` },
+    { name: "導入事例・制作実績", url: `${SITE.url}/works/` },
+  ]),
+];
+---
+
+<Layout
+  title="導入事例・制作実績 | 株式会社クリエイターのうえきばち"
+  description="株式会社クリエイターのうえきばちの導入事例・制作実績。児童発達支援アプリ「Comorevi」の開発、イベント出展、ゲーム開発ハッカソンの共同運営など、課題と取り組み・成果を紹介します。"
+  jsonLd={jsonLd}
+>
+  <div class="flex flex-col min-h-screen">
+    <main class="bg-[#0A0F1C] text-white flex-1">
+      <Navigation showBack={true} />
+
+      <!-- ヘッダー -->
+      <section class="bg-[#111827] py-20 px-5 md:px-[120px]">
+        <div
+          class="max-w-4xl mx-auto flex flex-col items-center gap-6 text-center pt-16"
+        >
+          <div
+            class="inline-flex items-center px-5 py-2 bg-emerald-500/15 text-emerald-500 text-xs font-bold rounded-full border border-emerald-500/25 tracking-[2px]"
+          >
+            WORKS
+          </div>
+          <h1 class="text-3xl md:text-[44px] font-black leading-tight">
+            導入事例・制作実績
+          </h1>
+          <p class="text-gray-300 text-base leading-relaxed max-w-[680px]">
+            アプリ開発からイベント出展、ハッカソンの共同運営まで。どんな課題に、どう取り組んだのかを紹介します。
+          </p>
+        </div>
+      </section>
+
+      <!-- 実績一覧 -->
+      <section class="bg-[#0A0F1C] py-16 px-5 md:px-[120px]">
+        <div class="max-w-5xl mx-auto flex flex-col gap-8">
+          {
+            portfolioItems.map((item) => (
+              <article class="bg-[#111827] rounded-2xl border border-[#1E293B] p-7 md:p-10 flex flex-col gap-6">
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="inline-flex items-center px-3 py-1 bg-emerald-500/10 text-emerald-500 text-[11px] font-semibold rounded border border-emerald-500/20">
+                    {item.categoryLabel}
+                  </span>
+                  {item.statusLabel && (
+                    <span class="inline-flex items-center px-3 py-1 bg-amber-500/10 text-amber-400 text-[11px] font-semibold rounded border border-amber-500/20">
+                      {item.statusLabel}
+                    </span>
+                  )}
+                </div>
+
+                <div class="flex flex-col gap-2">
+                  <h2 class="text-xl md:text-2xl font-extrabold text-white">
+                    {item.title}
+                  </h2>
+                  {item.caseStudy?.client && (
+                    <p class="text-emerald-400 text-sm font-medium">
+                      {item.caseStudy.client}
+                    </p>
+                  )}
+                </div>
+
+                <p class="text-gray-300 text-sm leading-relaxed">
+                  {item.description}
+                </p>
+
+                {item.caseStudy && (
+                  <div class="grid gap-4 md:grid-cols-3">
+                    {caseLabels.map(({ key, label }) => (
+                      <div class="bg-[#0A0F1C] rounded-xl border border-[#1E293B] p-5 flex flex-col gap-2">
+                        <span class="inline-flex w-fit items-center px-2.5 py-1 bg-emerald-500/10 text-emerald-400 text-[11px] font-bold rounded">
+                          {label}
+                        </span>
+                        <p class="text-gray-300 text-[13px] leading-relaxed">
+                          {item.caseStudy![key]}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                <div class="flex flex-wrap gap-1.5">
+                  {item.techStack.map((tech) => (
+                    <span class="bg-white/5 text-gray-400 text-[11px] rounded px-2 py-0.5">
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+
+                {item.url && (
+                  <a
+                    href={item.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-emerald-500 text-sm font-medium hover:underline inline-flex items-center gap-1 w-fit"
+                  >
+                    詳しく見る
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                      <polyline points="15 3 21 3 21 9" />
+                      <line x1="10" x2="21" y1="14" y2="3" />
+                    </svg>
+                  </a>
+                )}
+              </article>
+            ))
+          }
+        </div>
+
+        <!-- 制作のご相談への導線 -->
+        <div class="max-w-5xl mx-auto mt-12 text-center">
+          <a
+            href="/techplantstudio#contact"
+            data-cta="works_contact"
+            class="inline-flex items-center gap-2.5 px-10 py-4 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-[15px] rounded-xl transition-colors"
+          >
+            似た取り組みを相談する
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+              ><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg
+            >
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <Footer />
+  </div>
+</Layout>

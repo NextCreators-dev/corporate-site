@@ -1,0 +1,286 @@
+---
+// ① コミュニティ運営代行LP（要件定義 §4-1）
+// 名義: 本体（物語接続）／ index する・グローバルナビ掲載する／ 一次対応: 佐藤（クリエイター系枠）
+import Layout from "@layouts/Layout.astro";
+import Navigation from "@components/Navigation.astro";
+import TrustSection from "@components/TrustSection.astro";
+import SectionHeading from "@components/lp/SectionHeading.astro";
+import ScheduleCTA from "@components/lp/ScheduleCTA.astro";
+import PackagePricing from "@components/lp/PackagePricing.astro";
+import ComparisonTable from "@components/lp/ComparisonTable.astro";
+import FaqList from "@components/lp/FaqList.astro";
+import LPScripts from "@components/lp/LPScripts.astro";
+import heroBg from "../assets/hero-bg.png";
+import { Image } from "astro:assets";
+import { SITE, faqSchema, breadcrumbSchema, serviceSchema } from "../lib/seo";
+import { SCHEDULING_LINKS, LP_IDS } from "../lib/scheduling";
+
+const scheduleHref = SCHEDULING_LINKS.creator;
+
+// 課題提起（過疎の兆候）
+const symptoms = [
+  { title: "最終アナウンスが数ヶ月前のまま", desc: "告知チャンネルが止まり、ファンが「動いていない場所」と感じ始めている。" },
+  { title: "投稿へのリアクションが一桁", desc: "発言しても反応が薄く、運営も participants も発信のモチベーションを失っている。" },
+  { title: "新規参加がほとんど増えない", desc: "入口はあるのに、入ってすぐ静かになり定着しない。導線と初動の設計が抜けている。" },
+  { title: "運営する人手・ノウハウがない", desc: "本業の制作・配信で手一杯。コミュニティ運営まで手が回らず後回しになっている。" },
+];
+
+// 提供内容（構築・運営・イベント）
+const services = [
+  { title: "コミュニティ設計・構築", desc: "目的・ターゲットに合わせたチャンネル構成、ルール、ロール、参加導線を設計し、Discordサーバーを立ち上げ・再構築します。" },
+  { title: "日々の運営代行", desc: "モデレーション、定例の投稿・話題提供、新規参加者の歓迎まで、場が動き続けるための日常運営を代行します。" },
+  { title: "盛り上げ施策の企画・実施", desc: "参加者が発言したくなる企画・お題・常設イベントを設計。一過性でなく、自走するコミュニティを目指します。" },
+  { title: "月次イベントの運営", desc: "交流会・もくもく会・作品共有会などを定期開催。参加者が「また来たい」と思える接点をつくります。" },
+];
+
+// 比較（自分たちで運営 / 運営代行に依頼）— 検討段階の判断材料
+const comparisonRows = [
+  {
+    axis: "立ち上げ",
+    a: "チャンネル構成やルールを手探りで設計し、初動でつまずきやすい。",
+    b: "100名規模の運営知見をもとに、設計・構築から立ち上げまで代行します。",
+  },
+  {
+    axis: "日々の運営",
+    a: "本業の合間にモデレーションや投稿を行い、続かず止まりがち。",
+    b: "毎日の投稿・歓迎・モデレーションを継続し、場が動き続けます。",
+  },
+  {
+    axis: "盛り上げ",
+    a: "何を企画すればよいか分からず、反応が一桁のまま停滞する。",
+    b: "発言したくなる企画やイベントを設計し、自走するコミュニティを目指します。",
+  },
+  {
+    axis: "かかる時間",
+    a: "運営に追われ、配信や制作にあてる時間が削られる。",
+    b: "運営を任せ、本業の制作・発信に集中できます。",
+  },
+  {
+    axis: "費用",
+    a: "人件費や自分の工数という、見えにくいコストがかかる。",
+    b: "月額10〜20万円。かかる費用と成果がはっきり見えます。",
+  },
+];
+
+// 進め方（診断 → 提案 → 運営）
+const steps = [
+  { num: 1, title: "無料Discord診断", desc: "現在のサーバーを拝見し、改善点を整理してその場でお伝えします。" },
+  { num: 2, title: "60分の運営提案", desc: "診断をもとに、運営プラン・体制・進め方をご提案します。" },
+  { num: 3, title: "月額の運営代行", desc: "構築・運営をスタート。初期3ヶ月で立ち上げまで伴走します。" },
+];
+
+// FAQ（FAQPage 構造化データに流用するためプレーンテキスト）
+const faqs = [
+  { question: "どのような規模・ジャンルのコミュニティが対象ですか？", answer: "小規模VTuber事務所やインディースタジオなど、公式ファンコミュニティを持ちたい・立て直したい個人〜小規模チームを主な対象としています。規模やジャンルによって最適な設計は異なりますので、まずは無料診断でご相談ください。" },
+  { question: "まだDiscordサーバーがなくても依頼できますか？", answer: "はい。サーバーの新規構築からご依頼いただけます。目的やターゲットを整理したうえで、チャンネル構成・ルール・参加導線の設計から立ち上げまで対応します。" },
+  { question: "運営を自分たちの内製に戻すことはできますか？", answer: "はい。運営の型が整った段階で、運用マニュアルの整備と運営メンバーへの引き継ぎを行い、内製へ移行いただけます。代行を続けるか内製化するかは、状況に合わせて選んでいただけます。" },
+  { question: "最低契約期間はありますか？", answer: "立ち上げ初期は体制が整うまでの伴走が重要なため、初期3ヶ月のコミットをお願いしています。その後は月単位での継続をご相談いただけます。" },
+  { question: "診断だけ受けることもできますか？", answer: "はい。無料のDiscord診断のみのご利用も歓迎です。改善点を整理してお伝えしますので、その後の運営をどうするかはご検討いただけます。強引な営業は一切行いません。" },
+];
+
+const jsonLd = [
+  serviceSchema({
+    name: "公式コミュニティ運営代行",
+    description:
+      "公式Discordコミュニティの設計・構築から、日々のモデレーション・投稿運用、盛り上げ施策、月次イベントの運営までを代行するサービス。100名規模のクリエイターコミュニティ「NextCreators」を内製運営してきた知見を活かし、過疎化した公式サーバーを立て直します。",
+    url: `${SITE.url}/community-ops/`,
+    serviceType: "コミュニティ運営代行",
+    offer: { priceText: "月額 10〜20万円（初期3ヶ月コミット）", minPrice: 100000, maxPrice: 200000, unit: "month" },
+  }),
+  faqSchema(faqs),
+  breadcrumbSchema([
+    { name: "ホーム", url: `${SITE.url}/` },
+    { name: "コミュニティ運営代行", url: `${SITE.url}/community-ops/` },
+  ]),
+];
+---
+
+<Layout
+  title="公式コミュニティ運営代行 | 株式会社クリエイターのうえきばち"
+  description="ファンが集まる公式Discordコミュニティを、構築から日々の運営まで代行します。100名規模のクリエイターコミュニティ「NextCreators」を内製運営する知見を活かし、過疎化した公式サーバーを立て直します。"
+  jsonLd={jsonLd}
+>
+  <main class="bg-[#0A0F1C] text-white scroll-smooth" data-lp-id={LP_IDS.communityOps}>
+    <Navigation showBack={true} />
+
+    <!-- 1. Hero -->
+    <section class="relative min-h-[560px] flex items-center justify-center overflow-hidden" data-section="hero">
+      <div class="absolute inset-0">
+        <Image src={heroBg} width={1920} height={1080} quality={60} alt="" aria-hidden="true" class="w-full h-full object-cover" />
+      </div>
+      <div class="absolute inset-0 bg-[#0A0F1C]/80"></div>
+      <div class="relative z-10 flex flex-col items-center text-center px-5 py-24 gap-6 max-w-3xl mx-auto">
+        <div class="inline-flex items-center px-5 py-2 bg-emerald-500/15 text-emerald-500 text-xs font-bold rounded-full border border-emerald-500/25 tracking-[2px]">
+          COMMUNITY MANAGEMENT
+        </div>
+        <h1 class="text-4xl md:text-[52px] font-black leading-tight">
+          ファンが集まる場所を、<br class="hidden sm:inline" />運営ごと任せられる。
+        </h1>
+        <p class="text-gray-300 text-base md:text-[17px] leading-relaxed max-w-[640px]">
+          公式Discordの過疎、運営の手が回らない——。100名規模のクリエイターコミュニティ「NextCreators」を自分たちで運営してきた私たちが、コミュニティの構築から日々の運営まで代行します。
+        </p>
+        <div class="mt-2">
+          <ScheduleCTA href={scheduleHref} location="hero" label="無料でDiscord診断を受ける" />
+        </div>
+        <a href="#services" class="inline-flex items-center gap-2 text-gray-400 hover:text-white text-sm font-medium transition-colors">
+          提供内容を見る
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        </a>
+      </div>
+    </section>
+
+    <!-- 2. 課題提起 -->
+    <section class="bg-[#0A0F1C] py-20 px-5 md:px-[120px]" data-section="problem">
+      <div class="max-w-7xl mx-auto flex flex-col items-center gap-12">
+        <SectionHeading
+          badge="SYMPTOMS"
+          title="こんな状態になっていませんか"
+          lead="コミュニティの過疎は、外から見える形で進みます。下のどれかに当てはまるなら、立て直しの余地があります。"
+        />
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+          {symptoms.map((s) => (
+            <div class="bg-[#111827] p-8 rounded-2xl border border-[#1E293B] flex flex-col gap-3">
+              <h3 class="text-white text-lg font-bold">{s.title}</h3>
+              <p class="text-gray-300 text-sm leading-relaxed">{s.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. 提供内容 -->
+    <section id="services" class="bg-[#111827] py-20 px-5 md:px-[120px]" data-section="services">
+      <div class="max-w-7xl mx-auto flex flex-col items-center gap-12">
+        <SectionHeading
+          badge="WHAT WE DO"
+          title="構築から日々の運営まで、まるごと"
+          lead="場を立ち上げて終わりではなく、動き続けるコミュニティになるまで運営を引き受けます。"
+        />
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+          {services.map((s) => (
+            <div class="bg-[#0A0F1C] p-8 rounded-2xl border border-[#1E293B] flex flex-col gap-3">
+              <div class="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              </div>
+              <h3 class="text-white text-lg font-bold">{s.title}</h3>
+              <p class="text-gray-300 text-sm leading-relaxed">{s.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- 3.5 比較（自分たちで運営 / 運営代行に依頼） -->
+    <section class="bg-[#0F172A] py-20 px-5 md:px-[120px]" data-section="comparison">
+      <div class="max-w-7xl mx-auto flex flex-col items-center gap-12">
+        <SectionHeading
+          badge="WHY US"
+          title="自分たちで運営する場合との違い"
+          lead="運営を任せると、立ち上げ・継続・盛り上げのどこが変わるのかを整理しました。"
+        />
+        <ComparisonTable
+          colA="自分たちだけで運営する場合"
+          colB="運営代行に依頼する場合"
+          rows={comparisonRows}
+        />
+      </div>
+    </section>
+
+    <!-- 4. 料金 -->
+    <section class="bg-[#0A0F1C] py-20 px-5 md:px-[120px]" data-section="pricing">
+      <div class="max-w-7xl mx-auto flex flex-col items-center gap-12">
+        <SectionHeading
+          badge="PRICING"
+          title="料金プラン"
+          lead="コミュニティの設計・運営・イベントまでを含む月額プランです。"
+        />
+        <PackagePricing
+          name="コミュニティ運営代行プラン"
+          summary="公式ファンコミュニティの構築から日々の運営・イベントまでを一括でお任せいただけます。"
+          includes={[
+            "コミュニティ設計・サーバー構築",
+            "日々のモデレーション・投稿運用",
+            "盛り上げ施策の企画・実施",
+            "月次イベントの企画・運営",
+            "参加状況の分析レポート",
+            "運営メンバーへの引き継ぎ支援",
+          ]}
+          price="月額 10〜20万円"
+          priceNote="初期3ヶ月コミット（体制が整うまで伴走します）／規模・運用範囲に応じてご提案"
+          notes={[
+            "※ 表示価格は税別です。",
+            "※ 正式なお見積もりは無料Discord診断・ヒアリング後にご提示いたします。",
+          ]}
+        />
+        <div class="mt-2">
+          <ScheduleCTA href={scheduleHref} location="middle" size="md" label="無料でDiscord診断を受ける" microcopy="" />
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. 信頼（NextCreators 実績） -->
+    <TrustSection />
+
+    <!-- 6. 進め方 -->
+    <section class="bg-[#0A0F1C] py-20 px-5 md:px-[120px]" data-section="flow">
+      <div class="max-w-7xl mx-auto flex flex-col items-center gap-12">
+        <SectionHeading
+          badge="HOW IT WORKS"
+          title="無料診断から、月額運営まで"
+          lead="いきなり契約ではありません。まず無料診断で現状と改善点を確認してから進めます。"
+        />
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
+          {steps.map((step) => (
+            <div class="bg-[#111827] p-8 rounded-2xl border border-[#1E293B] flex flex-col items-center text-center gap-4">
+              <div class="flex items-center justify-center w-12 h-12 bg-emerald-500 rounded-full text-white text-xl font-bold">{step.num}</div>
+              <h3 class="text-white font-bold text-lg">{step.title}</h3>
+              <p class="text-gray-300 text-sm leading-relaxed">{step.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. FAQ -->
+    <section class="bg-[#111827] py-20 px-5 md:px-[120px]" data-section="faq">
+      <div class="max-w-7xl mx-auto flex flex-col items-center gap-10">
+        <SectionHeading badge="FAQ" title="よくあるご質問" />
+        <FaqList faqs={faqs} />
+        <a
+          href="/column/discord-community-management"
+          class="text-emerald-500 text-sm font-medium hover:underline inline-flex items-center gap-1.5"
+        >
+          関連コラム: Discordコミュニティの作り方と、続けるための運営のコツ
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
+      </div>
+    </section>
+
+    <!-- 8. 最終CTA -->
+    <section class="bg-[#0F172A] py-20 px-5 md:px-[120px]" data-section="cta_bottom">
+      <div class="max-w-3xl mx-auto flex flex-col items-center text-center gap-8">
+        <h2 class="text-2xl md:text-[32px] font-extrabold text-white">まずは無料のDiscord診断から</h2>
+        <p class="text-gray-300 text-base leading-relaxed">
+          いまのコミュニティの改善点を整理してお伝えします。診断だけのご利用も歓迎です。
+        </p>
+        <ScheduleCTA href={scheduleHref} location="bottom" label="無料相談の日程を選ぶ" />
+        <p class="text-gray-500 text-sm">
+          日程が合わない方は
+          <a href="/techplantstudio#contact" class="text-emerald-500 hover:underline">お問い合わせフォーム</a>
+          からもご連絡いただけます。
+        </p>
+      </div>
+    </section>
+
+    <!-- フッター -->
+    <div class="bg-[#111827] py-8 px-5 md:px-[120px]">
+      <div class="text-center">
+        <p class="text-gray-500 text-xs">
+          &copy; {new Date().getFullYear()} 株式会社クリエイターのうえきばち All rights reserved.
+        </p>
+      </div>
+    </div>
+
+    <LPScripts />
+  </main>
+</Layout>

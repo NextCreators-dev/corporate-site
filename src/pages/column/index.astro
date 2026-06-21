@@ -1,0 +1,114 @@
+---
+// コラム一覧（TOFU: 検索流入の入口）
+import Layout from "@layouts/Layout.astro";
+import Navigation from "@components/Navigation.astro";
+import Footer from "@components/Footer.astro";
+import Breadcrumb from "@components/Breadcrumb.astro";
+import { getCollection } from "astro:content";
+import { SITE, breadcrumbSchema } from "../../lib/seo";
+
+// 下書きを除外し、公開日の新しい順に並べる
+const entries = (await getCollection("column", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf(),
+);
+
+const formatDate = (d: Date) =>
+  `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, "0")}.${String(
+    d.getDate(),
+  ).padStart(2, "0")}`;
+
+const blogSchema = {
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  name: "クリエイターのうえきばち コラム",
+  description:
+    "ノーコードゲーム制作、コミュニティ運営、イベント企画、業務のAI活用など、クリエイター活動と制作の現場で役立つ情報をまとめたコラムです。",
+  url: `${SITE.url}/column/`,
+  publisher: { "@type": "Organization", name: SITE.name, url: SITE.url },
+  inLanguage: "ja",
+};
+
+const jsonLd = [
+  blogSchema,
+  breadcrumbSchema([
+    { name: "ホーム", url: `${SITE.url}/` },
+    { name: "コラム", url: `${SITE.url}/column/` },
+  ]),
+];
+---
+
+<Layout
+  title="コラム | 株式会社クリエイターのうえきばち"
+  description="ノーコードゲーム制作、コミュニティ運営、イベント企画、業務のAI活用など、クリエイター活動と制作の現場で役立つ情報をまとめたコラムです。"
+  jsonLd={jsonLd}
+>
+  <div class="flex flex-col min-h-screen">
+    <main class="bg-[#0A0F1C] text-white flex-1">
+      <Navigation showBack={true} />
+
+      <!-- ヘッダー -->
+      <section class="bg-[#111827] py-20 px-5 md:px-[120px]">
+        <div
+          class="max-w-4xl mx-auto flex flex-col items-center gap-6 text-center pt-16"
+        >
+          <div
+            class="inline-flex items-center px-5 py-2 bg-emerald-500/15 text-emerald-500 text-xs font-bold rounded-full border border-emerald-500/25 tracking-[2px]"
+          >
+            COLUMN
+          </div>
+          <h1 class="text-3xl md:text-[44px] font-black leading-tight">
+            コラム
+          </h1>
+          <p class="text-gray-300 text-base leading-relaxed max-w-[680px]">
+            ノーコードでのゲーム制作から、コミュニティ運営、イベント、業務のAI活用まで。制作の現場で役立つ話をまとめています。
+          </p>
+        </div>
+      </section>
+
+      <!-- 記事一覧 -->
+      <section class="bg-[#0A0F1C] py-12 px-5 md:px-[120px]">
+        <div class="max-w-4xl mx-auto">
+          <div class="mb-8">
+            <Breadcrumb
+              items={[{ name: "ホーム", href: "/" }, { name: "コラム" }]}
+            />
+          </div>
+
+          {
+            entries.length === 0 ? (
+              <p class="text-gray-500 text-sm text-center py-16">
+                記事を準備中です。
+              </p>
+            ) : (
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {entries.map((entry) => (
+                  <a
+                    href={`/column/${entry.id}`}
+                    class="group flex flex-col gap-3 bg-[#111827] rounded-2xl border border-[#1E293B] p-7 hover:border-emerald-500/40 transition-colors"
+                  >
+                    <div class="flex items-center gap-3">
+                      <span class="text-gray-500 text-[13px] font-medium tabular-nums">
+                        {formatDate(entry.data.publishDate)}
+                      </span>
+                      <span class="inline-flex items-center px-3 py-1 bg-emerald-500/10 text-emerald-500 text-[11px] font-semibold rounded border border-emerald-500/20">
+                        {entry.data.category}
+                      </span>
+                    </div>
+                    <h2 class="text-white text-lg font-bold leading-snug group-hover:text-emerald-300 transition-colors">
+                      {entry.data.title}
+                    </h2>
+                    <p class="text-gray-400 text-sm leading-relaxed line-clamp-3">
+                      {entry.data.description}
+                    </p>
+                  </a>
+                ))}
+              </div>
+            )
+          }
+        </div>
+      </section>
+    </main>
+
+    <Footer />
+  </div>
+</Layout>

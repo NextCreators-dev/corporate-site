@@ -1,4 +1,33 @@
 User-agent: *
 Allow: /
 
+# AI・生成エンジン向けクローラ（AIO）。学習・検索インデックスを明示的に許可する
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# AI向けのサイト要約: https://creatorpot.net/llms.txt
 Sitemap: https://creatorpot.net/sitemap-index.xml

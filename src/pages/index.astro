@@ -3,13 +3,36 @@ import Layout from "@layouts/Layout.astro";
 import { Image } from "astro:assets";
 import Navigation from "@components/Navigation.astro";
 import Footer from "@components/Footer.astro";
+import Testimonials from "@components/Testimonials.astro";
 import nextCreatorLogo from "@public/nextcreator-logo.png";
 import CEOPhoto from "@public/ceo-photo.png";
 import heroBg from "../assets/hero-bg.png";
 import { newsItems } from "../data/news";
+import {
+  SITE,
+  personSchema,
+  nologicAppSchema,
+  serviceSchema,
+} from "../lib/seo";
+
+// トップページの構造化データ（Organization / WebSite は Head.astro が自動付与）。
+// 代表者(Person)・主力プロダクト(NoLogic)・受託開発(Service)を加えて、
+// AI検索や検索エンジンが事業の全体像を正確に把握できるようにする。
+const jsonLd = [
+  personSchema(),
+  nologicAppSchema(),
+  serviceSchema({
+    name: "TechPlant Studio（受託開発）",
+    description:
+      "ゲーム制作・Webアプリ開発を軸に、Webサイト・クリエイティブ・AI活用コンサルティングまで、企画から納品まで一気通貫で対応する受託開発スタジオです。",
+    url: `${SITE.url}/techplantstudio/`,
+    serviceType: "受託開発",
+    offer: { priceText: "15万円〜（内容・規模に応じてお見積もり）", minPrice: 150000 },
+  }),
+];
 ---
 
-<Layout title="株式会社クリエイターのうえきばち">
+<Layout title="株式会社クリエイターのうえきばち" jsonLd={jsonLd}>
   <main class="bg-[#0A0F1C] text-white">
     <!-- ヘッダー -->
     <Navigation />
@@ -1045,6 +1068,62 @@ import { newsItems } from "../data/news";
               >
             </span>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- お客様の声（データが入ると自動表示。0件のときは非表示） -->
+    <Testimonials bgClass="bg-[#111827]" />
+
+    <!-- お問い合わせ / 次の一歩（BOFU 導線） -->
+    <section id="contact-cta" class="bg-[#0F172A] py-20 px-5 md:px-[120px]">
+      <div class="max-w-3xl mx-auto flex flex-col items-center text-center gap-7">
+        <div
+          class="inline-flex items-center px-5 py-2 bg-emerald-500/15 text-emerald-500 text-xs font-bold rounded-full border border-emerald-500/25 tracking-[2px]"
+        >
+          CONTACT
+        </div>
+        <h2 class="text-2xl md:text-[32px] font-extrabold text-white">
+          つくりたいものを、聞かせてください
+        </h2>
+        <p class="text-gray-300 text-base leading-relaxed max-w-[640px]">
+          ゲーム・Webアプリ・AI活用から、コミュニティ運営やイベントまで。まだ形になっていない段階のご相談でも構いません。内容を伺ったうえで、進め方とおおよその費用感をお伝えします。
+        </p>
+        <a
+          href="/techplantstudio#contact"
+          data-cta="home_contact"
+          class="inline-flex items-center gap-2.5 px-12 py-[18px] bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-base rounded-xl transition-colors"
+        >
+          お問い合わせフォームへ
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            ><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg
+          >
+        </a>
+        <div
+          class="flex flex-col items-center gap-3 pt-2 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-x-6 sm:gap-y-2"
+        >
+          <span class="text-gray-500 text-sm">サービス別のご相談はこちら</span>
+          <a href="/community-ops" class="text-emerald-500 text-sm hover:underline"
+            >コミュニティ運営代行</a
+          >
+          <a href="/event-pack" class="text-emerald-500 text-sm hover:underline"
+            >リアルイベントパック</a
+          >
+          <a
+            href="/techplantstudio"
+            class="text-emerald-500 text-sm hover:underline"
+            >受託開発（TechPlant Studio）</a
+          >
         </div>
       </div>
     </section>

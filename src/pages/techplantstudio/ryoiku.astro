@@ -1,0 +1,312 @@
+---
+// ③ 療育・業務AI化LP（要件定義 §4-3）
+// 名義: TechPlant Studio（物語切り離し・実績で信頼）／ index する・グローバルナビ非掲載
+// 一次対応: 芽以（療育枠）、クロージング・初回同席は山縣
+// 「LP単体で信頼完結」要件のため、会社概要フッター（CompanyInfo）を必須で配置する。
+import Layout from "@layouts/Layout.astro";
+import Navigation from "@components/Navigation.astro";
+import CompanyInfo from "@components/CompanyInfo.astro";
+import PortfolioCard from "@components/PortfolioCard.astro";
+import SectionHeading from "@components/lp/SectionHeading.astro";
+import ScheduleCTA from "@components/lp/ScheduleCTA.astro";
+import PackagePricing from "@components/lp/PackagePricing.astro";
+import ComparisonTable from "@components/lp/ComparisonTable.astro";
+import FaqList from "@components/lp/FaqList.astro";
+import LPScripts from "@components/lp/LPScripts.astro";
+import heroBg from "../../assets/hero-bg.png";
+import { Image } from "astro:assets";
+import { portfolioItems } from "../../data/portfolio";
+import { SITE, faqSchema, breadcrumbSchema, serviceSchema } from "../../lib/seo";
+import { SCHEDULING_LINKS, LP_IDS } from "../../lib/scheduling";
+
+const scheduleHref = SCHEDULING_LINKS.ryoiku;
+
+// 信頼: Comorevi 実績（児童発達支援アプリ）を portfolio.ts から流用
+const comorevi = portfolioItems.find((item) => item.title.includes("Comorevi"));
+
+// ハイマスト合同会社の掲載許諾・具体数値・推薦コメント（§7-3）取得後に true にして社名・数値を出す。
+// 未許諾の現状は、社名を伏せた事実ベースの記述で信頼を担保する。
+const HAIMAST_APPROVED = false;
+
+// 課題（人手・記録・送迎）
+const challenges = [
+  { title: "記録・書類業務に時間が取られる", desc: "日々の支援記録やモニタリング、請求関連の書類づくりに、現場の時間が奪われている。" },
+  { title: "送迎ルートの調整が属人的", desc: "送迎の組み方が特定の職員の経験に頼っており、変更や引き継ぎのたびに負担が大きい。" },
+  { title: "人手不足で支援に集中できない", desc: "本来は子どもと向き合う時間に充てたいのに、事務作業に追われている。" },
+  { title: "AIに興味はあるが、始め方がわからない", desc: "「うちの現場で何ができるのか」「補助金は使えるのか」が分からず、踏み出せていない。" },
+];
+
+// 提供内容（診断 → 自動化 → 伴走）
+const steps = [
+  { num: 1, title: "現状診断", desc: "現場の業務を伺い、まず自動化する「1業務」を一緒に見つけます。" },
+  { num: 2, title: "1業務の自動化", desc: "いきなり全部ではなく、効果の出やすい1業務からAI化を構築します。" },
+  { num: 3, title: "月次AI伴走", desc: "運用を支えながら、次に楽にできる業務へと少しずつ広げます。" },
+];
+
+// 比較（自力でAI導入 / 伴走支援を受ける）— 検討段階の判断材料
+const comparisonRows = [
+  {
+    axis: "始め方",
+    a: "何から手をつければよいか分からず、踏み出せない。",
+    b: "現状診断で、効果が出やすい1業務を一緒に決めます。",
+  },
+  {
+    axis: "進め方",
+    a: "いきなり全部を変えようとして、現場が混乱してしまう。",
+    b: "1業務からのスモールスタート。無理のない範囲で広げます。",
+  },
+  {
+    axis: "専門知識",
+    a: "AIの知識がないと、設定や運用でつまずいてしまう。",
+    b: "知識がない状態から始められ、月次でサポートします。",
+  },
+  {
+    axis: "補助金",
+    a: "使える制度や申請のしかたが分からない。",
+    b: "活用できる可能性を含めて、相談と情報整理をお手伝いします。",
+  },
+];
+
+// FAQ（補助金・契約形態 中心）
+const faqs = [
+  { question: "補助金は使えますか？", answer: "AI・ITツールの導入にあたっては、補助金を活用できる場合があります。対象となる制度や要件は時期・事業所の状況によって異なるため、現状を伺ったうえで、活用できる可能性を含めてご相談に乗ります。申請に必要な情報の整理もお手伝いします。" },
+  { question: "AIの専門知識がなくても大丈夫ですか？", answer: "はい。専門知識は不要です。まず現場の業務を伺い、何から始めるのが効果的かをこちらで整理してご提案します。導入後も月次でサポートしますので、知識がない状態からでも無理なく進められます。" },
+  { question: "どの業務から始めるのがよいですか？", answer: "記録・書類作成・送迎調整など、時間を取られている業務から始めることが多いです。現状診断で、効果が出やすく現場の負担が少ない1業務を一緒に見極めます。" },
+  { question: "契約形態・期間はどうなりますか？", answer: "初回の現状診断＋1業務の自動化構築のあと、月次の運用サポート（AI伴走）に移行する形が基本です。月次サポートは継続・終了を状況に合わせてご相談いただけます。" },
+  { question: "小規模な事業所でも依頼できますか？", answer: "はい。1事業所からご依頼いただけます。事業所連絡会・協議会など、複数事業所でのご相談も承ります。まずは無料診断でお気軽にご相談ください。" },
+];
+
+const jsonLd = [
+  serviceSchema({
+    name: "療育・福祉現場の業務AI化支援",
+    description:
+      "児童発達支援・放課後等デイサービスの記録・送迎・書類業務を、いきなり全部ではなく「1業務」から自動化する伴走支援。現状診断＋1業務の自動化構築から、月次の運用サポート（AI伴走）まで対応し、補助金の活用相談にも応じます。",
+    url: `${SITE.url}/techplantstudio/ryoiku/`,
+    serviceType: "業務AI化・DX支援",
+    offer: { priceText: "初回30万円＋月額10万円", minPrice: 100000, unit: "month" },
+  }),
+  faqSchema(faqs),
+  breadcrumbSchema([
+    { name: "ホーム", url: `${SITE.url}/` },
+    { name: "TechPlantStudio", url: `${SITE.url}/techplantstudio/` },
+    { name: "療育・業務AI化", url: `${SITE.url}/techplantstudio/ryoiku/` },
+  ]),
+];
+---
+
+<Layout
+  title="療育・福祉現場の業務AI化 | TechPlant Studio"
+  description="児童発達支援・放課後等デイサービスの記録・送迎・書類業務を、現場の1業務から無理なくAI化。現状診断＋1業務の自動化から月次のAI伴走まで。補助金の活用もご相談いただけます。"
+  jsonLd={jsonLd}
+>
+  <main class="bg-[#0A0F1C] text-white scroll-smooth" data-lp-id={LP_IDS.ryoiku}>
+    <Navigation showBack={true} backHref="/techplantstudio" backLabel="TechPlant Studio に戻る" />
+
+    <!-- 1. Hero（補助金 × 現場AI化） -->
+    <section class="relative min-h-[560px] flex items-center justify-center overflow-hidden" data-section="hero">
+      <div class="absolute inset-0">
+        <Image src={heroBg} width={1920} height={1080} quality={60} alt="" aria-hidden="true" class="w-full h-full object-cover" />
+      </div>
+      <div class="absolute inset-0 bg-[#0A0F1C]/85"></div>
+      <div class="relative z-10 flex flex-col items-center text-center px-5 py-24 gap-6 max-w-3xl mx-auto">
+        <div class="inline-flex items-center px-5 py-2 bg-emerald-500/15 text-emerald-500 text-xs font-bold rounded-full border border-emerald-500/25 tracking-[2px]">
+          TECHPLANT STUDIO
+        </div>
+        <h1 class="text-4xl md:text-[52px] font-black leading-tight">
+          現場の1業務から、<br class="hidden sm:inline" />無理なくAI化。
+        </h1>
+        <p class="text-gray-300 text-base md:text-[17px] leading-relaxed max-w-[660px]">
+          児童発達支援・放課後等デイサービスの記録・送迎・書類業務を、いきなり全部ではなく「1業務」から自動化します。補助金を活用したAI導入のご相談も承ります。
+        </p>
+        <div class="mt-2">
+          <ScheduleCTA href={scheduleHref} location="hero" label="無料で現状診断を受ける" />
+        </div>
+        <a href="#service" class="inline-flex items-center gap-2 text-gray-400 hover:text-white text-sm font-medium transition-colors">
+          サービス内容を見る
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        </a>
+      </div>
+    </section>
+
+    <!-- 2. 課題 -->
+    <section class="bg-[#0A0F1C] py-20 px-5 md:px-[120px]" data-section="problem">
+      <div class="max-w-7xl mx-auto flex flex-col items-center gap-12">
+        <SectionHeading
+          badge="CHALLENGES"
+          title="現場の時間を、事務作業に奪われていませんか"
+          lead="療育・福祉の現場で、多くの事業所が抱えている負担です。"
+        />
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+          {challenges.map((c) => (
+            <div class="bg-[#111827] p-8 rounded-2xl border border-[#1E293B] flex flex-col gap-3">
+              <h3 class="text-white text-lg font-bold">{c.title}</h3>
+              <p class="text-gray-300 text-sm leading-relaxed">{c.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. 提供内容 -->
+    <section id="service" class="bg-[#111827] py-20 px-5 md:px-[120px]" data-section="service">
+      <div class="max-w-7xl mx-auto flex flex-col items-center gap-12">
+        <SectionHeading
+          badge="HOW IT WORKS"
+          title="診断 → 1業務の自動化 → 月次伴走"
+          lead="「導入して終わり」にしません。1業務の自動化から始め、運用を支えながら少しずつ広げます。"
+        />
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
+          {steps.map((step) => (
+            <div class="bg-[#0A0F1C] p-8 rounded-2xl border border-[#1E293B] flex flex-col items-center text-center gap-4">
+              <div class="flex items-center justify-center w-12 h-12 bg-emerald-500 rounded-full text-white text-xl font-bold">{step.num}</div>
+              <h3 class="text-white font-bold text-lg">{step.title}</h3>
+              <p class="text-gray-300 text-sm leading-relaxed">{step.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- 3.5 比較（自力でAI導入 / 伴走支援） -->
+    <section class="bg-[#0F172A] py-20 px-5 md:px-[120px]" data-section="comparison">
+      <div class="max-w-7xl mx-auto flex flex-col items-center gap-12">
+        <SectionHeading
+          badge="WHY US"
+          title="自力で進める場合との違い"
+          lead="AI導入を自分たちだけで進める場合と、伴走支援を受ける場合で何が変わるかを整理しました。"
+        />
+        <ComparisonTable
+          colA="自力でAI導入を進める場合"
+          colB="伴走支援を受ける場合"
+          rows={comparisonRows}
+        />
+      </div>
+    </section>
+
+    <!-- 4. 料金 -->
+    <section class="bg-[#0A0F1C] py-20 px-5 md:px-[120px]" data-section="pricing">
+      <div class="max-w-7xl mx-auto flex flex-col items-center gap-12">
+        <SectionHeading
+          badge="PRICING"
+          title="料金"
+          lead="現状診断と1業務の自動化からスタートし、月次のAI伴走で運用を支えます。"
+        />
+        <PackagePricing
+          name="現場AI化スタートプラン"
+          summary="まず1業務の自動化を構築し、月次のサポートで運用を定着させます。"
+          includes={[
+            "現状業務のヒアリング・診断",
+            "1業務の自動化構築",
+            "運用マニュアルの整備",
+            "月次の運用サポート・改善提案",
+            "補助金活用のご相談",
+          ]}
+          price="初回 30万円 ＋ 月額 10万円"
+          priceNote="初回（現状診断＋1業務の自動化）／月額（運用サポート・AI伴走）"
+          notes={[
+            "※ 表示価格は税別です。",
+            "※ 内容・規模により変動します。正式なお見積もりは無料診断後にご提示いたします。",
+          ]}
+        />
+        <div class="mt-2">
+          <ScheduleCTA href={scheduleHref} location="middle" size="md" label="無料で現状診断を受ける" microcopy="" />
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. 実績・信頼 -->
+    <section class="bg-[#111827] py-20 px-5 md:px-[120px]" data-section="trust">
+      <div class="max-w-7xl mx-auto flex flex-col items-center gap-12">
+        <SectionHeading
+          badge="TRACK RECORD"
+          title="実績で、お伝えします"
+          lead="療育・福祉領域での開発支援と、AI活用研修から続く継続的な伴走の実績があります。"
+        />
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+          <!-- 継続支援の実績（§7-3 許諾後に社名・具体数値へ差し替え） -->
+          <div class="bg-[#0A0F1C] p-8 rounded-2xl border border-[#1E293B] flex flex-col gap-4">
+            <div class="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+            </div>
+            <p class="text-emerald-500 text-3xl font-black">継続支援 2年</p>
+            {HAIMAST_APPROVED ? (
+              <>
+                <h3 class="text-white text-lg font-bold">ハイマスト合同会社</h3>
+                <p class="text-gray-300 text-sm leading-relaxed">業務管理システム・送迎ルート最適化・AI活用研修まで、AIの実装と現場定着を継続的に支援しています。</p>
+              </>
+            ) : (
+              <>
+                <h3 class="text-white text-lg font-bold">福祉事業者様での継続支援</h3>
+                <p class="text-gray-300 text-sm leading-relaxed">AI活用研修をきっかけに、業務管理システムや送迎ルートの最適化まで、AIの実装と現場定着を2年にわたり継続的に支援しています。</p>
+              </>
+            )}
+          </div>
+
+          <!-- Comorevi 実績 -->
+          {comorevi && <PortfolioCard item={comorevi} />}
+        </div>
+
+        <!-- 代表メッセージ（信頼の顔は山縣に統一 §3-5） -->
+        <div class="w-full bg-[#0A0F1C] p-6 md:p-10 rounded-2xl border-l-2 border-emerald-500">
+          <div class="flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-8">
+            <img src="/ceo-photo.png" alt="代表取締役 山縣 帆高" loading="lazy" class="w-28 h-28 md:w-32 md:h-32 rounded-full object-cover shrink-0" />
+            <div class="flex flex-col gap-3 text-center md:text-left">
+              <div class="flex flex-col gap-1">
+                <p class="text-white text-lg font-bold">山縣 帆高</p>
+                <p class="text-emerald-500 text-sm font-semibold">株式会社クリエイターのうえきばち 代表取締役</p>
+              </div>
+              <p class="text-gray-300 text-sm leading-relaxed">
+                AIは「全部を一度に変える」ものではなく、現場の負担が大きい業務を一つずつ軽くしていく道具だと考えています。まずは効果の出やすい1業務から。補助金の活用も含め、現場が無理なく続けられる形で、責任を持って伴走します。
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. FAQ -->
+    <section class="bg-[#0A0F1C] py-20 px-5 md:px-[120px]" data-section="faq">
+      <div class="max-w-7xl mx-auto flex flex-col items-center gap-10">
+        <SectionHeading badge="FAQ" title="よくあるご質問" />
+        <FaqList faqs={faqs} />
+        <a
+          href="/column/ryoiku-business-ai"
+          class="text-emerald-500 text-sm font-medium hover:underline inline-flex items-center gap-1.5"
+        >
+          関連コラム: 放課後等デイサービスの業務をAIで効率化する方法
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
+      </div>
+    </section>
+
+    <!-- 7. 会社概要フッター（LP単体で信頼完結 §3-5 / §4-3 必須） -->
+    <CompanyInfo bg="#111827" />
+
+    <!-- 8. 最終CTA -->
+    <section class="bg-[#0F172A] py-20 px-5 md:px-[120px]" data-section="cta_bottom">
+      <div class="max-w-3xl mx-auto flex flex-col items-center text-center gap-8">
+        <h2 class="text-2xl md:text-[32px] font-extrabold text-white">まずは無料の現状診断から</h2>
+        <p class="text-gray-300 text-base leading-relaxed">
+          「うちの現場で何ができるのか」を一緒に整理します。診断だけのご利用も歓迎です。
+        </p>
+        <ScheduleCTA href={scheduleHref} location="bottom" label="無料相談の日程を選ぶ" />
+        <p class="text-gray-500 text-sm">
+          日程が合わない方は
+          <a href="/techplantstudio#contact" class="text-emerald-500 hover:underline">お問い合わせフォーム</a>
+          からメールでもご相談いただけます。
+        </p>
+      </div>
+    </section>
+
+    <!-- フッター -->
+    <div class="bg-[#111827] py-8 px-5 md:px-[120px]">
+      <div class="text-center">
+        <p class="text-gray-500 text-xs">
+          &copy; {new Date().getFullYear()} 株式会社クリエイターのうえきばち All rights reserved.
+        </p>
+      </div>
+    </div>
+
+    <LPScripts />
+  </main>
+</Layout>

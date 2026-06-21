@@ -1,0 +1,40 @@
+---
+// セクション見出しパターン（DESIGN.md §5-5）
+// バッジ（英大文字）→ H2 → リード文 の共通パターン。
+
+interface Props {
+  /** セクションバッジ（英大文字） */
+  badge: string;
+  /** セクション見出し（H2） */
+  title: string;
+  /** リード文（任意） */
+  lead?: string;
+  /** 配置（既定は中央寄せ） */
+  align?: "center" | "left";
+}
+
+const { badge, title, lead, align = "center" } = Astro.props;
+---
+
+<div
+  class:list={[
+    "flex flex-col gap-4 w-full",
+    align === "center" ? "items-center text-center" : "items-start text-left",
+  ]}
+>
+  <span
+    class="inline-flex items-center px-5 py-2 bg-emerald-500/15 text-emerald-500 text-xs font-bold rounded-full border border-emerald-500/25 tracking-[2px]"
+  >
+    {badge}
+  </span>
+  <h2 class="text-[28px] md:text-[32px] font-extrabold text-white leading-tight">
+    {title}
+  </h2>
+  {
+    lead && (
+      <p class="text-[#C0C8D4] text-base md:text-[17px] leading-relaxed max-w-[760px]">
+        {lead}
+      </p>
+    )
+  }
+</div>

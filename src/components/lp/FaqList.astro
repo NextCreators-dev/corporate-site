@@ -1,0 +1,31 @@
+---
+// FAQアコーディオン（native <details> / 外部ライブラリ不要 §3-8）
+// faq_expand 計測（§3-7）は LPScripts.astro の <details> toggle ハンドラが拾う。
+// answer はプレーンテキスト（FAQPage 構造化データにそのまま流用するため HTML を含めない）。
+
+interface Props {
+  faqs: { question: string; answer: string }[];
+}
+
+const { faqs } = Astro.props;
+---
+
+<div class="w-full max-w-3xl mx-auto">
+  <div class="flex flex-col">
+    {
+      faqs.map((faq) => (
+        <details class="border-b border-[#1E293B] group">
+          <summary class="py-5 px-4 md:px-6 text-white font-semibold text-sm md:text-base cursor-pointer flex justify-between items-center gap-4 hover:text-emerald-400 transition-colors list-none [&::-webkit-details-marker]:hidden">
+            <span>{faq.question}</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-500 transition-transform duration-300 group-open:rotate-180 shrink-0" aria-hidden="true">
+              <path d="m6 9 6 6 6-6" />
+            </svg>
+          </summary>
+          <div class="px-4 md:px-6 pb-5 text-gray-300 text-sm leading-relaxed">
+            {faq.answer}
+          </div>
+        </details>
+      ))
+    }
+  </div>
+</div>

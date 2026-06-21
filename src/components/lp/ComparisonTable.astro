@@ -1,0 +1,66 @@
+---
+// 比較表（自分たちでやる場合 / 依頼する場合）
+// 検討段階(MOFU)の判断材料。意味のある <table> 構造にして、AI検索や検索エンジンが
+// 「依頼すると何がどう変わるか」を抽出できるようにする。
+interface Row {
+  /** 比較の観点（例: 立ち上げ、費用） */
+  axis: string;
+  /** 自分たちでやる場合 */
+  a: string;
+  /** 依頼する場合（強調列） */
+  b: string;
+}
+
+interface Props {
+  /** 左列の見出し（例: 自分たちだけで運営する場合） */
+  colA: string;
+  /** 右列の見出し（依頼する場合・強調列） */
+  colB: string;
+  rows: Row[];
+}
+
+const { colA, colB, rows } = Astro.props;
+---
+
+<div class="w-full max-w-4xl overflow-x-auto">
+  <table class="w-full min-w-[560px] border-collapse text-left align-top">
+    <thead>
+      <tr>
+        <th class="w-[22%] p-4 text-xs font-semibold text-gray-500"></th>
+        <th
+          class="w-[39%] p-4 text-sm font-bold text-gray-300 border-b border-[#1E293B]"
+          >{colA}</th
+        >
+        <th
+          class="w-[39%] rounded-t-xl bg-emerald-500/[0.08] p-4 text-sm font-bold text-emerald-300 border-b border-emerald-500/30"
+          >{colB}</th
+        >
+      </tr>
+    </thead>
+    <tbody>
+      {
+        rows.map((r, i) => (
+          <tr>
+            <th
+              scope="row"
+              class="p-4 text-sm font-bold text-white border-b border-[#1E293B] align-top"
+            >
+              {r.axis}
+            </th>
+            <td class="p-4 text-sm leading-relaxed text-gray-400 border-b border-[#1E293B] align-top">
+              {r.a}
+            </td>
+            <td
+              class:list={[
+                "p-4 text-sm leading-relaxed text-gray-100 bg-emerald-500/[0.06] align-top border-b border-emerald-500/20",
+                i === rows.length - 1 && "rounded-b-xl",
+              ]}
+            >
+              {r.b}
+            </td>
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+</div>

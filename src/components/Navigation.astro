@@ -5,9 +5,17 @@ import Logo from "@public/logo.png";
 interface Props {
   /** トップページ以外の場合、戻るリンクを表示 */
   showBack?: boolean;
+  /** 戻るリンクの遷移先（既定はトップ） */
+  backHref?: string;
+  /** 戻るリンクの文言（既定は「トップに戻る」） */
+  backLabel?: string;
 }
 
-const { showBack = false } = Astro.props;
+const {
+  showBack = false,
+  backHref = "/",
+  backLabel = "トップに戻る",
+} = Astro.props;
 ---
 
 <header class="fixed top-0 left-0 right-0 z-50 border-b border-white/[0.04] bg-[#020B16]/[0.78] backdrop-blur-xl">
@@ -28,16 +36,42 @@ const { showBack = false } = Astro.props;
       </div>
 
       {showBack ? (
-        <a href="/" class="flex items-center gap-1.5 text-gray-400 hover:text-white transition-colors text-sm">
+        <a href={backHref} class="flex items-center gap-1.5 text-gray-400 hover:text-white transition-colors text-sm">
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-          <span>トップに戻る</span>
+          <span>{backLabel}</span>
         </a>
       ) : (
         <>
           {/* デスクトップナビゲーション */}
-          <nav class="hidden lg:flex items-center gap-10 xl:gap-14">
+          <nav class="hidden lg:flex items-center gap-8 xl:gap-12">
             <a href="#vision" class="text-white/90 hover:text-emerald-300 transition-colors text-[15px] font-bold tracking-[0.04em]">私たちについて</a>
             <a href="#product" class="text-white/90 hover:text-emerald-300 transition-colors text-[15px] font-bold tracking-[0.04em]">事業内容</a>
+
+            {/* サービス（独立LPへの導線）— hover / フォーカスで開く CSS ドロップダウン */}
+            <div class="relative group">
+              <button
+                type="button"
+                aria-haspopup="true"
+                class="flex items-center gap-1 text-white/90 hover:text-emerald-300 transition-colors text-[15px] font-bold tracking-[0.04em]"
+              >
+                サービス
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" class="transition-transform duration-200 group-hover:rotate-180 group-focus-within:rotate-180" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+              </button>
+              <div class="invisible opacity-0 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100 absolute left-1/2 -translate-x-1/2 top-full pt-3 transition-opacity duration-200 z-50">
+                <div class="w-64 rounded-xl border border-white/10 bg-[#0A0F1C]/95 backdrop-blur-xl p-2 shadow-[0_12px_40px_rgba(0,0,0,0.5)] flex flex-col">
+                  <a href="/community-ops" class="flex flex-col gap-0.5 rounded-lg px-4 py-3 hover:bg-white/[0.06] transition-colors">
+                    <span class="text-white text-sm font-bold">コミュニティ運営代行</span>
+                    <span class="text-gray-400 text-xs">公式ファンコミュニティの構築・運営</span>
+                  </a>
+                  <a href="/event-pack" class="flex flex-col gap-0.5 rounded-lg px-4 py-3 hover:bg-white/[0.06] transition-colors">
+                    <span class="text-white text-sm font-bold">リアルイベントパック</span>
+                    <span class="text-gray-400 text-xs">企画から映像まで全部入り</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <a href="/column" class="text-white/90 hover:text-emerald-300 transition-colors text-[15px] font-bold tracking-[0.04em]">コラム</a>
             <a href="/news" class="text-white/90 hover:text-emerald-300 transition-colors text-[15px] font-bold tracking-[0.04em]">ニュース</a>
             <a href="#company" class="text-white/90 hover:text-emerald-300 transition-colors text-[15px] font-bold tracking-[0.04em]">会社情報</a>
           </nav>
@@ -84,6 +118,9 @@ const { showBack = false } = Astro.props;
     <nav class="flex flex-col items-center space-y-8 mt-16">
       <a href="#vision" class="text-xl text-gray-400 hover:text-white transition-colors">私たちについて</a>
       <a href="#product" class="text-xl text-gray-400 hover:text-white transition-colors">事業内容</a>
+      <a href="/community-ops" class="text-xl text-gray-400 hover:text-white transition-colors">コミュニティ運営代行</a>
+      <a href="/event-pack" class="text-xl text-gray-400 hover:text-white transition-colors">リアルイベントパック</a>
+      <a href="/column" class="text-xl text-gray-400 hover:text-white transition-colors">コラム</a>
       <a href="/news" class="text-xl text-gray-400 hover:text-white transition-colors">ニュース</a>
       <a href="#company" class="text-xl text-gray-400 hover:text-white transition-colors">会社情報</a>
       <a href="/techplantstudio#contact" class="inline-flex items-center gap-3 rounded-full bg-emerald-400 px-7 py-3 text-base font-bold text-[#052016]">

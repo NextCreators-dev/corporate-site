@@ -1,0 +1,74 @@
+---
+// 商品パッケージ価格表（要件定義 §3-4 / §5-3）
+// 見せ方の原則: 成果物バンドル・体験価値を「先に列挙」してから価格を提示する。
+// 釘: 「ノーコードだから安い」という値付けはしない。売るのは速さと体験であって工数ではない。
+// （既存 techplantstudio.astro の pricingItems は受託総合の別系統。これは商品パッケージ専用）
+
+interface Props {
+  /** パッケージ名 */
+  name: string;
+  /** リード（パッケージの一言要約） */
+  summary?: string;
+  /** 含まれる成果物・体験価値（価格より先に列挙する） */
+  includes: string[];
+  /** 価格表示（例: "月額 10〜20万円"） */
+  price: string;
+  /** 価格の補足（例: "初期3ヶ月コミット"） */
+  priceNote?: string;
+  /** 脚注（税表記・条件など） */
+  notes?: string[];
+}
+
+const { name, summary, includes, price, priceNote, notes } = Astro.props;
+---
+
+<div class="w-full max-w-3xl mx-auto">
+  <div
+    class="bg-gradient-to-br from-emerald-900/40 to-[#111827] rounded-2xl border border-[#1E293B] p-8 md:p-10 flex flex-col gap-8"
+  >
+    <!-- パッケージ名 -->
+    <div class="flex flex-col gap-2">
+      <span
+        class="inline-flex items-center self-start px-3 py-1 bg-emerald-500/15 text-emerald-400 text-[11px] font-semibold rounded-full"
+      >
+        全部入りパッケージ
+      </span>
+      <h3 class="text-white text-[22px] md:text-2xl font-bold">{name}</h3>
+      {summary && <p class="text-gray-300 text-sm leading-relaxed">{summary}</p>}
+    </div>
+
+    <!-- 成果物バンドル（価格より先に列挙） -->
+    <div class="flex flex-col gap-3">
+      <p class="text-gray-500 text-xs font-semibold tracking-wider uppercase">
+        含まれるもの
+      </p>
+      <ul class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3">
+        {
+          includes.map((item) => (
+            <li class="flex items-start gap-2.5">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="shrink-0 mt-0.5" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+              <span class="text-gray-300 text-sm leading-relaxed">{item}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <!-- 価格（バンドルの後に提示） -->
+    <div class="flex flex-col gap-1 pt-6 border-t border-[#1E293B]">
+      <p class="text-gray-400 text-sm">上記すべてを含めて</p>
+      <p class="text-emerald-500 text-3xl md:text-4xl font-black">{price}</p>
+      {priceNote && <p class="text-gray-400 text-sm">{priceNote}</p>}
+    </div>
+
+    {
+      notes && notes.length > 0 && (
+        <div class="text-gray-500 text-xs leading-relaxed space-y-1">
+          {notes.map((note) => (
+            <p>{note}</p>
+          ))}
+        </div>
+      )
+    }
+  </div>
+</div>

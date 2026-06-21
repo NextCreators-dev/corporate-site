@@ -26,6 +26,9 @@ pnpm-debug.log*
 # claude log
 claude_log/
 
+# playwright MCP の作業用フォルダ
+.playwright-mcp/
+
 CLAUDE.md
 # Local Netlify folder
 .netlify

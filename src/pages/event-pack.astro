@@ -1,0 +1,335 @@
+---
+// ② リアルイベントパックLP（要件定義 §4-2）
+// 名義: 本体（物語接続）／ index する・グローバルナビ掲載する／ 一次対応: 佐藤、クロージング・初回同席は山縣
+import Layout from "@layouts/Layout.astro";
+import Navigation from "@components/Navigation.astro";
+import PortfolioCard from "@components/PortfolioCard.astro";
+import SectionHeading from "@components/lp/SectionHeading.astro";
+import ScheduleCTA from "@components/lp/ScheduleCTA.astro";
+import PackagePricing from "@components/lp/PackagePricing.astro";
+import ComparisonTable from "@components/lp/ComparisonTable.astro";
+import FaqList from "@components/lp/FaqList.astro";
+import LPScripts from "@components/lp/LPScripts.astro";
+import heroBg from "../assets/hero-bg.png";
+import { Image } from "astro:assets";
+import { portfolioItems } from "../data/portfolio";
+import { SITE, faqSchema, breadcrumbSchema, serviceSchema } from "../lib/seo";
+import { SCHEDULING_LINKS, LP_IDS } from "../lib/scheduling";
+
+const scheduleHref = SCHEDULING_LINKS.creator;
+
+// 実績は portfolio.ts のイベント系（共同運営・出展）を流用（§4-2 流用元）
+const eventWorks = portfolioItems.filter((item) => item.category === "community");
+
+// アフタームービー映像アセット（§7-5 不足素材）。取得後に true にして公開する。
+const HAS_AFTERMOVIE = false;
+
+// こんな悩み（手配が大変／単発で終わる）
+const pains = [
+  { title: "手配先が多すぎて回らない", desc: "会場・音響・配信・撮影・物販……。バラバラに発注すると、調整だけで本業が止まる。" },
+  { title: "イベントが「その日だけ」で終わる", desc: "せっかく盛り上がっても記録が残らず、次の集客につながらない。" },
+  { title: "大手に頼むと予算が合わない", desc: "やりたい規模に対して見積もりが大きすぎる。小箱・個人勢に合う座組みがない。" },
+];
+
+// パッケージ内容（全部入り）
+const packageItems = [
+  { title: "企画・構成", desc: "コンセプト設計から当日の進行台本まで。" },
+  { title: "会場手配", desc: "規模・予算に合う会場の選定・調整。" },
+  { title: "音響オペレーション", desc: "当日の音響設営・オペレーションを担当。" },
+  { title: "ライブ配信", desc: "現地イベントのオンライン配信に対応。" },
+  { title: "写真・動画撮影", desc: "当日の記録を写真・動画で撮影。" },
+  { title: "限定ミニゲーム制作", desc: "イベント用のオリジナルミニゲームを制作。" },
+  { title: "オリジナルBGM", desc: "イベントの世界観に合わせたBGMを制作。" },
+  { title: "告知ショート動画", desc: "集客のための告知用ショート動画を制作。" },
+  { title: "アフタームービー", desc: "次の集客につながる、イベント当日の映像作品。" },
+];
+
+// 比較（個別に手配する場合 / 制作パックに任せる場合）— 検討段階の判断材料
+const comparisonRows = [
+  {
+    axis: "発注先",
+    a: "会場・音響・配信・撮影・物販を、それぞれ別々に手配する。",
+    b: "窓口はひとつ。企画から映像まで一括で引き受けます。",
+  },
+  {
+    axis: "当日まで",
+    a: "各社との調整に追われ、本業が止まってしまう。",
+    b: "進行台本づくりから手配・制作まで、まとめて担当します。",
+  },
+  {
+    axis: "イベント後",
+    a: "盛り上がっても記録が残らず、次の集客につながらない。",
+    b: "アフタームービーが、次のイベントへの集客につながります。",
+  },
+  {
+    axis: "予算",
+    a: "大手に頼むと、やりたい規模に対して見積もりが大きすぎる。",
+    b: "80〜150万円。小箱や個人の活動に合う座組みでご提案します。",
+  },
+];
+
+// 当日までの流れ
+const flowSteps = [
+  { num: 1, title: "ご相談・ヒアリング", desc: "やりたいイベント像・規模・ご予算を伺います。" },
+  { num: 2, title: "企画・お見積もり", desc: "構成・座組み・スケジュールとお見積もりをご提案。" },
+  { num: 3, title: "制作・手配", desc: "会場・音響・限定ゲーム・BGM・告知物を準備します。" },
+  { num: 4, title: "当日運営", desc: "音響・配信・撮影まで、当日の運営を担当します。" },
+  { num: 5, title: "納品", desc: "写真・アフタームービーを納品。次の集客につなげます。" },
+];
+
+const faqs = [
+  { question: "どのくらい前に相談すればよいですか？", answer: "企画・会場手配・制作物の準備を含めると、開催日の2〜3ヶ月前までにご相談いただけると余裕を持って進められます。同時に対応できる件数に限りがあるため、日程が決まっている場合は早めのご相談をおすすめします。" },
+  { question: "会場がまだ決まっていなくても相談できますか？", answer: "はい。会場の選定・手配からご依頼いただけます。規模やご予算に合わせて候補をご提案します。コラボカフェやライブハウスなど、提携先での開催のご相談も歓迎です。" },
+  { question: "一部だけ（撮影だけ・配信だけ）の依頼はできますか？", answer: "全部入りパッケージを基本としていますが、必要な範囲に絞ったご相談も可能です。まずはやりたいことをお聞かせください。最適な座組みをご提案します。" },
+  { question: "オンライン配信のみのイベントにも対応できますか？", answer: "はい。現地開催に加え、オンライン配信のみ・ハイブリッド開催にも対応しています。配信の構成・運営もまとめてお任せいただけます。" },
+  { question: "遠方の会場でも対応してもらえますか？", answer: "内容・規模により対応可否が変わりますので、まずはご相談ください。開催地やスケジュールを踏まえて、対応できる体制をご提案します。" },
+];
+
+const jsonLd = [
+  serviceSchema({
+    name: "リアルイベント制作パック",
+    description:
+      "企画・会場手配・音響・ライブ配信・写真/動画撮影・限定ミニゲーム・オリジナルBGM・告知ショート動画・アフタームービーまで、リアルイベントを丸ごと一括で制作する全部入りパッケージ。周年・記念イベントを「その日だけ」で終わらせず、映像が次の集客になるイベントをつくります。",
+    url: `${SITE.url}/event-pack/`,
+    serviceType: "イベント企画・制作",
+    offer: { priceText: "80〜150万円（規模・内容に応じて）", minPrice: 800000, maxPrice: 1500000 },
+  }),
+  faqSchema(faqs),
+  breadcrumbSchema([
+    { name: "ホーム", url: `${SITE.url}/` },
+    { name: "リアルイベントパック", url: `${SITE.url}/event-pack/` },
+  ]),
+];
+---
+
+<Layout
+  title="リアルイベント制作パック | 株式会社クリエイターのうえきばち"
+  description="企画・会場・音響・配信・撮影・限定ゲーム・BGM・告知・アフタームービーまで、リアルイベントを丸ごと一括で制作。周年・記念イベントを「その日だけ」で終わらせず、映像が次の集客になるイベントをつくります。"
+  jsonLd={jsonLd}
+>
+  <main class="bg-[#0A0F1C] text-white scroll-smooth" data-lp-id={LP_IDS.eventPack}>
+    <Navigation showBack={true} />
+
+    <!-- 1. Hero -->
+    <section class="relative min-h-[560px] flex items-center justify-center overflow-hidden" data-section="hero">
+      <div class="absolute inset-0">
+        <Image src={heroBg} width={1920} height={1080} quality={60} alt="" aria-hidden="true" class="w-full h-full object-cover" />
+      </div>
+      <div class="absolute inset-0 bg-[#0A0F1C]/80"></div>
+      <div class="relative z-10 flex flex-col items-center text-center px-5 py-24 gap-6 max-w-3xl mx-auto">
+        <div class="inline-flex items-center px-5 py-2 bg-emerald-500/15 text-emerald-500 text-xs font-bold rounded-full border border-emerald-500/25 tracking-[2px]">
+          EVENT PRODUCTION
+        </div>
+        <h1 class="text-4xl md:text-[52px] font-black leading-tight">
+          周年を、一日で<br class="hidden sm:inline" />終わらせない。
+        </h1>
+        <p class="text-gray-300 text-base md:text-[17px] leading-relaxed max-w-[660px]">
+          企画・会場・音響・配信・撮影・限定ゲーム・BGM・告知・アフタームービーまで。映像が次の集客になるイベントを、まるごと一括でお引き受けします。
+        </p>
+        <div class="mt-2">
+          <ScheduleCTA href={scheduleHref} location="hero" label="イベントの相談をする" />
+        </div>
+        <a href="#package" class="inline-flex items-center gap-2 text-gray-400 hover:text-white text-sm font-medium transition-colors">
+          パッケージ内容を見る
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        </a>
+      </div>
+    </section>
+
+    <!-- 2. こんな悩み -->
+    <section class="bg-[#0A0F1C] py-20 px-5 md:px-[120px]" data-section="problem">
+      <div class="max-w-7xl mx-auto flex flex-col items-center gap-12">
+        <SectionHeading
+          badge="CHALLENGES"
+          title="イベントの「大変」を、まとめて引き受けます"
+          lead="個人勢〜小箱のイベントでつまずきやすいポイントを、一つの窓口で解決します。"
+        />
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
+          {pains.map((p) => (
+            <div class="bg-[#111827] p-8 rounded-2xl border border-[#1E293B] flex flex-col gap-3">
+              <h3 class="text-white text-lg font-bold">{p.title}</h3>
+              <p class="text-gray-300 text-sm leading-relaxed">{p.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. パッケージ内容 -->
+    <section id="package" class="bg-[#111827] py-20 px-5 md:px-[120px]" data-section="package">
+      <div class="max-w-7xl mx-auto flex flex-col items-center gap-12">
+        <SectionHeading
+          badge="ALL-IN-ONE"
+          title="これ全部、ひとつの窓口で"
+          lead="企画から当日運営、納品物まで。社内のエンジニア・音楽家・映像クリエイターが連携して制作します。"
+        />
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+          {packageItems.map((item) => (
+            <div class="bg-[#0A0F1C] p-6 rounded-2xl border border-[#1E293B] flex flex-col gap-2">
+              <div class="flex items-center gap-2.5">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="shrink-0" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+                <h3 class="text-white text-base font-bold">{item.title}</h3>
+              </div>
+              <p class="text-gray-400 text-sm leading-relaxed">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- 3.5 比較（個別手配 / 制作パック） -->
+    <section class="bg-[#0F172A] py-20 px-5 md:px-[120px]" data-section="comparison">
+      <div class="max-w-7xl mx-auto flex flex-col items-center gap-12">
+        <SectionHeading
+          badge="WHY US"
+          title="個別に手配する場合との違い"
+          lead="会場から映像まで、ばらばらに発注する場合と一括で任せる場合で何が変わるかを整理しました。"
+        />
+        <ComparisonTable
+          colA="個別に手配する場合"
+          colB="制作パックに任せる場合"
+          rows={comparisonRows}
+        />
+      </div>
+    </section>
+
+    <!-- 4. 料金 -->
+    <section class="bg-[#0A0F1C] py-20 px-5 md:px-[120px]" data-section="pricing">
+      <div class="max-w-7xl mx-auto flex flex-col items-center gap-12">
+        <SectionHeading
+          badge="PRICING"
+          title="料金"
+          lead="上記の全部入りをまとめて。規模・内容に応じてご提案します。"
+        />
+        <PackagePricing
+          name="リアルイベント 全部入りパッケージ"
+          summary="企画から当日運営、写真・アフタームービーの納品まで。手配の手間をなくし、当日に集中できます。"
+          includes={[
+            "企画・構成・当日進行",
+            "会場手配",
+            "音響オペレーション",
+            "ライブ配信",
+            "写真・動画撮影",
+            "限定ミニゲーム制作",
+            "オリジナルBGM",
+            "告知ショート動画",
+            "アフタームービー",
+          ]}
+          price="80〜150万円"
+          priceNote="規模・内容に応じて／同時に対応できる件数に限りがあるため、早めのご相談をおすすめします"
+          notes={[
+            "※ 表示価格は税別です。",
+            "※ 正式なお見積もりはヒアリング後にご提示いたします。",
+          ]}
+        />
+        <div class="mt-2">
+          <ScheduleCTA href={scheduleHref} location="middle" size="md" label="イベントの相談をする" microcopy="" />
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. 実績（映像・写真） -->
+    <section class="bg-[#111827] py-20 px-5 md:px-[120px]" data-section="works">
+      <div class="max-w-7xl mx-auto flex flex-col items-center gap-12">
+        <SectionHeading
+          badge="WORKS"
+          title="イベント実績"
+          lead="出展・共同運営など、リアルイベントの企画・運営に携わってきました。"
+        />
+        {HAS_AFTERMOVIE && (
+          <div class="w-full max-w-4xl aspect-video rounded-2xl overflow-hidden border border-[#1E293B]">
+            {/* TODO(§7-5): アフタームービー映像アセット取得後に <video> / 埋め込みを設置 */}
+          </div>
+        )}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+          {eventWorks.map((item) => (
+            <PortfolioCard item={item} />
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. 当日までの流れ -->
+    <section class="bg-[#0A0F1C] py-20 px-5 md:px-[120px]" data-section="flow">
+      <div class="max-w-7xl mx-auto flex flex-col items-center gap-12">
+        <SectionHeading badge="FLOW" title="ご相談から当日まで" />
+        <!-- PC: 横並び（5ステップ + 4矢印 = 9列） -->
+        <div class="hidden md:grid md:grid-cols-9 gap-4 w-full items-start">
+          {flowSteps.map((step, i) => (
+            <>
+              <div class="flex flex-col items-center gap-3 md:col-span-1">
+                <div class="flex items-center justify-center w-12 h-12 bg-emerald-500 rounded-full text-white text-xl font-bold">{step.num}</div>
+                <h3 class="text-white font-bold text-center">{step.title}</h3>
+                <p class="text-gray-300 text-sm text-center leading-relaxed">{step.desc}</p>
+              </div>
+              {i < flowSteps.length - 1 && (
+                <div class="flex items-center justify-center md:col-span-1 pt-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+                </div>
+              )}
+            </>
+          ))}
+        </div>
+        <!-- モバイル: 縦並び -->
+        <div class="flex flex-col items-center gap-0 w-full md:hidden">
+          {flowSteps.map((step, i) => (
+            <>
+              <div class="flex flex-col items-center gap-3 w-full">
+                <div class="flex items-center justify-center w-12 h-12 bg-emerald-500 rounded-full text-white text-xl font-bold">{step.num}</div>
+                <h3 class="text-white font-bold text-center">{step.title}</h3>
+                <p class="text-gray-300 text-sm text-center leading-relaxed">{step.desc}</p>
+              </div>
+              {i < flowSteps.length - 1 && (
+                <div class="flex justify-center py-2">
+                  <div class="w-0.5 h-8 bg-emerald-500/30"></div>
+                </div>
+              )}
+            </>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. FAQ -->
+    <section class="bg-[#111827] py-20 px-5 md:px-[120px]" data-section="faq">
+      <div class="max-w-7xl mx-auto flex flex-col items-center gap-10">
+        <SectionHeading badge="FAQ" title="よくあるご質問" />
+        <FaqList faqs={faqs} />
+        <a
+          href="/column/anniversary-event-guide"
+          class="text-emerald-500 text-sm font-medium hover:underline inline-flex items-center gap-1.5"
+        >
+          関連コラム: 周年・記念イベントを成功させる進め方
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
+      </div>
+    </section>
+
+    <!-- 8. 最終CTA -->
+    <section class="bg-[#0F172A] py-20 px-5 md:px-[120px]" data-section="cta_bottom">
+      <div class="max-w-3xl mx-auto flex flex-col items-center text-center gap-8">
+        <h2 class="text-2xl md:text-[32px] font-extrabold text-white">やりたいイベント、聞かせてください</h2>
+        <p class="text-gray-300 text-base leading-relaxed">
+          まだざっくりした構想でも大丈夫です。規模・ご予算に合わせて座組みをご提案します。
+        </p>
+        <ScheduleCTA href={scheduleHref} location="bottom" label="無料相談の日程を選ぶ" />
+        <p class="text-gray-500 text-sm">
+          日程が合わない方は
+          <a href="/techplantstudio#contact" class="text-emerald-500 hover:underline">お問い合わせフォーム</a>
+          からもご連絡いただけます。
+        </p>
+      </div>
+    </section>
+
+    <!-- フッター -->
+    <div class="bg-[#111827] py-8 px-5 md:px-[120px]">
+      <div class="text-center">
+        <p class="text-gray-500 text-xs">
+          &copy; {new Date().getFullYear()} 株式会社クリエイターのうえきばち All rights reserved.
+        </p>
+      </div>
+    </div>
+
+    <LPScripts />
+  </main>
+</Layout>

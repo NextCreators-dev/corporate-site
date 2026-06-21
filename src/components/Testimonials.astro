@@ -1,0 +1,84 @@
+---
+// お客様の声セクション
+// データ駆動。testimonials.ts が0件のときはセクションごと描画しない（= 仮の声は出さない）。
+// 実際の声が1件でも入れば、そのまま表示される「構造先行」の作り。
+import { testimonials, type Testimonial } from "../data/testimonials";
+
+interface Props {
+  /** 表示する声を絞り込みたい場合（"client" = 取引先 / "community" = コミュニティ参加者） */
+  source?: Testimonial["source"];
+  /** セクションのタイトル */
+  title?: string;
+  /** セクションの背景色クラス（配置先のページに合わせて切り替える） */
+  bgClass?: string;
+}
+
+const {
+  source,
+  title = "お客様の声",
+  bgClass = "bg-[#111827]",
+} = Astro.props;
+
+const items = source
+  ? testimonials.filter((t) => t.source === source)
+  : testimonials;
+---
+
+{
+  items.length > 0 && (
+    <section
+      class={`${bgClass} py-20 px-5 md:px-[120px]`}
+      data-section="testimonials"
+    >
+      <div class="max-w-7xl mx-auto flex flex-col items-center gap-12">
+        <div class="flex flex-col items-center gap-4">
+          <div class="inline-flex items-center px-5 py-2 bg-emerald-500/15 text-emerald-500 text-xs font-bold rounded-full border border-emerald-500/25 tracking-[2px]">
+            VOICE
+          </div>
+          <h2 class="text-[24px] md:text-[32px] font-extrabold text-center">
+            {title}
+          </h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+          {items.map((t) => (
+            <figure class="bg-[#0A0F1C] p-8 rounded-2xl border border-[#1E293B] flex flex-col gap-5">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="28"
+                height="28"
+                viewBox="0 0 24 24"
+                fill="#10B981"
+                aria-hidden="true"
+                class="opacity-80"
+              >
+                <path d="M9.5 4C6.5 4 4 6.5 4 9.5c0 2.6 1.9 4.8 4.4 5.4-.2 2-1.3 3.3-3.3 4.1l.8 1c3.3-1.2 5.6-3.9 5.6-7.8V9.5C11.5 6.5 9.5 4 9.5 4zm9 0C15.5 4 13 6.5 13 9.5c0 2.6 1.9 4.8 4.4 5.4-.2 2-1.3 3.3-3.3 4.1l.8 1c3.3-1.2 5.6-3.9 5.6-7.8V9.5C20.5 6.5 18.5 4 18.5 4z" />
+              </svg>
+              <blockquote class="text-gray-200 text-[15px] leading-[1.9]">
+                {t.quote}
+              </blockquote>
+              <figcaption class="flex items-center gap-3 mt-auto pt-2">
+                {t.avatar && (
+                  <img
+                    src={t.avatar}
+                    alt=""
+                    width="44"
+                    height="44"
+                    loading="lazy"
+                    class="w-11 h-11 rounded-full object-cover flex-shrink-0"
+                  />
+                )}
+                <span class="flex flex-col">
+                  <span class="text-white text-sm font-bold">{t.name}</span>
+                  <span class="text-gray-400 text-xs leading-relaxed">
+                    {t.role}
+                  </span>
+                </span>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}

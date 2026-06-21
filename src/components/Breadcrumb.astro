@@ -1,0 +1,42 @@
+---
+// パンくずリスト（可視UI）。JSON-LD の BreadcrumbList とあわせて使う。
+interface Crumb {
+  name: string;
+  /** 末尾（現在地）はリンクなしにするため href を省略する */
+  href?: string;
+}
+
+interface Props {
+  items: Crumb[];
+}
+
+const { items } = Astro.props;
+---
+
+<nav aria-label="パンくずリスト" class="text-xs text-gray-500">
+  <ol class="flex flex-wrap items-center gap-1.5">
+    {
+      items.map((item, i) => (
+        <li class="flex items-center gap-1.5">
+          {item.href && i < items.length - 1 ? (
+            <a
+              href={item.href}
+              class="hover:text-emerald-400 transition-colors"
+            >
+              {item.name}
+            </a>
+          ) : (
+            <span class="text-gray-400" aria-current="page">
+              {item.name}
+            </span>
+          )}
+          {i < items.length - 1 && (
+            <span class="text-gray-600" aria-hidden="true">
+              /
+            </span>
+          )}
+        </li>
+      ))
+    }
+  </ol>
+</nav>

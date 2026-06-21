@@ -1,0 +1,365 @@
+---
+// コラム記事ページ（TOFU 記事 → 関連サービスLPへのMOFUハンドオフ）
+import Layout from "@layouts/Layout.astro";
+import Navigation from "@components/Navigation.astro";
+import Footer from "@components/Footer.astro";
+import Breadcrumb from "@components/Breadcrumb.astro";
+import { getCollection, render } from "astro:content";
+import { SITE, blogPostingSchema, breadcrumbSchema } from "../../lib/seo";
+import { RELATED_SERVICE } from "../../lib/relatedService";
+
+export async function getStaticPaths() {
+  const entries = await getCollection("column", ({ data }) => !data.draft);
+  return entries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+
+const articleUrl = `${SITE.url}/column/${entry.id}/`;
+const toISO = (d: Date) => d.toISOString().slice(0, 10);
+const publishedISO = toISO(entry.data.publishDate);
+const modifiedISO = entry.data.updatedDate
+  ? toISO(entry.data.updatedDate)
+  : publishedISO;
+const isUpdated = modifiedISO !== publishedISO;
+
+const formatDate = (d: Date) =>
+  `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, "0")}.${String(
+    d.getDate(),
+  ).padStart(2, "0")}`;
+
+// 記事末のCTA（関連サービス）
+const cta = entry.data.relatedService
+  ? RELATED_SERVICE[entry.data.relatedService]
+  : undefined;
+
+// 関連記事（同カテゴリを優先し、最大3件）
+const others = (await getCollection("column", ({ data }) => !data.draft)).filter(
+  (e) => e.id !== entry.id,
+);
+const related = [
+  ...others.filter((e) => e.data.category === entry.data.category),
+  ...others.filter((e) => e.data.category !== entry.data.category),
+].slice(0, 3);
+
+const jsonLd = [
+  blogPostingSchema({
+    title: entry.data.title,
+    description: entry.data.description,
+    url: articleUrl,
+    datePublished: publishedISO,
+    dateModified: modifiedISO,
+  }),
+  breadcrumbSchema([
+    { name: "ホーム", url: `${SITE.url}/` },
+    { name: "コラム", url: `${SITE.url}/column/` },
+    { name: entry.data.title, url: articleUrl },
+  ]),
+];
+---
+
+<Layout
+  title={`${entry.data.title} | 株式会社クリエイターのうえきばち`}
+  description={entry.data.description}
+  type="article"
+  jsonLd={jsonLd}
+>
+  <main class="bg-[#0A0F1C] text-white">
+    <Navigation showBack={true} backHref="/column" backLabel="コラム一覧に戻る" />
+
+    <!-- 記事ヘッダー -->
+    <section class="bg-[#111827] py-20 px-5 md:px-[120px]">
+      <div class="max-w-3xl mx-auto flex flex-col gap-6 pt-16">
+        <Breadcrumb
+          items={[
+            { name: "ホーム", href: "/" },
+            { name: "コラム", href: "/column" },
+            { name: entry.data.title },
+          ]}
+        />
+        <div class="flex items-center gap-3">
+          <span class="text-gray-500 text-[13px] font-medium tabular-nums"
+            >{formatDate(entry.data.publishDate)}</span
+          >
+          {
+            isUpdated && (
+              <span class="text-gray-500 text-[13px] font-medium tabular-nums">
+                （更新: {formatDate(entry.data.updatedDate!)}）
+              </span>
+            )
+          }
+          <span
+            class="inline-flex items-center px-3 py-1 bg-emerald-500/10 text-emerald-500 text-[11px] font-semibold rounded border border-emerald-500/20"
+            >{entry.data.category}</span
+          >
+        </div>
+        <h1 class="text-2xl md:text-[34px] font-black leading-tight">
+          {entry.data.title}
+        </h1>
+        <p class="text-gray-300 text-[15px] leading-relaxed">
+          {entry.data.description}
+        </p>
+      </div>
+    </section>
+
+    <!-- 記事本文 -->
+    <section class="bg-[#0A0F1C] py-16 px-5 md:px-[120px]">
+      <div class="max-w-3xl mx-auto">
+        <article
+          class="article-body max-w-none text-[#C0C8D4] text-base leading-[2]"
+        >
+          <Content />
+        </article>
+
+        {
+          cta && (
+            <aside class="mt-14 rounded-2xl border border-emerald-500/30 bg-emerald-500/[0.06] p-7 md:p-9 flex flex-col gap-4">
+              <p class="text-gray-300 text-sm leading-relaxed">{cta.note}</p>
+              <a
+                href={cta.href}
+                target={cta.external ? "_blank" : undefined}
+                rel={cta.external ? "noopener noreferrer" : undefined}
+                data-cta={`column_cta_${entry.data.relatedService}`}
+                class="inline-flex w-fit items-center gap-2.5 px-8 py-3.5 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-[15px] rounded-xl transition-colors"
+              >
+                {cta.label}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M5 12h14" />
+                  <path d="m12 5 7 7-7 7" />
+                </svg>
+              </a>
+            </aside>
+          )
+        }
+
+        {
+          related.length > 0 && (
+            <div class="mt-16 pt-10 border-t border-[#1E293B]">
+              <h2 class="text-white text-lg font-bold mb-6">関連記事</h2>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {related.map((e) => (
+                  <a
+                    href={`/column/${e.id}`}
+                    class="group flex flex-col gap-2 bg-[#111827] rounded-xl border border-[#1E293B] p-5 hover:border-emerald-500/40 transition-colors"
+                  >
+                    <span class="text-gray-500 text-xs tabular-nums">
+                      {formatDate(e.data.publishDate)}
+                    </span>
+                    <span class="text-white text-sm font-bold leading-snug group-hover:text-emerald-300 transition-colors">
+                      {e.data.title}
+                    </span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )
+        }
+
+        <!-- 一覧に戻る -->
+        <div class="mt-12 pt-8 border-t border-[#1E293B]">
+          <a
+            href="/column"
+            class="inline-flex items-center gap-2 text-emerald-500 text-sm font-medium hover:underline"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg
+            >
+            コラム一覧に戻る
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  /* 記事本文のタイポグラフィ（news/[slug] と同じ体裁） */
+  .article-body :global(p) {
+    margin-top: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+  .article-body :global(p:first-child) {
+    margin-top: 0;
+  }
+
+  .article-body :global(h2) {
+    position: relative;
+    margin-top: 3rem;
+    margin-bottom: 1.25rem;
+    padding-left: 1rem;
+    color: #ffffff;
+    font-size: 1.5rem;
+    font-weight: 800;
+    line-height: 1.5;
+    border-left: 4px solid #10b981;
+  }
+  @media (min-width: 768px) {
+    .article-body :global(h2) {
+      font-size: 1.75rem;
+    }
+  }
+
+  .article-body :global(h3) {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    color: #ffffff;
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.5;
+  }
+  .article-body :global(h3)::before {
+    content: "";
+    display: inline-block;
+    width: 6px;
+    height: 22px;
+    background: linear-gradient(180deg, #10b981 0%, #059669 100%);
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+  @media (min-width: 768px) {
+    .article-body :global(h3) {
+      font-size: 1.375rem;
+    }
+  }
+
+  .article-body :global(h4) {
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    color: #ffffff;
+    font-size: 1.0625rem;
+    font-weight: 700;
+    line-height: 1.5;
+  }
+
+  .article-body :global(ul) {
+    margin: 1.25rem 0;
+    padding: 1.25rem 1.5rem;
+    background: rgba(16, 185, 129, 0.04);
+    border: 1px solid rgba(16, 185, 129, 0.15);
+    border-radius: 0.75rem;
+    list-style: none;
+  }
+  .article-body :global(ul li) {
+    position: relative;
+    padding-left: 1.5rem;
+    margin: 0.5rem 0;
+    line-height: 1.9;
+  }
+  .article-body :global(ul li)::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.9em;
+    width: 8px;
+    height: 8px;
+    background: #10b981;
+    border-radius: 50%;
+    transform: translateY(-50%);
+  }
+
+  .article-body :global(ol) {
+    margin: 1.25rem 0;
+    padding-left: 1.75rem;
+    list-style: decimal;
+  }
+  .article-body :global(ol li) {
+    margin: 0.5rem 0;
+    padding-left: 0.5rem;
+    line-height: 1.9;
+  }
+  .article-body :global(ol li::marker) {
+    color: #10b981;
+    font-weight: 700;
+  }
+
+  .article-body :global(strong) {
+    color: #ffffff;
+    font-weight: 700;
+    background: linear-gradient(transparent 60%, rgba(16, 185, 129, 0.18) 60%);
+    padding: 0 2px;
+  }
+
+  .article-body :global(a) {
+    color: #10b981;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+    transition: color 150ms ease;
+  }
+  .article-body :global(a:hover) {
+    color: #34d399;
+  }
+
+  .article-body :global(code) {
+    background: rgba(16, 185, 129, 0.1);
+    color: #6ee7b7;
+    padding: 0.125rem 0.375rem;
+    border-radius: 0.25rem;
+    font-size: 0.9em;
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  }
+
+  .article-body :global(blockquote) {
+    margin: 1.5rem 0;
+    padding: 1rem 1.25rem;
+    border-left: 3px solid #10b981;
+    background: rgba(255, 255, 255, 0.02);
+    color: #94a3b8;
+    font-style: italic;
+  }
+
+  .article-body :global(hr) {
+    margin: 2.5rem 0;
+    border: none;
+    border-top: 1px solid #1e293b;
+  }
+
+  /* 表（比較表など）。AIにも読まれるよう素の table を整形する */
+  .article-body :global(table) {
+    width: 100%;
+    margin: 1.5rem 0;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+  .article-body :global(th),
+  .article-body :global(td) {
+    padding: 0.75rem 1rem;
+    border: 1px solid #1e293b;
+    text-align: left;
+    vertical-align: top;
+  }
+  .article-body :global(thead th) {
+    background: rgba(16, 185, 129, 0.08);
+    color: #ffffff;
+    font-weight: 700;
+  }
+</style>

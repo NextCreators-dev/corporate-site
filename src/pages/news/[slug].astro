@@ -46,6 +46,9 @@ const jsonLd = [
         </div>
         <div class="flex items-center gap-4">
           <span class="text-gray-500 text-[13px] font-medium">{item.date}</span>
+          {item.updated && item.updated !== item.date && (
+            <span class="text-gray-500 text-[13px] font-medium">（更新: {item.updated}）</span>
+          )}
           <span class="inline-flex items-center px-3 py-1 bg-emerald-500/10 text-emerald-500 text-[11px] font-semibold rounded border border-emerald-500/20">
             {item.category}
           </span>

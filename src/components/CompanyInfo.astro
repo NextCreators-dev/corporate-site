@@ -1,0 +1,53 @@
+---
+// 会社概要（要件定義 §5-4）
+// index.astro の会社概要ブロックをコンポーネント化。療育LP（§4-3）の「LP単体で信頼完結」要件で
+// 会社概要フッター（会社名・設立・代表・所在地）を必須とするため再利用する。
+// 表記は index.astro の既存内容をそのまま維持（[[feedback_keep_original_text]]）。
+
+interface Props {
+  /** 背景色（セクション交互パターン用） */
+  bg?: string;
+}
+
+const { bg = "#0A0F1C" } = Astro.props;
+---
+
+<section class={`py-20 px-5 md:px-[120px]`} style={`background-color:${bg}`} data-section="company">
+  <div class="max-w-7xl mx-auto flex flex-col items-center gap-12">
+    <div
+      class="inline-flex items-center px-5 py-2 bg-emerald-500/15 text-emerald-500 text-xs font-bold rounded-full border border-emerald-500/25 tracking-[2px]"
+    >
+      COMPANY
+    </div>
+    <h2 class="text-[28px] md:text-[32px] font-extrabold text-white">会社概要</h2>
+
+    <div class="w-full max-w-[900px]">
+      <div class="flex py-5 border-b border-[#1E293B]">
+        <span class="w-[120px] md:w-[200px] flex-shrink-0 text-gray-400 text-sm font-semibold">会社名</span>
+        <span class="text-white text-sm">株式会社クリエイターのうえきばち</span>
+      </div>
+      <div class="flex py-5 border-b border-[#1E293B]">
+        <span class="w-[120px] md:w-[200px] flex-shrink-0 text-gray-400 text-sm font-semibold">設立</span>
+        <span class="text-white text-sm">2024年11月</span>
+      </div>
+      <div class="flex py-5 border-b border-[#1E293B]">
+        <span class="w-[120px] md:w-[200px] flex-shrink-0 text-gray-400 text-sm font-semibold">代表取締役</span>
+        <span class="text-white text-sm">山縣 帆高</span>
+      </div>
+      <div class="flex py-5 border-b border-[#1E293B]">
+        <span class="w-[120px] md:w-[200px] flex-shrink-0 text-gray-400 text-sm font-semibold">所在地</span>
+        <span class="text-white text-sm">東京都千代田区神田神保町3丁目21-7 英弘ビル3F みらいスタジオ</span>
+      </div>
+      <div class="flex py-5 border-b border-[#1E293B]">
+        <span class="w-[120px] md:w-[200px] flex-shrink-0 text-gray-400 text-sm font-semibold">事業内容</span>
+        <span class="text-white text-sm leading-relaxed">ゲーム制作プラットフォーム運営 / クリエイティブ制作 / Webアプリ開発 / AI活用コンサルティング</span>
+      </div>
+      <div class="flex py-5">
+        <span class="w-[120px] md:w-[200px] flex-shrink-0 text-gray-400 text-sm font-semibold">URL</span>
+        <span class="flex flex-col gap-1">
+          <a href="https://creatorpot.net" class="text-emerald-500 text-sm hover:underline">https://creatorpot.net</a>
+        </span>
+      </div>
+    </div>
+  </div>
+</section>
