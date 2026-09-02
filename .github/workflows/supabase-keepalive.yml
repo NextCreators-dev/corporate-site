@@ -1,0 +1,33 @@
+name: Supabase Keepalive
+
+# Supabase Free プランは7日間アクティビティがないとプロジェクトが停止するため、
+# 1日1回 keepalive_ping を叩いて非アクティブ判定をリセットする。
+on:
+  schedule:
+    # 毎日 00:23 UTC（JST 9:23）。毎時0分は混雑して遅延しやすいので分をずらしている
+    - cron: "23 0 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: supabase-keepalive
+  cancel-in-progress: false
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+
+      - name: Supabase へ疎通確認
+        run: node scripts/keepalive.mjs
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
