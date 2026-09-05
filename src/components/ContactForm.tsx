@@ -439,7 +439,7 @@ export default function ContactForm({
 
         <p className="text-gray-500 text-xs text-center">
           本フォームを送信したことで、
-          <a href="/privacy" target="_blank" class="text-emerald-400 underline">
+          <a href="/privacy/" target="_blank" class="text-emerald-400 underline">
             プライバシーポリシー
           </a>
           に同意したものとみなします。
