@@ -222,7 +222,182 @@ Netlifyで本番反映する前に挙動確認したい場合:
 
 ---
 
-## 8. 参考リンク
+## 8. API から自動でデータを取る（スクリプト連携）
+
+GSC と GA4 の数値をコマンドで取れるようにしてある。画面を開いてスクリーンショットを撮る代わりに、
+Claude Code から直接叩いてレポートを作れる。
+
+### 8.1 全体像
+
+スクリプトは**サービスアカウント `analytics-reader` として** GSC / GA4 の API を読む。ただし
+**サービスアカウント鍵は作らない**。あなた本人の資格情報でサービスアカウントを一時的に借用し
+（impersonation）、必要なスコープのアクセストークンをその都度発行してもらう。**読み取り専用**で、
+外部依存パッケージは使っていない（Node 22 の組み込み機能だけ）。
+
+この形になった経緯:
+
+| 試したこと | 結果 |
+| --- | --- |
+| サービスアカウント鍵を発行する | 組織ポリシー `constraints/iam.disableServiceAccountKeyCreation` で禁止されていて発行できない |
+| ADC で本人の権限のまま読む | 2026-09 時点で gcloud の既定クライアント ID では `analytics.readonly` スコープが Google 側にブロックされる |
+| **サービスアカウントの権限借用** | **鍵を作らずに済み、スコープの制限にも当たらない。これを採用** |
+
+| ファイル | 役割 |
+| --- | --- |
+| `scripts/analytics/config.mjs` | **対象プロパティの固定**（GSC のサイト URL / GA4 のプロパティ ID / サイトマップ） |
+| `scripts/analytics/auth.mjs` | 資格情報 → アクセストークン（鍵 / 権限借用 / ユーザー資格情報の3方式に対応） |
+| `scripts/analytics/lib.mjs` | 期間計算・引数解釈・表の整形 |
+| `scripts/analytics/gsc.mjs` | Search Console API のクライアント兼 CLI |
+| `scripts/analytics/ga4.mjs` | GA4 Data API / Admin API のクライアント兼 CLI |
+| `scripts/analytics/report.mjs` | 週次レポートの生成（md + CSV） |
+| `.claude/skills/seo-report/SKILL.md` | `/seo-report` |
+
+### 8.2 セットアップ（1回だけ）
+
+#### 済んでいること
+
+| 項目 | 値 |
+| --- | --- |
+| Google Cloud プロジェクト | `creatorpot-analytics`（組織 `creatorpot.net` 配下、プロジェクト番号 469912785070） |
+| 有効化した API | `searchconsole` / `analyticsdata` / `analyticsadmin` / `iamcredentials` |
+| サービスアカウント | `analytics-reader@creatorpot-analytics.iam.gserviceaccount.com` |
+| 借用の権限 | `yamagata@creatorpot.net` に `roles/iam.serviceAccountTokenCreator` |
+
+このプロジェクトは API の呼び出し先とクォータの計上先を用意するためだけのもので、
+GSC や GA4 のデータそのものは保持しない。課金アカウントは不要。
+
+#### 手順1: ADC のログイン（借用の設定つき）
+
+ブラウザが開くので `yamagata@creatorpot.net` を選ぶ。
+
+```bash
+gcloud auth application-default login \
+  --impersonate-service-account=analytics-reader@creatorpot-analytics.iam.gserviceaccount.com
+```
+
+> **`--scopes` は付けない。** 付けると gcloud の既定クライアント ID でブロックされる。
+> スコープはスクリプトが借用トークンを発行するときに指定するので、ここでは要らない。
+
+資格情報は `~/.config/gcloud/application_default_credentials.json` に置かれる。中身は本人の
+リフレッシュトークンと借用先の URL で、サービスアカウントの秘密鍵は含まれない。リポジトリには入らない。
+
+#### 手順2: Search Console にサービスアカウントを追加する
+
+読むのはサービスアカウントなので、GSC 側にそのメールアドレスを登録する。
+
+1. https://search.google.com/search-console で対象プロパティを開く
+2. 左メニュー下部の「設定」→「ユーザーと権限」
+3. 「ユーザーを追加」→ `analytics-reader@creatorpot-analytics.iam.gserviceaccount.com`
+4. 権限は **「フル」**
+
+> 検索パフォーマンスを読むだけなら「制限付き」で足りるが、**URL 検査 API は「フル」以上でないと使えない**。
+> `report.mjs` は既定でインデックス状況を調べるので、「制限付き」だと §5 が全ページ「検査に失敗」になる。
+> URL 検査が不要なら「制限付き」＋ `--skip-inspect` の組み合わせでもよい。
+
+#### 手順3: GA4 にサービスアカウントを追加する
+
+1. https://analytics.google.com で「管理」→ 対象プロパティの「プロパティのアクセス管理」
+2. 右上の「+」→「ユーザーを追加」
+3. `analytics-reader@creatorpot-analytics.iam.gserviceaccount.com` を入力
+4. 役割は **「閲覧者」**、「メールで通知する」のチェックは**外す**（送信先が実在しないため）
+
+### 8.3 動作確認
+
+```bash
+# 権限のあるプロパティが出れば GSC 側は通っている
+node scripts/analytics/gsc.mjs sites --format table
+
+# プロパティ ID が出れば GA4 側は通っている
+node scripts/analytics/ga4.mjs properties --format table
+
+# 直近7日ぶんを保存せずに表示する
+node scripts/analytics/report.mjs --dry-run --days 7
+```
+
+#### 対象プロパティは設定で固定してある
+
+このアカウントには GA4 プロパティが2つある（`534062125` Corporate Site と `452255564` nologic-beta）。
+**自動検出に任せると別プロダクトの数値を取り違える**ので、`scripts/analytics/config.mjs` で固定している。
+
+| 設定 | 値 |
+| --- | --- |
+| `gscSiteUrl` | `sc-domain:creatorpot.net` |
+| `ga4PropertyId` | `534062125`（Corporate Site）。HTML に埋まっている測定 ID `G-LD73BKRCCG` とは別物 |
+| `sitemapUrl` | `https://creatorpot.net/sitemap-index.xml` |
+
+一時的に別サイトを見たいときは環境変数 `GSC_SITE_URL` / `GA4_PROPERTY_ID` で上書きできる。
+設定を消して自動検出に戻した場合、候補が複数あるとエラーで止まる（黙って選ばない）。
+
+うまくいかないときは次を見る。
+
+| 出力 | 原因と対処 |
+| --- | --- |
+| `Google API の資格情報が見つかりません` | ADC が未作成。§8.2 手順1 のログインコマンドを実行する |
+| `サービスアカウントの権限借用に失敗しました` | `roles/iam.serviceAccountTokenCreator` が付いていないか、`iamcredentials` API が無効。§8.2 の「済んでいること」を確認する |
+| `権限のある Search Console プロパティがありません` | GSC にサービスアカウントが追加されていない。§8.2 手順2 |
+| `権限のある GA4 プロパティがありません` | GA4 にサービスアカウントが追加されていない。§8.2 手順3 |
+| `HTTP 403`（URL 検査だけ失敗する） | GSC の権限が「制限付き」になっている。「フル」に上げるか `--skip-inspect` を使う |
+| `has not been used in project ... or it is disabled` | API が有効化されていない。§8.2 の表を確認する |
+
+### 8.4 レポートの出力先
+
+```bash
+node scripts/analytics/report.mjs
+```
+
+- `docs/analytics/reports/YYYY-MM-DD.md` … その回の詳細（サマリ / クエリ / ページ / デバイス / インデックス状況 / GA4 / 改善提案）
+- `docs/analytics/history.csv` … 主要な数値の時系列。1回1行
+
+改善提案は `report.mjs` の `THRESHOLDS` で機械的に抽出しているだけで、業界的な根拠のある値ではない。
+運用しながら調整する。
+
+### 8.5 定期実行にしたくなったら
+
+**権限借用は手元のログインに紐づくので、GitHub Actions からは使えない。** 定期実行するなら、CI から
+使える資格情報を別途用意することになる。GSC・GA4 へのサービスアカウント追加は済んでいるので、
+残りは資格情報の渡し方だけ。
+
+| 方法 | 必要な作業 | 備考 |
+| --- | --- | --- |
+| サービスアカウント鍵 | 組織ポリシー `constraints/iam.disableServiceAccountKeyCreation` を `creatorpot-analytics` だけ解除し、`analytics-reader` の鍵を発行して Secrets に入れる | 組織の管理者権限が必要。鍵の管理責任が発生する |
+| Workload Identity Federation | GitHub Actions と `analytics-reader` の信頼関係を設定 | 鍵を作らずに済む。設定は複雑 |
+
+`auth.mjs` はサービスアカウント鍵にも対応済みで、Secrets（`GOOGLE_SERVICE_ACCOUNT_KEY`）に
+JSON の中身をそのまま入れれば読む。ワークフローの雛形は次のとおり。
+
+```yaml
+# .github/workflows/seo-report.yml （必要になったら作る）
+name: SEO Report
+on:
+  schedule:
+    - cron: "17 22 * * 0" # 毎週月曜 7:17 JST
+  workflow_dispatch:
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+      - run: node scripts/analytics/report.mjs
+        env:
+          GOOGLE_SERVICE_ACCOUNT_KEY: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
+      - name: レポートをコミットする
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/analytics
+          git diff --staged --quiet || git commit -m "chore: SEOレポートを更新"
+          git push
+```
+
+---
+
+## 9. 参考リンク
 
 - Search Console ヘルプ: https://support.google.com/webmasters
 - GA4 ヘルプ: https://support.google.com/analytics/answer/10089681

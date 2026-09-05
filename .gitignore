@@ -29,3 +29,11 @@ claude_log/
 CLAUDE.md
 # Local Netlify folder
 .netlify
+
+# Google サービスアカウント鍵（本来はリポジトリ外に置く。取り違え防止で無視する）
+*service-account*.json
+gcp-*.json
+
+# 各自の環境に依存する設定・作業ディレクトリ（.claude/skills などは共有する）
+.claude/settings.local.json
+.playwright-mcp/
