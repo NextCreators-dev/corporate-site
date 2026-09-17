@@ -51,8 +51,12 @@ const { hideCta = false } = Astro.props;
   <div class="px-5 md:px-20 py-8">
     <div class="max-w-7xl mx-auto">
       <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-        {/* ロゴ */}
-        <div class="flex items-center gap-2.5">
+        {/* ロゴ（トップページへのリンク） */}
+        <a
+          href="/"
+          class="flex items-center gap-2.5 hover:opacity-80 transition-opacity"
+          aria-label="トップページへ"
+        >
           <Image
             src={Logo}
             alt="クリエイターのうえきばち"
@@ -63,7 +67,7 @@ const { hideCta = false } = Astro.props;
           <span class="text-white text-sm font-semibold"
             >クリエイターのうえきばち</span
           >
-        </div>
+        </a>
 
         {/* リンク */}
         <div class="flex flex-col md:flex-row items-center gap-4 md:gap-6">
