@@ -92,6 +92,49 @@ export function breadcrumbSchema(items: { name: string; url: string }[]) {
   };
 }
 
+/** 提供サービス（Service）— サービス LP で出力
+ *  offers には価格そのものではなく価格レンジ（下限〜上限）を入れる。
+ *  掲載金額は「〜」付きの下限表記なので、上限は書かず lowPrice のみを与える。
+ *  lowPrice を省いたプラン（「要相談」など）は、機械可読な価格を出さない。 */
+export function serviceSchema(params: {
+  name: string;
+  description: string;
+  serviceType: string;
+  url: string;
+  /** プラン名と下限価格（円）の組。lowPrice 省略時は価格を出力しない */
+  offers: { name: string; lowPrice?: number; description: string }[];
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: params.name,
+    description: params.description,
+    serviceType: params.serviceType,
+    url: params.url,
+    provider: {
+      "@type": "Organization",
+      name: SITE.name,
+      url: SITE.url,
+    },
+    areaServed: { "@type": "Country", name: "日本" },
+    offers: params.offers.map((offer) => ({
+      "@type": "Offer",
+      name: offer.name,
+      description: offer.description,
+      ...(offer.lowPrice === undefined
+        ? {}
+        : {
+            priceCurrency: "JPY",
+            priceSpecification: {
+              "@type": "PriceSpecification",
+              priceCurrency: "JPY",
+              minPrice: offer.lowPrice,
+            },
+          }),
+    })),
+  };
+}
+
 /** よくある質問（FAQPage）— TechPlantStudio で出力 */
 export function faqSchema(faqs: { question: string; answer: string }[]) {
   return {

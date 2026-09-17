@@ -1,0 +1,1194 @@
+---
+// 企業向けゲーム制作 LP（/business-game/）
+// デザインの正: lp-design.pen のフレーム BPADd「ToB Game LP B (grid)」（hallmark Grid テーマの日本語化）
+// 文言の正: docs/ToB_Game_LP_copy_v2.md（そのまま使用。数値は 2026-09-16 に代表が確定）
+// 単独の LP なのでグローバルの Navigation は使わず、ページ固有のマストヘッドを持つ。フッターはサイト共通の Footer。
+import Layout from "@layouts/Layout.astro";
+import Footer from "@components/Footer.astro";
+import { members } from "../data/members";
+import {
+  SITE,
+  breadcrumbSchema,
+  faqSchema,
+  serviceSchema,
+} from "../lib/seo";
+import {
+  SCHEDULE_URL_BUSINESS,
+  IS_EXTERNAL_SCHEDULE_URL,
+  CONTACT_FORM_URL,
+  CONTACT_EMAIL,
+} from "../lib/scheduling";
+
+const pageUrl = `${SITE.url}/business-game/`;
+const pageTitle = "企業向けゲーム制作 | 株式会社クリエイターのうえきばち";
+const pageDescription =
+  "会社の歴史、事業、行動指針を、クイズやノベル形式のゲームにします。新入社員研修、理念の浸透、部署をまたぐ交流まで。企画・シナリオ・イラスト・音楽・開発をすべて自社チームで作るので、試作版まで最短1週間です。";
+
+// ── 3. こんな場面で ─────────────────────────────
+const scenes = [
+  {
+    title: "新入社員研修・オンボーディング",
+    body: "会社の歴史、事業内容、行動指針をクイズ形式やノベル形式に。配属前に会社の全体像が頭に入った状態をつくります。",
+  },
+  {
+    title: "ミッション・ビジョン・バリューの浸透",
+    body: "抽象的なバリューを、判断を迫られる場面として体験させます。選択肢によって結果が変わるノベル形式なら、「うちの会社ならどう判断するか」が自然と身につきます。",
+  },
+  {
+    title: "部署をまたぐ交流",
+    body: "自己紹介ゲームや部署対抗のミニゲームで、雑談のきっかけをつくります。全社イベント、懇親会、リモート環境での交流に。",
+  },
+  {
+    title: "説明会・インターンでの二次利用",
+    body: "新入社員研修用に作った会社理解のゲームは、そのまま学生にも見せられます。事業や行動指針を入社前に体験してもらうことで、入社後の「思っていたのと違う」を減らします。",
+  },
+];
+
+// ── 4. 私たちだからできる理由 ─────────────────────
+const scope = [
+  {
+    title: "短納期・低コスト。",
+    body: "テンプレート型のゲーム制作基盤NoLogicで、累計600本以上のゲームが作られています。この基盤とAIコーディング支援を使い、企画から試作版まで最短1週間。小さく試して、効果を見てから広げられます。",
+  },
+  {
+    title: "素材は自社クリエイターのオリジナル。",
+    body: "キャラクター、イラスト、楽曲は所属クリエイターが制作します。研修や社内利用の際の権利関係が明確で、貴社のブランドガイドラインに合わせた調整にも応じます。生成AIは工程で使い、品質と権利の最終確認は人が行います。納品後の動作保証と保守も自社で担います。",
+  },
+  {
+    title: "遊ばれる状態まで設計し、結果を数字で返す。",
+    body: "2,800人規模の高専コミュニティと、自社クリエイターコミュニティNextCreatorsの運営で、参加者が自発的に盛り上がる仕組みづくりを続けてきました。ゲームだけでなく、社内での展開方法と導入後の運営まで提案します。納品後は、プレイ完了率や設問ごとの正答率をレポートとしてお渡しします。どこで理解が止まっているかが分かるので、次の研修の設計にも使えます。",
+  },
+];
+
+// ── 5. 私たちの実績 ────────────────────────────
+// 400人・90%・20% は 2026-09-16 に代表が確定した値（docs/ToB_Game_LP_copy_v2.md 参照）
+const records = [
+  {
+    figure: "667本",
+    label:
+      "NoLogic上で作られたゲームの本数（2026年9月5日時点）。2025年11月の公開から10か月で、400人の制作者がこの本数を作りました。",
+  },
+  {
+    figure: "90%",
+    label:
+      "作ったゲームを公開した人の割合。テンプレートで「人に見せられるもの」ができることの証明です。",
+  },
+  {
+    figure: "20%",
+    label:
+      "2本目を作った人の割合。一度遊んでもらうと、もう一度作りたくなる。この設計を企業向けにも持ち込みます。",
+  },
+  {
+    figure: "116人",
+    label:
+      "NextCreatorsの参加者数（2026年9月5日時点）。人が集まり、動き続ける場を運営してきました。",
+  },
+];
+
+// ── 6. 先行導入のご案内 ────────────────────────
+// 3社・20%引きは 2026-09-16 に代表が確定した値
+const pilotConditions = [
+  "料金は各プランの20%引き。",
+  "代表の山縣が企画からヒアリング、進行まで直接入ります。",
+  "納品後、社名とロゴ、担当者の方の声を事例として掲載させてください。難しい場合は、業種と規模のみの匿名事例でも構いません。",
+];
+
+// ── 7. 料金 ──────────────────────────────────
+// 「プラン名　価格」「項目：価格」は仕様表の2セルに分けて組む（全角空白・全角コロンは区切り記号のため表示しない）
+const plans = [
+  {
+    name: "テンプレート活用プラン",
+    price: "50万円〜",
+    body: "NoLogicのテンプレートに、貴社の素材・設問・ロゴを組み込みます。最短1週間で納品。社内交流イベントや小規模な研修向け。貴社専用サイトを用意し、アクセス制限にも対応します。",
+    lowPrice: 500000,
+  },
+  {
+    name: "セミオーダープラン",
+    price: "100万円〜",
+    body: "オリジナルの企画・シナリオに加え、キャラクターや楽曲を新規に制作します。新入社員研修、理念浸透、採用活動向け。",
+    lowPrice: 1000000,
+  },
+  {
+    name: "フルオーダープラン",
+    price: "150万円〜（要相談）",
+    body: "世界観の設計から3D・CG制作、キャンペーンサイトとの連携まで。広告・販促や、全社規模の施策向け。",
+    lowPrice: 1500000,
+    // 「（要相談）」のプランは JSON-LD に下限価格を出さない
+    negotiable: true,
+  },
+];
+
+const supportOptions = [
+  {
+    name: "研修当日の進行支援、イベント会場での体験ブース運営",
+    price: "1日5万円〜（交通費別途）",
+  },
+  {
+    name: "社内展開の設計と導入後の運営支援",
+    price: "月額5万円〜",
+  },
+];
+
+// ── 8. 進め方 ────────────────────────────────
+const steps = [
+  {
+    ordinal: "1",
+    title: "ご相談（無料）",
+    body: "困っていることと、誰に使いたいかを伺います。作りたいものが決まっていなくて構いません。",
+  },
+  {
+    ordinal: "2",
+    title: "企画と試作版",
+    body: "企画案とお見積りをお出しし、了承後に動くものを作ります。ここで方向性を確認します。",
+  },
+  {
+    ordinal: "3",
+    title: "本制作と納品",
+    body: "直しを反映して仕上げます。納品後、プレイ完了率と設問ごとの正答率をまとめてお渡しします。ご希望があれば、社内での配り方や当日の進行まで一緒に設計します。",
+  },
+];
+
+// ── 10. よくあるご質問 ─────────────────────────
+const faqs = [
+  {
+    question: "社内資料や社員の写真を使えますか",
+    answer: "使えます。どこまで表に出すかはご一緒に決めます。",
+  },
+  {
+    question: "どのくらいの期間で作れますか",
+    answer:
+      "テンプレート活用なら試作版まで最短1週間。企画から作る場合は、内容に応じて相談のうえお出しします。",
+  },
+  {
+    question: "生成AIを使った素材だと、権利面は大丈夫ですか",
+    answer:
+      "キャラクターやイラスト、楽曲は所属クリエイターが制作するオリジナルです。権利関係は顧問弁護士と連携しながら丁寧に対応いたします。",
+  },
+  {
+    question: "社員数が少なくても意味がありますか",
+    answer: "あります。むしろ小規模のほうが、全員が同じ体験を共有しやすい。",
+  },
+  {
+    question: "効果はどう確認できますか",
+    answer:
+      "プレイ完了率、設問ごとの正答率、プレイ時間をレポートでお渡しします。研修の報告資料にそのまま使える形です。",
+  },
+  {
+    question: "就活生に公開しても問題ありませんか",
+    answer: "問題ありません。公開範囲やアクセス制限は貴社の方針に合わせます。",
+  },
+];
+
+// ── 12. 会社概要 ──────────────────────────────
+// 「項目：値」は表の2セルに分けて組む（全角コロンは区切り記号のため表示しない）
+const companyRows = [
+  { label: "会社名", value: "株式会社クリエイターのうえきばち" },
+  { label: "設立", value: "2024年11月" },
+  { label: "資本金", value: "105万円（資本準備金を含む）" },
+  { label: "代表者", value: "代表取締役 山縣帆高" },
+  {
+    label: "所在地",
+    value: "東京都千代田区神田神保町3丁目21-7 英弘ビル3F みらいスタジオ",
+  },
+  {
+    label: "事業内容",
+    value:
+      "ゲーム制作基盤「NoLogic」の開発・運営、コミュニティ運営、企業向けゲーム開発・受託開発",
+  },
+  { label: "URL", value: "https://creatorpot.net" },
+];
+
+// 日付や但し書きの丸括弧が行末で割れると読み違いのもとになるので、
+// 短い括弧はひとまとまりで折り返すようにする（文字は増減させない）
+const escapeHtml = (text: string) =>
+  text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+const keepParensTogether = (text: string) =>
+  escapeHtml(text).replace(/（[^（）]{1,14}）/g, (match) => `<span class="nb">${match}</span>`);
+
+const ctaLabel = "無料相談の日程を選ぶ";
+const scheduleLinkAttrs = IS_EXTERNAL_SCHEDULE_URL
+  ? { target: "_blank", rel: "noopener noreferrer" }
+  : {};
+
+const jsonLd = [
+  breadcrumbSchema([
+    { name: "ホーム", url: `${SITE.url}/` },
+    { name: "企業向けゲーム制作", url: pageUrl },
+  ]),
+  serviceSchema({
+    name: "企業向けゲーム制作",
+    description: pageDescription,
+    serviceType: "企業向けゲーム制作・研修コンテンツ制作",
+    url: pageUrl,
+    offers: plans.map((plan) => ({
+      name: plan.name,
+      // 「要相談」のプランは下限価格を機械可読にしない（拘束力を持たせないため）
+      lowPrice: plan.negotiable ? undefined : plan.lowPrice,
+      description: plan.body,
+    })),
+  }),
+  faqSchema(faqs),
+];
+---
+
+<Layout
+  title={pageTitle}
+  description={pageDescription}
+  jsonLd={jsonLd}
+  preloadMincho={false}
+>
+  <Fragment slot="head">
+    <!-- Grid テーマの単一書体。この LP でだけ読み込む -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;700;900&display=swap"
+    />
+  </Fragment>
+
+  <div class="lp relative">
+    <!-- 露出した12カラムのヘアライン格子。内容の背後で全帯を貫通する -->
+
+    <!-- ══ 0. マストヘッド ══════════════════════════════ -->
+    <header class="band pt-[var(--sp-md)]">
+      <div class="shell">
+        <div
+          class="flex flex-wrap items-center justify-between gap-x-[var(--sp-lg)] gap-y-[var(--sp-sm)]"
+        >
+          <div
+            class="flex flex-wrap items-center gap-x-[var(--sp-sm)] gap-y-[var(--sp-2xs)]"
+          >
+            <a
+              href="/"
+              class="link-plain text-[length:var(--t-lead)] font-black tracking-[-0.02em] text-[var(--ink)]"
+              >クリエイターのうえきばち</a
+            >
+            <span
+              class="hidden h-4 w-px bg-[var(--rule-strong)] sm:block"
+              aria-hidden="true"></span>
+            <span class="label text-[var(--muted)]">企業向けゲーム制作</span>
+          </div>
+
+          <nav
+            class="flex flex-wrap items-center gap-x-[var(--sp-md)] gap-y-[var(--sp-2xs)]"
+            aria-label="ページ内の案内"
+          >
+            <a href="#pricing" class="anchor label">料金</a>
+            <a href="#process" class="anchor label">進め方</a>
+            <a href="#team" class="anchor label">私たちの体制</a>
+            <a
+              href={SCHEDULE_URL_BUSINESS}
+              {...scheduleLinkAttrs}
+              data-cta="nav"
+              class="btn btn--sm"><span class="label-btn">{ctaLabel}</span></a
+            >
+          </nav>
+        </div>
+        <div class="mt-[var(--sp-md)] h-px bg-[var(--ink)]"></div>
+      </div>
+    </header>
+
+    <!-- ══ 1. ヒーロー ═════════════════════════════════ -->
+    <section class="band pt-[var(--band-sm)] pb-[var(--band-xl)]">
+      <div class="shell">
+        <!-- 3px の信号バー（3カラム分に切る） -->
+        <div
+          class="h-[3px] w-[160px] bg-[var(--signal-2)] lg:w-[312px]"
+          aria-hidden="true"></div>
+
+        <h1 class="mt-[var(--sp-sm)] h1">会社のことは、説明するより、<br
+            class="hidden lg:inline"
+          />遊んでもらったほうが伝わる。</h1>
+
+        <!-- H1 の下は、左に本文と CTA（1〜6カラム）、右下に NoLogic のプレイ動画（8〜12カラム、下端揃え） -->
+        <div class="mt-[20px] lg:grid lg:grid-cols-12 lg:gap-x-[var(--gap)]">
+          <div class="lg:col-span-6">
+            <p class="mt-[var(--gap)] measure body">
+              会社の歴史、事業、行動指針を、クイズやノベル形式のゲームにします。新入社員研修、理念の浸透、部署をまたぐ交流まで。企画・シナリオ・イラスト・音楽・開発をすべて自社チームで作るので、試作版まで最短1週間です。
+            </p>
+
+            <div class="mt-[var(--gap)]">
+              <a
+                href={SCHEDULE_URL_BUSINESS}
+                {...scheduleLinkAttrs}
+                data-cta="hero"
+                class="btn"
+              >
+                <span class="label-btn-lg">{ctaLabel}</span>
+                <svg
+                  class="arrow"
+                  width="14"
+                  height="10"
+                  viewBox="0 0 14 10"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M0 5h13M9.5 1.5 13 5l-3.5 3.5"
+                    stroke="currentColor"
+                    stroke-width="1"></path>
+                </svg>
+              </a>
+              <p class="mt-[var(--sp-sm)] measure note">
+                相談は無料です。ゲームにしないほうがいい、という結論をお伝えすることもあります。
+              </p>
+            </div>
+          </div>
+
+          <!-- NoLogic のプレイ動画。音は無く、自動再生と繰り返し。動きを減らす設定の環境では再生しない（下のスクリプト） -->
+          <div class="mt-[var(--gap)] lg:col-start-8 lg:col-span-5 lg:mt-0 lg:self-end">
+            <video
+              class="hero-video block w-full border border-[var(--rule)] bg-[var(--paper-2)]"
+              src="/nologic-play.mp4"
+              autoplay
+              loop
+              muted
+              playsinline
+              preload="metadata"
+              width="1280"
+              height="720"
+              aria-label="NoLogic で作ったゲームのプレイ動画"
+            ></video>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script is:inline>
+      // 「視差効果を減らす」設定の環境では、ヒーローの動画を自動再生しない
+      (function () {
+        if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+        document.querySelectorAll("video.hero-video").forEach(function (v) {
+          v.removeAttribute("autoplay");
+          v.pause();
+        });
+      })();
+    </script>
+
+    <!-- ══ 2. 課題 ════════════════════════════════════ -->
+    <section class="band pb-[var(--band-md)]">
+      <div class="shell">
+        <div class="h-px bg-[var(--ink)]"></div>
+        <h2 class="mt-[var(--gap)] h2">伝えたつもりで、届いていない。</h2>
+
+        <!-- 本文は4〜9カラムに中入り -->
+        <div class="mt-[var(--gap)] lg:grid lg:grid-cols-12">
+          <div class="lg:col-start-4 lg:col-span-6">
+            <div class="flex flex-col gap-[var(--sp-md)]">
+              <p class="body">
+                入社した週に配った会社案内を、半年後まで覚えている人はほとんどいない。
+              </p>
+              <p class="body">
+                ミッション・ビジョン・バリューを壁に貼った。でも日々の判断の場面で、誰もそれを持ち出さない。
+              </p>
+              <p class="body">
+                部署をまたぐと名前しか知らない。交流施策は初回は盛り上がり、2回目はたいてい続かない。
+              </p>
+              <p class="body">
+                説明会で事業を丁寧に説明した。それでも入社後に「思っていたのと違う」と言われる。
+              </p>
+            </div>
+
+            <!-- 3px の信号バー（2カラム分）。問題の終わりと転換の境目を指す -->
+            <div
+              class="mt-[var(--gap)] h-[3px] w-[120px] bg-[var(--signal-2)] lg:w-[208px]"
+              aria-hidden="true">
+            </div>
+
+            <h3 class="mt-[var(--gap)] h3">なぜゲームか</h3>
+
+            <div class="mt-[var(--sp-md)] flex flex-col gap-[var(--sp-md)]">
+              <p class="body">
+                読むだけの情報は流れていきますが、自分で選び、操作し、結果を見た体験は残ります。隣の人と一緒に遊べば、そこに会話が生まれます。部署が違う人同士なら、なおさらです。
+              </p>
+              <p class="body">
+                ただ、ゲームは作ればいいわけではありません。何を作るかを決め、権利を整理し、社内で実際に遊ばれる状態まで運んで、はじめて効果が出ます。制作ツールや生成AIでゲームを「作ること」自体は簡単になりました。私たちが引き受けるのは、その前と後です。
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ 3. こんな場面で ═════════════════════════════ -->
+    <section class="band pb-[var(--band-sm)]">
+      <div class="shell">
+        <div class="h-px bg-[var(--ink)]"></div>
+        <h2 class="mt-[var(--gap)] h2">こんな場面で</h2>
+
+        <!-- 全幅の索引。見出しは1〜3列、本文は4〜9列、右の3列は空きのまま -->
+        <div class="mt-[var(--gap)]">
+          {
+            scenes.map((scene) => (
+              <div class="index-row">
+                <div class="py-[var(--sp-md)] lg:grid lg:grid-cols-12">
+                  <h3 class="h3 lg:col-span-3 lg:pr-[var(--sp-lg)]">
+                    {scene.title}
+                  </h3>
+                  <p class="body mt-[var(--sp-xs)] lg:col-span-6 lg:mt-0 lg:pr-[var(--sp-sm)]">
+                    {scene.body}
+                  </p>
+                </div>
+                <div class="h-px bg-[var(--rule-strong)]" />
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ 4. 私たちだからできる理由 ════════════════════ -->
+    <section class="band pb-[var(--band)]">
+      <div class="shell">
+        <div class="h-px bg-[var(--ink)]"></div>
+        <h2 class="mt-[var(--gap)] h2">私たちだからできる理由</h2>
+
+        <!-- 3セル。天地は帯の罫。小見出しの行数が違っても本文の頭が揃うよう、行を subgrid で共有する -->
+        <div class="mt-[var(--gap)]">
+          <div class="h-px bg-[var(--rule-strong)]"></div>
+          <div class="lg:grid lg:grid-cols-3 lg:grid-rows-[auto_auto]">
+            {
+              scope.map((item, i) => (
+                <div
+                  class:list={[
+                    "py-[var(--sp-md)] lg:pr-[var(--sp-lg)] lg:grid lg:grid-rows-subgrid lg:row-span-2",
+                    i > 0 &&
+                      "border-t border-[var(--rule-strong)] lg:border-t-0",
+                  ]}
+                >
+                  <h3 class="h3">{item.title}</h3>
+                  <p class="body measure mt-[var(--sp-xs)]">{item.body}</p>
+                </div>
+              ))
+            }
+          </div>
+          <div class="h-px bg-[var(--rule-strong)]"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ 5. 私たちの実績 ═════════════════════════════ -->
+    <section class="band pb-[var(--band)]">
+      <div class="shell">
+        <div class="h-px bg-[var(--ink)]"></div>
+        <h2 class="mt-[var(--gap)] h2">私たちの実績</h2>
+
+        <!-- 1〜10カラムの 2×2 行列。縦の仕切りは5本目の格子線 -->
+        <div class="mt-[var(--gap)] lg:grid lg:grid-cols-12">
+          <div class="lg:col-span-10">
+            <div class="h-px bg-[var(--rule-strong)]"></div>
+            <div class="sm:grid sm:grid-cols-2">
+              {
+                records.map((record, i) => (
+                  <div
+                    class:list={[
+                      "py-[var(--sp-md)] lg:pr-[var(--sp-md)]",
+                      i > 0 && "border-t border-[var(--rule-strong)]",
+                      i === 1 && "sm:border-t-0",
+                    ]}
+                  >
+                    <p
+                      class:list={[
+                        "fig",
+                      ]}
+                    >
+                      {record.figure}
+                    </p>
+                    <p
+                      class="body measure mt-[var(--sp-2xs)]"
+                      set:html={keepParensTogether(record.label)}
+                    />
+                  </div>
+                ))
+              }
+            </div>
+            <div class="h-px bg-[var(--rule-strong)]"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ 6. 先行導入のご案内 ═════════════════════════ -->
+    <section class="band pb-[var(--band-md)]">
+      <div class="shell">
+        <div class="h-px bg-[var(--ink)]"></div>
+
+        <!-- 左端は他の節と揃える（1〜8カラム）。条件はピリオドの正方形で刻む -->
+        <div class="mt-[var(--gap)] lg:grid lg:grid-cols-12">
+          <div class="lg:col-span-8">
+            <h2 class="h2">先行導入のご案内</h2>
+            <p class="body mt-[var(--gap)] measure">
+              サービス提供開始を記念して、最初の3社には次の条件でお引き受けします。
+            </p>
+
+            <ul class="mt-[var(--gap)] list-none">
+              {
+                pilotConditions.map((condition, i) => (
+                  <li
+                    class:list={[
+                      "flex gap-[var(--sp-sm)] py-[var(--sp-md)] lg:gap-0",
+                      i > 0 && "border-t border-[var(--rule-strong)]",
+                    ]}
+                  >
+                    <span class="period" aria-hidden="true" />
+                    <span class="body measure">{condition}</span>
+                  </li>
+                ))
+              }
+            </ul>
+            <div class="h-px bg-[var(--rule-strong)]"></div>
+
+            <p class="note mt-[var(--gap)] measure">
+              枠が埋まり次第、通常価格に戻します。
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ 7. 料金 ════════════════════════════════════ -->
+    <section id="pricing" class="band pb-[var(--band-lg)] scroll-mt-[24px]">
+      <div class="shell">
+        <div class="h-px bg-[var(--ink)]"></div>
+        <h2 class="mt-[var(--gap)] h2">料金</h2>
+
+        <!-- 仕様表 -->
+        <div class="mt-[var(--gap)]">
+          <div class="h-px bg-[var(--ink)]"></div>
+          {
+            plans.map((plan, i) => (
+              <>
+                {i > 0 && <div class="h-px bg-[var(--rule-strong)]" />}
+                <div class="py-[var(--sp-md)] lg:grid lg:grid-cols-12">
+                  <h3 class="h3 lg:col-span-6 lg:row-start-1 lg:pr-[var(--sp-lg)]">
+                    {plan.name}
+                  </h3>
+                  <p class="price mt-[var(--sp-2xs)] lg:col-start-7 lg:col-span-6 lg:row-start-1 lg:mt-0 lg:text-right">
+                    {plan.price}
+                  </p>
+                  <p class="body measure mt-[var(--sp-xs)] lg:col-span-6 lg:row-start-2 lg:mt-[var(--sp-2xs)] lg:pr-[var(--sp-lg)]">
+                    {plan.body}
+                  </p>
+                </div>
+              </>
+            ))
+          }
+
+          <div class="h-px bg-[var(--ink)]"></div>
+          <div class="pt-[var(--sp-md)]">
+            <h3 class="h3">導入支援オプション</h3>
+          </div>
+          {
+            supportOptions.map((option) => (
+              <div class="pt-[var(--sp-xs)] lg:grid lg:grid-cols-12">
+                <p class="body lg:col-span-6 lg:pr-[var(--sp-lg)]">
+                  {option.name}
+                </p>
+                <p class="price-sm lg:col-span-6 lg:text-right">
+                  {option.price}
+                </p>
+              </div>
+            ))
+          }
+          <div class="mt-[var(--sp-md)] h-px bg-[var(--ink)]"></div>
+        </div>
+
+        <p class="note mt-[var(--gap)] measure-sm">
+          金額は内容と規模で変わります。正式な見積りは相談のあとにお出しします。
+        </p>
+
+        <div class="mt-[var(--gap)]">
+          <a
+            href={SCHEDULE_URL_BUSINESS}
+            {...scheduleLinkAttrs}
+            data-cta="middle"
+            class="btn"
+          >
+            <span class="label-btn-lg">{ctaLabel}</span>
+            <svg
+              class="arrow"
+              width="14"
+              height="10"
+              viewBox="0 0 14 10"
+              fill="none"
+              aria-hidden="true"
+            >
+              <path
+                d="M0 5h13M9.5 1.5 13 5l-3.5 3.5"
+                stroke="currentColor"
+                stroke-width="1"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ 8. 進め方 ══════════════════════════════════ -->
+    <section id="process" class="band pb-[var(--band)] scroll-mt-[24px]">
+      <div class="shell">
+        <div class="h-px bg-[var(--ink)]"></div>
+        <h2 class="mt-[var(--gap)] h2">進め方</h2>
+
+        <!-- 1〜7カラムに左寄せ。序数は見出しと同じ行 -->
+        <div class="mt-[var(--gap)] lg:grid lg:grid-cols-12">
+          <div class="flex flex-col gap-[var(--sp-sm)] lg:col-span-7">
+            {
+              steps.map((step, i) => (
+                <>
+                  {i > 0 && (
+                    <div
+                      class="py-[var(--sp-xs)] text-[var(--ink)]"
+                      aria-hidden="true"
+                    >
+                      <svg
+                        width="26"
+                        height="10"
+                        viewBox="0 0 26 10"
+                        fill="none"
+                      >
+                        <path
+                          d="M0 1l13 8 13-8"
+                          stroke="currentColor"
+                          stroke-width="1"
+                        />
+                      </svg>
+                    </div>
+                  )}
+                  <div>
+                    <h3 class="flex items-baseline gap-[var(--sp-md)] h3">
+                      <span class="text-[var(--muted)]">{step.ordinal}</span>
+                      <span>{step.title}</span>
+                    </h3>
+                    <p class="body measure mt-[var(--sp-2xs)]">{step.body}</p>
+                  </div>
+                </>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ 9. 私たちの体制 ═════════════════════════════ -->
+    <section id="team" class="band pb-[var(--band-xl)] scroll-mt-[24px]">
+      <div class="shell">
+        <div class="h-px bg-[var(--ink)]"></div>
+        <h2 class="mt-[var(--gap)] h2">私たちの体制</h2>
+        <p class="body mt-[var(--gap)] measure">
+          企画、シナリオ、イラスト、音楽、開発。全員が社内にいるので、途中で外注の調整が挟まりません。
+        </p>
+
+        <!-- 6つの格子セル（2カラム＝208px ずつ） -->
+        <ul
+          class="mt-[var(--gap)] grid list-none grid-cols-2 gap-y-[var(--sp-lg)] sm:grid-cols-3 xl:grid-cols-6"
+        >
+          {
+            members.map((member) => (
+              <li class="pr-[var(--sp-sm)]">
+                <img
+                  src={member.avatar}
+                  alt={`${member.name}の顔写真`}
+                  width="80"
+                  height="80"
+                  loading="lazy"
+                  decoding="async"
+                  class="h-20 w-20 rounded-full object-cover ring-1 ring-[var(--rule-strong)]"
+                />
+                <p class="mt-[var(--sp-xs)] flex flex-wrap items-center gap-[var(--sp-2xs)]">
+                  <span class="text-[length:var(--t-body)] font-bold leading-[1.6] text-[var(--ink)]">
+                    {member.name}
+                  </span>
+                  {/* バッジの上下 2px は輪郭を名前の行に収めるための値。
+                      --sp-* の最小は 8px なので、段を増やさずここだけ直に書く。 */}
+                  {member.isRepresentative && (
+                    <span class="border border-[var(--rule-strong)] px-[var(--sp-2xs)] py-[2px] text-[length:var(--t-xs)] font-bold leading-[1.6] text-[var(--ink)]">
+                      代表
+                    </span>
+                  )}
+                </p>
+                <p class="mt-[var(--sp-2xs)] text-[length:var(--t-xs)] leading-[1.7] text-[var(--muted)]">
+                  {/* 役割は「 / 」で分け、区切りを前の語に付けたまま折り返さない。
+                      区切りが無い1語の役割は、狭い列で1行に収まらないので折り返しを許す。 */}
+                  {member.role.split(" / ").map((part, i, all) => (
+                    <>
+                      {i > 0 && " "}
+                      <span class={all.length > 1 ? "nb" : undefined}>
+                        {part}
+                        {i < all.length - 1 ? " /" : ""}
+                      </span>
+                    </>
+                  ))}
+                </p>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <!-- ══ 10. よくあるご質問 ══════════════════════════ -->
+    <section class="band pb-[var(--band-md)]">
+      <div class="shell">
+        <div class="h-px bg-[var(--ink)]"></div>
+
+        <!-- 左端は他の節と揃える（1〜8カラム）。左の罫は置かない -->
+        <div class="mt-[var(--gap)] lg:grid lg:grid-cols-12">
+          <div class="lg:col-span-8">
+            <h2 class="h2">よくあるご質問</h2>
+            <dl class="mt-[var(--gap)] flex flex-col gap-[var(--gap)]">
+              {
+                faqs.map((faq) => (
+                  <div>
+                    <dt class="h3">{faq.question}</dt>
+                    <dd class="body mt-[var(--sp-xs)] measure">{faq.answer}</dd>
+                  </div>
+                ))
+              }
+            </dl>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ 11. 最終CTA（プレート） ═════════════════════ -->
+    <section class="plate">
+        <div class="plate-inner">
+        <div class="shell">
+          <h2 class="h1">何を作るか、決めるところから</h2>
+          <p class="body mt-[var(--gap)] measure">
+            作りたいものが決まっていなくて構いません。課題を伺って、そもそもゲームにすべきかどうかから一緒に考えます。先行導入の枠は残り3社です。
+          </p>
+
+          <div class="mt-[var(--gap)]">
+            <a
+              href={SCHEDULE_URL_BUSINESS}
+              {...scheduleLinkAttrs}
+              data-cta="bottom"
+              class="btn btn--on-plate"
+            >
+              <span class="label-btn-lg">{ctaLabel}</span>
+              <svg
+                class="arrow"
+                width="14"
+                height="10"
+                viewBox="0 0 14 10"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path
+                  d="M0 5h13M9.5 1.5 13 5l-3.5 3.5"
+                  stroke="currentColor"
+                  stroke-width="1"></path>
+              </svg>
+            </a>
+          </div>
+
+          <p class="note-ink mt-[var(--gap)] measure">
+            相談は無料です。強引な営業はしません。
+          </p>
+          <p class="note-ink mt-[var(--sp-xs)] measure">
+            日程が合わない方は、<a href={CONTACT_FORM_URL} class="link-ink"
+              >お問い合わせフォーム</a
+            > ／ <a href={`mailto:${CONTACT_EMAIL}`} class="link-ink"
+              >{CONTACT_EMAIL}</a
+            > までどうぞ。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ 12. 会社概要 ═══════════════════════════════ -->
+    <section class="band pt-[var(--band)] pb-[var(--band)]">
+      <div class="shell">
+        <div class="h-px bg-[var(--ink)]"></div>
+        <h2 class="mt-[var(--gap)] h2">会社概要</h2>
+
+        <!-- 1〜9カラムの2列表 -->
+        <div class="mt-[var(--gap)] lg:grid lg:grid-cols-12">
+          <dl class="lg:col-span-9">
+            {
+              companyRows.map((row, i) => (
+                <div
+                  class:list={[
+                    "py-[var(--sp-sm)] lg:grid lg:grid-cols-9",
+                    i > 0 && "border-t border-[var(--rule-strong)]",
+                  ]}
+                >
+                  <dt class="label text-[var(--muted)] lg:col-span-2">
+                    {row.label}
+                  </dt>
+                  <dd class="body mt-[var(--sp-2xs)] break-words lg:col-span-7 lg:mt-0">
+                    {row.label === "URL" ? (
+                      <a
+                        href="https://creatorpot.net/"
+                        class="text-[var(--signal)] underline underline-offset-[3px] break-all"
+                      >
+                        {row.value}
+                      </a>
+                    ) : (
+                      row.value
+                    )}
+                  </dd>
+                </div>
+              ))
+            }
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ フッター（サイト共通。CTA は最終CTA の帯があるので省く） ══ -->
+    <Footer hideCta />
+  </div>
+</Layout>
+
+<style>
+  /* ── Grid テーマの値（lp-design.pen の gd-* が正） ───────────── */
+  .lp {
+    --paper: #fafcfe;
+    --ink: #0a0e12;
+    --muted: #6b7075;
+    --rule: #d6d7d9;
+    --rule-strong: #8e9296;
+    --signal: #15514f;
+    --signal-2: #26afa7;
+    --signal-ink: #fafcfe;
+    --plate-rule: #0a0e121a;
+
+    --shell: 1248px;
+    --gutter: 20px;
+
+    /* 級数 */
+    --t-h1: clamp(32px, 5.6vw, 64px);
+    --t-h2: clamp(24px, 3.2vw, 34px);
+    --t-num: clamp(22px, 2.6vw, 32px);
+    --t-fig: clamp(21px, 2vw, 24px);
+    --t-lead: clamp(17px, 1.7vw, 20px);
+    --t-body: 16px;
+    --t-xs: 13px;
+
+    /* 余白 */
+    --sp-2xs: 8px;
+    --sp-xs: 12px;
+    --sp-sm: 20px;
+    --sp-md: 28px;
+    --sp-lg: 40px;
+    --sp-xl: 56px;
+    --sp-2xl: 72px;
+    --gap: 28px;
+
+    /* 帯の下余白 */
+    --band-sm: 64px;
+    --band: 72px;
+    --band-md: 80px;
+    --band-lg: 88px;
+    --band-xl: 96px;
+
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Zen Kaku Gothic New", "Hiragino Sans", "Noto Sans JP",
+      system-ui, sans-serif;
+    font-size: var(--t-body);
+    line-height: 1.8;
+  }
+
+  @media (min-width: 768px) {
+    .lp {
+      --gutter: 48px;
+      --gap: 32px;
+      --band-sm: 80px;
+      --band: 88px;
+      --band-md: 96px;
+      --band-lg: 104px;
+      --band-xl: 112px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .lp {
+      --gutter: 96px;
+      --gap: 40px;
+      --band-sm: 112px;
+      --band: 128px;
+      --band-md: 136px;
+      --band-lg: 144px;
+      --band-xl: 152px;
+    }
+  }
+
+  /* 横スクロールを出さない */
+  :global(html),
+  :global(body) {
+    overflow-x: clip;
+  }
+
+
+  /* ── 帯と版面 ─────────────────────────────────── */
+  .band {
+    position: relative;
+    z-index: 1;
+    padding-inline: var(--gutter);
+  }
+
+  .shell {
+    max-width: var(--shell);
+    margin-inline: auto;
+  }
+
+  /* ── 活字 ─────────────────────────────────────── */
+  .lp :is(h1, h2, h3, p, dt, dd, li, span, a) {
+    line-break: strict;
+    word-break: auto-phrase;
+  }
+
+  .h1 {
+    font-size: var(--t-h1);
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    color: var(--ink);
+  }
+
+  .h2 {
+    text-wrap: balance;
+    font-size: var(--t-h2);
+    font-weight: 900;
+    letter-spacing: -0.018em;
+    line-height: 1.4;
+    color: var(--ink);
+  }
+
+  .h3 {
+    text-wrap: balance;
+    font-size: var(--t-lead);
+    font-weight: 700;
+    line-height: 1.6;
+    color: var(--ink);
+  }
+
+  .body {
+    font-size: var(--t-body);
+    font-weight: 400;
+    line-height: 1.8;
+    color: var(--ink);
+    overflow-wrap: break-word;
+  }
+
+  .note {
+    font-size: var(--t-xs);
+    line-height: 1.9;
+    color: var(--muted);
+    overflow-wrap: break-word;
+  }
+
+  .note-ink {
+    font-size: var(--t-xs);
+    line-height: 1.8;
+    color: var(--ink);
+    overflow-wrap: break-word;
+  }
+
+  /* ラベル声（小さく・太く・字間を開ける） */
+  .label {
+    font-size: var(--t-xs);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    line-height: 1.8;
+  }
+
+  .fig {
+    font-size: var(--t-fig);
+    font-weight: 900;
+    letter-spacing: -0.018em;
+    line-height: 1.4;
+    color: var(--ink);
+  }
+
+  /* 全角の始め括弧で始まる数値は、左の空きぶんだけ戻して格子線に揃える */
+
+  .price {
+    font-size: var(--t-num);
+    font-weight: 900;
+    letter-spacing: -0.018em;
+    line-height: 1.3;
+    color: var(--ink);
+  }
+
+  .price-sm {
+    font-size: var(--t-lead);
+    font-weight: 900;
+    letter-spacing: -0.018em;
+    line-height: 1.6;
+    color: var(--ink);
+  }
+
+  /* 走る本文は6カラムまで */
+  .measure {
+    max-width: 624px;
+  }
+
+  /* 括弧のひとまとまりを行末で割らない */
+  .nb {
+    white-space: nowrap;
+  }
+
+  .measure-sm {
+    max-width: 520px;
+  }
+
+  /* ── マーク ───────────────────────────────────── */
+  /* ピリオドの正方形 */
+  .period {
+    flex: none;
+    width: 13px;
+    height: 13px;
+    /* 本文1行目の中心に合わせる（16px × 行送り1.8 の半分 − 正方形の半分） */
+    margin-top: 7px;
+    background: var(--signal-2);
+  }
+
+  @media (min-width: 1024px) {
+    .period {
+      /* 13 + 91 = 104 で、条件文の左端が1カラム右の格子線に乗る */
+      margin-right: 91px;
+    }
+  }
+
+  /* ── 押せるもの ───────────────────────────────── */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-xs);
+    min-height: 44px;
+    padding: 16px 32px;
+    background: var(--signal);
+    color: var(--signal-ink);
+    border-radius: 0;
+    transition: opacity 0.18s ease;
+  }
+
+  .btn--sm {
+    padding: 12px 20px;
+    min-height: 44px;
+  }
+
+  .btn--on-plate {
+    box-shadow: inset 0 0 0 1px var(--signal-ink);
+  }
+
+  .btn:hover {
+    opacity: 0.88;
+  }
+
+  .label-btn {
+    font-size: var(--t-xs);
+    font-weight: 700;
+    line-height: 1.7;
+    white-space: nowrap;
+  }
+
+  .label-btn-lg {
+    font-size: var(--t-body);
+    font-weight: 700;
+    line-height: 1.6;
+    white-space: nowrap;
+  }
+
+  .arrow {
+    flex: none;
+  }
+
+  .anchor {
+    color: var(--ink);
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    transition: color 0.18s ease;
+  }
+
+  .anchor:hover {
+    color: var(--signal);
+  }
+
+  .link-plain {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    transition: color 0.18s ease;
+  }
+
+  .link-plain:hover {
+    color: var(--signal);
+  }
+
+  /* プレート上の文中リンク（下線で押せることを示す） */
+  .link-ink {
+    color: var(--ink);
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  /* ── 可視フォーカス ───────────────────────────── */
+  .lp :is(a, button):focus-visible {
+    outline: 2px solid var(--signal);
+    outline-offset: 2px;
+  }
+
+  .plate :is(a, button):focus-visible {
+    outline-color: var(--ink);
+  }
+
+  /* ── プレート（1ページに1枚だけの面） ─────────── */
+  .plate {
+    position: relative;
+    z-index: 1;
+    background: var(--signal-2);
+    overflow: clip;
+  }
+
+  .plate-inner {
+    position: relative;
+    z-index: 1;
+    padding-block: var(--band-xl);
+    padding-inline: var(--gutter);
+  }
+
+  .plate .h1,
+  .plate .h2,
+  .plate .body {
+    color: var(--ink);
+  }
+
+  /* ── 選択色 ───────────────────────────────────── */
+  .lp ::selection {
+    background: var(--signal);
+    color: var(--signal-ink);
+  }
+
+  /* ── モーション抑制 ───────────────────────────── */
+  @media (prefers-reduced-motion: reduce) {
+    .lp * {
+      transition-duration: 0.01ms !important;
+      animation: none !important;
+    }
+  }
+</style>
+
+<script>
+  // CTA のクリックを GA4 に送る（gtag 未ロード時は黙ってスキップされる）
+  import { trackEvent } from "../lib/gtag";
+
+  document
+    .querySelectorAll<HTMLAnchorElement>("[data-cta]")
+    .forEach((element) => {
+      element.addEventListener("click", () => {
+        trackEvent("schedule_click", {
+          cta_location: element.dataset.cta,
+          lp_id: "business-game",
+        });
+      });
+    });
+</script>

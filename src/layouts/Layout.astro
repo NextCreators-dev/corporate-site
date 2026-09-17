@@ -8,9 +8,13 @@ interface Props {
   image?: string;
   noindex?: boolean;
   jsonLd?: object[];
+  /** ヒーロー H1 用の明朝を読み込むか。使わないページは false（既定 true） */
+  preloadMincho?: boolean;
 }
 
 // 受け取ったSEO情報をそのまま Head へ受け渡す
+// <head> の name="head" スロットはページ固有の追記口（書体の読み込みなど）。
+// 差し込むページが無ければ何も出力しない。
 const props = Astro.props;
 ---
 
@@ -19,6 +23,7 @@ const props = Astro.props;
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <Head {...props} />
+    <slot name="head" />
   </head>
   <body>
     <slot />

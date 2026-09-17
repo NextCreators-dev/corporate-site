@@ -13,6 +13,10 @@ interface Props {
     noindex?: boolean;
     /** ページ固有の構造化データ（JSON-LD）配列 */
     jsonLd?: object[];
+    /** ヒーロー H1 用の明朝（Shippori Mincho）を読み込むか。
+     *  preload は高優先度で他の取得と帯域を奪い合うので、
+     *  この書体を使わないページは false を渡して preload と @font-face ごと落とす。既定 true */
+    preloadMincho?: boolean;
 }
 
 // ページ固有のタイトル・ディスクリプションを受け取り、未指定時はサイト共通の既定値にフォールバックする
@@ -26,6 +30,7 @@ const {
     image,
     noindex = false,
     jsonLd = [],
+    preloadMincho = true,
 } = Astro.props;
 
 // 各ページの canonical URL（クエリ・ハッシュは除外）
@@ -39,6 +44,18 @@ const gaMeasurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
 
 // 全ページ共通の構造化データ（Organization / WebSite）+ ページ固有の構造化データ
 const schemas = [organizationSchema(), websiteSchema(), ...jsonLd];
+
+// Shippori Mincho の @font-face。<style> の中身は CSS の生テキストとして扱われるため、
+// テンプレート式を直接書かず、この文字列を set:html で流し込む。
+const minchoFaceCss = `
+    @font-face {
+        font-family: "Shippori Mincho";
+        font-style: normal;
+        font-weight: 800;
+        font-display: optional;
+        src: url("/fonts/shippori-mincho-800-subset.woff2") format("woff2");
+    }
+`;
 ---
 
 <SEO
@@ -90,22 +107,20 @@ const schemas = [organizationSchema(), websiteSchema(), ...jsonLd];
 
 <!-- Shippori Mincho 800（ヒーロー H1 専用 / 必要文字のみサブセット）を自己ホスト -->
 <!-- レンダーブロックを避けるため preload + インライン @font-face で読み込み、font-display: optional で CLS=0 を担保 -->
-<link
-    rel="preload"
-    href="/fonts/shippori-mincho-800-subset.woff2"
-    as="font"
-    type="font/woff2"
-    crossorigin
-/>
-<style is:inline>
-    @font-face {
-        font-family: "Shippori Mincho";
-        font-style: normal;
-        font-weight: 800;
-        font-display: optional;
-        src: url("/fonts/shippori-mincho-800-subset.woff2") format("woff2");
-    }
-</style>
+{
+    preloadMincho && (
+        <Fragment>
+            <link
+                rel="preload"
+                href="/fonts/shippori-mincho-800-subset.woff2"
+                as="font"
+                type="font/woff2"
+                crossorigin
+            />
+            <style is:inline set:html={minchoFaceCss} />
+        </Fragment>
+    )
+}
 
 {
     gaMeasurementId && (
