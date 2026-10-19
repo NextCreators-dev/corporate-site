@@ -1,159 +1,146 @@
 ---
 import { Image } from "astro:assets";
 import Logo from "@public/logo.png";
+import {
+  CONTACT_EMAIL,
+  SCHEDULE_URL_BUSINESS,
+  IS_EXTERNAL_SCHEDULE_URL,
+} from "../lib/scheduling";
 
 interface Props {
-  /** CTA表示を省略するか */
+  /** 上段の相談の案内を省く（フォームの直後に置くページなど） */
   hideCta?: boolean;
+  /** 「相談する」の行き先 */
+  contactHref?: string;
 }
 
-const { hideCta = false } = Astro.props;
+const { hideCta = false, contactHref = "/techplantstudio/#contact" } = Astro.props;
+
+const scheduleAttrs = IS_EXTERNAL_SCHEDULE_URL
+  ? { target: "_blank", rel: "noopener noreferrer" }
+  : {};
+
+const nologicUrl =
+  "https://nologic.app/?utm_source=creatorpot&utm_medium=referral&utm_campaign=corporate_site&utm_content=footer_text";
+
+const groups = [
+  {
+    title: "ご依頼",
+    links: [
+      { href: "/techplantstudio/", label: "ゲーム制作のご相談" },
+      { href: "/techplantstudio/ip-minigame/", label: "IPのミニゲーム制作" },
+      { href: "/business-game/", label: "社内研修のゲーム制作" },
+      { href: "/techplantstudio/#ai-training", label: "AI研修・導入支援" },
+    ],
+  },
+  {
+    title: "自社で運営しているもの",
+    links: [
+      { href: nologicUrl, label: "NoLogic（ゲーム制作基盤）", external: true },
+      { href: "https://discord.gg/3hy2UNmXca", label: "NextCreators（Discord）", external: true },
+      { href: "/essay/", label: "代表のエッセイ" },
+    ],
+  },
+  {
+    title: "会社",
+    links: [
+      { href: "/#company", label: "会社情報" },
+      { href: "/news/", label: "お知らせ" },
+      { href: "/privacy/", label: "プライバシーポリシー" },
+      { href: "https://twitter.com/creator_pot", label: "X（@creator_pot）", external: true },
+      { href: "https://note.com/creator_pot", label: "note", external: true },
+    ],
+  },
+];
 ---
 
-<footer class="bg-[#111827]">
-  {/* CTAセクション */}
+<footer class="site-footer">
   {
     !hideCta && (
-      <div class="bg-[#0F172A] py-16 px-5 md:px-20">
-        <div class="max-w-4xl mx-auto text-center flex flex-col items-center gap-8">
-          <h2 class="text-2xl md:text-[32px] font-extrabold text-white">
-            クリエイターの"つくりたい"を、一緒に。
-          </h2>
-          <p class="text-gray-400 text-base">
-            ゲームを作りたい方も、制作を依頼したい方も、お気軽にどうぞ。
-          </p>
-          <div class="flex flex-wrap justify-center gap-4">
-            <a
-              href="https://nologic.app/?utm_source=creatorpot&utm_medium=referral&utm_campaign=corporate_site&utm_content=footer_cta"
-              class="inline-flex items-center justify-center px-9 py-4 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-[15px] rounded-[10px] transition-colors min-w-[220px]"
-            >
-              ゲームを作ってみる
-            </a>
-            <a
-              href="https://discord.gg/3hy2UNmXca"
-              class="inline-flex items-center justify-center px-9 py-4 bg-white/10 hover:bg-white/20 text-emerald-500 font-semibold text-[15px] rounded-[10px] border border-emerald-500/40 transition-colors min-w-[220px]"
-            >
-              コミュニティに参加
-            </a>
-            <a
-              href="/techplantstudio/#contact"
-              class="inline-flex items-center justify-center px-9 py-4 bg-white/10 hover:bg-white/20 text-white font-semibold text-[15px] rounded-[10px] border border-white/20 transition-colors min-w-[220px]"
-            >
-              制作のご相談
-            </a>
+      <section class="band rule-ink" aria-labelledby="footer-cta-title">
+        <div class="shell grid gap-8 lg:grid-cols-12 lg:items-end">
+          <div class="lg:col-span-7">
+            <p class="kicker">ご相談</p>
+            <h2 id="footer-cta-title" class="h2 mt-2">作りたいものが決まっていなくても、ご相談いただけます。</h2>
+            <p class="body mt-4 measure">
+              目的と、公開したい時期と、ご予算の目安が分かれば、進め方と費用の見通しをお返しします。お返事は2営業日以内です。
+            </p>
+          </div>
+          <div class="flex flex-col gap-4 lg:col-span-5 lg:items-end">
+            <div class="flex flex-wrap gap-3">
+              <a href={contactHref} class="btn" data-cta-location="footer">相談する</a>
+              <a href={SCHEDULE_URL_BUSINESS} {...scheduleAttrs} class="btn-line" data-schedule-location="footer">
+                打ち合わせの日程を選ぶ
+              </a>
+            </div>
+            <p class="small">
+              メール: <a class="link" href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+            </p>
           </div>
         </div>
-      </div>
+      </section>
     )
   }
 
-  {/* フッター下部 */}
-  <div class="px-5 md:px-20 py-8">
-    <div class="max-w-7xl mx-auto">
-      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-        {/* ロゴ（トップページへのリンク） */}
-        <a
-          href="/"
-          class="flex items-center gap-2.5 hover:opacity-80 transition-opacity"
-          aria-label="トップページへ"
-        >
-          <Image
-            src={Logo}
-            alt="クリエイターのうえきばち"
-            width={62}
-            height={56}
-            class="w-auto h-7"
-          />
-          <span class="text-white text-sm font-semibold"
-            >クリエイターのうえきばち</span
-          >
-        </a>
-
-        {/* リンク */}
-        <div class="flex flex-col md:flex-row items-center gap-4 md:gap-6">
-          <a
-            href="https://nologic.app/?utm_source=creatorpot&utm_medium=referral&utm_campaign=corporate_site&utm_content=footer_text"
-            class="text-gray-400 hover:text-white text-[13px] transition-colors"
-            >NoLogic</a
-          >
-          <a
-            href="https://discord.gg/3hy2UNmXca"
-            class="text-gray-400 hover:text-white text-[13px] transition-colors"
-            >NextCreators</a
-          >
-          <a
-            href="/business-game/"
-            class="text-gray-400 hover:text-white text-[13px] transition-colors"
-            >企業向けゲーム制作</a
-          >
-          <a
-            href="/techplantstudio/#contact"
-            class="text-gray-400 hover:text-white text-[13px] transition-colors"
-            >お問い合わせ</a
-          >
-          <a
-            href="/privacy/"
-            class="text-gray-400 hover:text-white text-[13px] transition-colors"
-            >プライバシーポリシー</a
-          >
+  <div class="footer-bottom">
+    <div class="shell py-14">
+      <div class="grid gap-10 md:grid-cols-12">
+        <div class="md:col-span-4">
+          <a href="/" class="inline-flex items-center gap-3" aria-label="トップページへ">
+            <Image src={Logo} alt="" width={62} height={56} class="h-8 w-auto" />
+            <span class="text-[15px] font-bold">株式会社クリエイターのうえきばち</span>
+          </a>
+          <p class="small mt-4">
+            東京都千代田区神田神保町3丁目21-7<br />英弘ビル3F みらいスタジオ
+          </p>
         </div>
-
-        {/* SNS */}
-        <div class="flex items-center gap-4">
-          <a
-            href="https://twitter.com/creator_pot"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="X (旧Twitter)"
-            class="text-gray-400 hover:text-white transition-colors"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
-              ><path
-                d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"
-              ></path></svg
-            >
-          </a>
-          <a
-            href="https://note.com/creator_pot"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="note"
-            class="text-gray-400 hover:text-white transition-colors"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
-              ><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg
-            >
-          </a>
+        <div class="grid gap-10 sm:grid-cols-3 md:col-span-8">
+          {groups.map((g) => (
+            <div>
+              <p class="text-[13px] font-bold text-[var(--muted)]">{g.title}</p>
+              <ul class="mt-3 flex flex-col gap-2">
+                {g.links.map((l) => (
+                  <li>
+                    <a
+                      href={l.href}
+                      class="footer-link"
+                      {...("external" in l && l.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                    >
+                      {l.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
       </div>
-
-      {/* コピーライト */}
-      <div class="text-center mt-8 pt-8 border-t border-gray-800">
-        <p class="text-gray-400 text-xs">
-          &copy; {new Date().getFullYear()} 株式会社クリエイターのうえきばち All
-          rights reserved.
-        </p>
-      </div>
+      <p class="mt-12 border-t border-[var(--rule)] pt-6 text-[12px] text-[var(--muted)]">
+        &copy; {new Date().getFullYear()} 株式会社クリエイターのうえきばち
+      </p>
     </div>
   </div>
 </footer>
+
+<style>
+  .site-footer {
+    background: var(--paper);
+  }
+
+  .footer-bottom {
+    background: var(--paper-2);
+    border-top: 1px solid var(--rule);
+  }
+
+  .footer-link {
+    font-size: 14px;
+    color: var(--ink-2);
+    transition: color 0.15s;
+  }
+
+  .footer-link:hover {
+    color: var(--accent-ink);
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+  }
+</style>

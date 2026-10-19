@@ -3,114 +3,139 @@ import { Image } from "astro:assets";
 import Logo from "@public/logo.png";
 
 interface Props {
-  /** トップページ以外の場合、戻るリンクを表示 */
-  showBack?: boolean;
+  /** 右上の「相談する」の行き先。フォームを持つページは自分の #contact を渡す */
+  contactHref?: string;
+  /** いま開いているページ。該当するリンクに aria-current を付ける */
+  current?: "home" | "studio" | "ip" | "ai" | "news";
 }
 
-const { showBack = false } = Astro.props;
+const { contactHref = "/techplantstudio/#contact", current } = Astro.props;
+
+// 読み手が「自分の用件はどこか」で選べるよう、受託の入口を先に並べる
+const links = [
+  { href: "/techplantstudio/", label: "ゲーム制作のご相談", key: "studio" },
+  { href: "/techplantstudio/ip-minigame/", label: "IPのミニゲーム", key: "ip" },
+  { href: "/techplantstudio/#ai-training", label: "AI研修", key: "ai" },
+  { href: "/#company", label: "会社情報", key: "home" },
+  { href: "/news/", label: "お知らせ", key: "news" },
+] as const;
 ---
 
-<header class="fixed top-0 left-0 right-0 z-50 border-b border-white/[0.04] bg-[#020B16]/[0.78] backdrop-blur-xl">
-  <div class="mx-auto max-w-[1500px] px-5 md:px-10 xl:px-12">
-    <div class="flex h-20 items-center justify-between">
-      {/* ロゴエリア */}
-      <div class="flex items-center gap-2.5">
-        <a href="/" class="flex items-center gap-2.5">
-          <Image
-            src={Logo}
-            alt="クリエイターのうえきばち"
-            width={120}
-            height={109}
-            loading="eager"
-            class="h-[3.375rem] w-[3.71rem] aspect-[120/109]"
-          />
+<header class="site-header fixed inset-x-0 top-0 z-50">
+  <div class="shell flex h-[68px] items-center justify-between gap-6">
+    <a href="/" class="flex shrink-0 items-center gap-3" aria-label="株式会社クリエイターのうえきばち トップページ">
+      <Image src={Logo} alt="" width={120} height={109} loading="eager" class="h-9 w-auto" />
+      <span class="hidden text-[15px] font-bold tracking-[0.02em] text-[var(--ink)] sm:inline">クリエイターのうえきばち</span>
+    </a>
+
+    <nav class="hidden items-center gap-7 lg:flex" aria-label="サイト内の案内">
+      {links.map((l) => (
+        <a
+          href={l.href}
+          class="nav-link text-[14px] font-bold"
+          aria-current={current === l.key && l.key !== "home" ? "page" : undefined}
+        >
+          {l.label}
         </a>
-      </div>
+      ))}
+    </nav>
 
-      {showBack ? (
-        <a href="/" class="flex items-center gap-1.5 text-gray-400 hover:text-white transition-colors text-sm">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-          <span>トップに戻る</span>
-        </a>
-      ) : (
-        <>
-          {/* デスクトップナビゲーション */}
-          <nav class="hidden lg:flex items-center gap-10 xl:gap-14">
-            <a href="#vision" class="text-white/90 hover:text-emerald-300 transition-colors text-[15px] font-bold tracking-[0.04em]">私たちについて</a>
-            <a href="#product" class="text-white/90 hover:text-emerald-300 transition-colors text-[15px] font-bold tracking-[0.04em]">事業内容</a>
-            <a href="/news/" class="text-white/90 hover:text-emerald-300 transition-colors text-[15px] font-bold tracking-[0.04em]">ニュース</a>
-            <a href="#company" class="text-white/90 hover:text-emerald-300 transition-colors text-[15px] font-bold tracking-[0.04em]">会社情報</a>
-          </nav>
-
-          <a
-            href="/techplantstudio/#contact"
-            class="hidden md:inline-flex items-center justify-center gap-3 rounded-full bg-emerald-400 px-6 py-3 text-[15px] font-bold text-[#052016] shadow-[0_0_30px_rgba(16,224,154,0.24)] transition-colors hover:bg-emerald-300 xl:px-7"
-          >
-            お問い合わせ
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-          </a>
-
-          {/* モバイルメニューボタン */}
-          <div class="lg:hidden">
-            <button
-              id="menu-toggle"
-              class="text-white/80 hover:text-white transition-colors"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
-              <span class="sr-only">メニューを開く</span>
-            </button>
-          </div>
-        </>
-      )}
+    <div class="flex items-center gap-3">
+      <a href={contactHref} class="btn btn--sm hidden md:inline-flex" data-cta-location="nav">相談する</a>
+      <button
+        id="menu-toggle"
+        type="button"
+        class="menu-btn lg:hidden"
+        aria-controls="mobile-menu"
+        aria-expanded="false"
+      >
+        メニュー
+      </button>
     </div>
   </div>
 </header>
 
-{/* モバイルメニュー */}
-<div
-  id="mobile-menu"
-  class="fixed inset-0 bg-[#0A0F1C] z-50 transform translate-x-full transition-transform duration-300 ease-in-out"
->
-  <div class="flex flex-col h-full">
-    <div class="flex justify-end p-4">
-      <button
-        id="close-menu"
-        class="text-gray-400 hover:text-white transition-colors"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-        <span class="sr-only">メニューを閉じる</span>
-      </button>
-    </div>
-    <nav class="flex flex-col items-center space-y-8 mt-16">
-      <a href="#vision" class="text-xl text-gray-400 hover:text-white transition-colors">私たちについて</a>
-      <a href="#product" class="text-xl text-gray-400 hover:text-white transition-colors">事業内容</a>
-      <a href="/news/" class="text-xl text-gray-400 hover:text-white transition-colors">ニュース</a>
-      <a href="#company" class="text-xl text-gray-400 hover:text-white transition-colors">会社情報</a>
-      <a href="/techplantstudio/#contact" class="inline-flex items-center gap-3 rounded-full bg-emerald-400 px-7 py-3 text-base font-bold text-[#052016]">
-        お問い合わせ
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-      </a>
-    </nav>
+<div id="mobile-menu" class="mobile-menu fixed inset-0 z-[60] hidden" role="dialog" aria-modal="true" aria-label="メニュー">
+  <div class="shell flex h-[68px] items-center justify-end">
+    <button id="close-menu" type="button" class="menu-btn">閉じる</button>
   </div>
+  <nav class="shell mt-4 flex flex-col" aria-label="サイト内の案内">
+    {links.map((l) => (
+      <a href={l.href} class="mobile-link">{l.label}</a>
+    ))}
+    <a href={contactHref} class="btn mt-8" data-cta-location="nav_mobile">相談する</a>
+  </nav>
 </div>
 
+<!-- 固定ヘッダーの高さ分、本文を下げる -->
+<div class="h-[68px]" aria-hidden="true"></div>
+
+<style>
+  .site-header {
+    background: color-mix(in srgb, var(--paper) 92%, transparent);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .nav-link {
+    color: var(--ink-2);
+    transition: color 0.15s;
+  }
+
+  .nav-link:hover,
+  .nav-link[aria-current="page"] {
+    color: var(--accent-ink);
+  }
+
+  .nav-link[aria-current="page"] {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 8px;
+  }
+
+  .menu-btn {
+    min-height: 44px;
+    padding: 0 14px;
+    border: 1.5px solid var(--ink);
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  .mobile-menu {
+    background: var(--paper);
+  }
+
+  .mobile-menu.is-open {
+    display: block;
+  }
+
+  .mobile-link {
+    padding: 18px 0;
+    border-bottom: 1px solid var(--rule);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+</style>
+
 <script>
-  const menuToggle = document.getElementById("menu-toggle");
-  const closeMenu = document.getElementById("close-menu");
-  const mobileMenu = document.getElementById("mobile-menu");
-  const mobileMenuLinks = document.querySelectorAll("#mobile-menu a");
+  const toggle = document.getElementById("menu-toggle");
+  const close = document.getElementById("close-menu");
+  const menu = document.getElementById("mobile-menu");
 
-  menuToggle?.addEventListener("click", () => {
-    mobileMenu?.classList.remove("translate-x-full");
-  });
+  const setOpen = (open: boolean) => {
+    menu?.classList.toggle("is-open", open);
+    toggle?.setAttribute("aria-expanded", String(open));
+    document.documentElement.style.overflow = open ? "hidden" : "";
+  };
 
-  closeMenu?.addEventListener("click", () => {
-    mobileMenu?.classList.add("translate-x-full");
-  });
-
-  mobileMenuLinks.forEach((link) => {
-    link.addEventListener("click", () => {
-      mobileMenu?.classList.add("translate-x-full");
-    });
+  toggle?.addEventListener("click", () => setOpen(true));
+  close?.addEventListener("click", () => setOpen(false));
+  menu?.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => setOpen(false)));
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") setOpen(false);
   });
 </script>

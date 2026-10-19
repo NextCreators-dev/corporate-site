@@ -1,8 +1,11 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import {
   CONTACT_CATEGORIES,
   BUDGET_OPTIONS,
+  SALES_CATEGORY,
+  SOURCE_PAGE_MAX,
   contactSchema,
+  isContactCategory,
 } from "../lib/validation";
 import { trackEvent } from "../lib/gtag";
 
@@ -13,7 +16,23 @@ interface ContactFormProps {
   heading?: string;
   // セクション説明文（送信前のみ表示。改行文字 \n は <br /> に変換される）
   description?: string;
+  // 初期選択する種別（例: IP向けページなら "game-promo"）。CONTACT_CATEGORIES に無い値は無視する
+  defaultCategory?: string;
 }
+
+// エラーの文字色。明るい背景で約6:1。site.css に赤の変数が無いのでここだけで持つ
+const ERROR_COLOR = "#b42318";
+
+// 案件のご相談に約束する返信の目安（全ページで「2営業日以内」にそろえる。決定 0087）
+const REPLY_PROMISE = "担当者から2営業日以内にご連絡します。";
+// 営業のご連絡には返信を約束しない
+const SALES_REPLY = "内容を拝見し、必要なときにご連絡します。";
+
+// 案件の種別（売り込みの sales は別の段に分けて置く）
+const PROJECT_CATEGORIES = CONTACT_CATEGORIES.filter(
+  (c) => c.value !== SALES_CATEGORY,
+);
+const SALES_OPTION = CONTACT_CATEGORIES.find((c) => c.value === SALES_CATEGORY)!;
 
 function getSubmissionErrorMessage() {
   if (import.meta.env.DEV) {
@@ -33,14 +52,49 @@ function renderMultiline(text: string) {
   ));
 }
 
+function getSourcePage(): string {
+  if (typeof window === "undefined") return "";
+  return window.location.pathname.slice(0, SOURCE_PAGE_MAX);
+}
+
+const labelClass = "block text-[15px] font-bold leading-relaxed text-[var(--ink)]";
+const requiredMark = (
+  <span className="ml-2 text-[13px] font-bold text-[var(--accent-ink)]">必須</span>
+);
+const optionalMark = (
+  <span className="ml-2 text-[13px] font-normal text-[var(--muted)]">任意</span>
+);
+
+function inputClass(hasError: boolean) {
+  return [
+    "block w-full rounded-lg border bg-[var(--card)] px-4 py-3 text-[16px] leading-relaxed text-[var(--ink)]",
+    "placeholder:text-[var(--muted)] placeholder:opacity-70",
+    "focus:outline focus:outline-2 focus:outline-offset-0 focus:outline-[var(--accent)]",
+    hasError
+      ? "border-2 border-[#b42318]"
+      : "border-[var(--rule-strong)] focus:border-[var(--accent-ink)]",
+  ].join(" ");
+}
+
+function FieldError({ id, message }: { id: string; message?: string }) {
+  if (!message) return null;
+  return (
+    <p id={id} className="mt-2 text-[14px] font-bold leading-relaxed" style={{ color: ERROR_COLOR }}>
+      {message}
+    </p>
+  );
+}
+
 export default function ContactForm({
   heading,
   description,
+  defaultCategory,
 }: ContactFormProps = {}) {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    category: "",
+    category:
+      defaultCategory && isContactCategory(defaultCategory) ? defaultCategory : "",
     message: "",
     company: "",
     budget: "",
@@ -51,6 +105,23 @@ export default function ContactForm({
     "idle" | "submitting" | "success" | "error"
   >("idle");
   const [serverError, setServerError] = useState("");
+  const [submittedCategory, setSubmittedCategory] = useState("");
+  const startedRef = useRef(false);
+  const successRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (status === "success") successRef.current?.focus();
+  }, [status]);
+
+  // 最初の入力で1回だけ form_start を送る（入力を始めた人と送信した人の差を見る）
+  const markStarted = () => {
+    if (startedRef.current) return;
+    startedRef.current = true;
+    trackEvent("form_start", {
+      form_name: "contact",
+      source_page: getSourcePage(),
+    });
+  };
 
   const clearFieldError = (field: string) => {
     setErrors((prev) => {
@@ -69,14 +140,7 @@ export default function ContactForm({
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     clearFieldError(name);
-    if (serverError) {
-      setServerError("");
-    }
-  };
-
-  const handleCategorySelect = (value: string) => {
-    setFormData((prev) => ({ ...prev, category: value }));
-    clearFieldError("category");
+    if (name !== "website") markStarted();
     if (serverError) {
       setServerError("");
     }
@@ -86,7 +150,8 @@ export default function ContactForm({
     e.preventDefault();
     setServerError("");
 
-    const result = contactSchema.safeParse(formData);
+    const sourcePage = getSourcePage();
+    const result = contactSchema.safeParse({ ...formData, source_page: sourcePage });
     if (!result.success) {
       const newErrors: FormErrors = {};
       for (const issue of result.error.issues) {
@@ -116,12 +181,14 @@ export default function ContactForm({
       const data = await res.json();
 
       if (data.success) {
+        setSubmittedCategory(result.data.category);
         setStatus("success");
-        // リード獲得を GA4 に通知。category / budget はユーザーセグメント分析用
+        // リード獲得を GA4 に通知。category / budget / source_page はセグメント分析用
         trackEvent("generate_lead", {
           form_name: "contact",
           category: result.data.category,
           budget: result.data.budget || "unspecified",
+          source_page: result.data.source_page,
         });
         trackEvent("form_submit", {
           form_name: "contact",
@@ -156,168 +223,162 @@ export default function ContactForm({
   };
 
   if (status === "success") {
+    const isSales = submittedCategory === SALES_CATEGORY;
     return (
-      <div className="w-full bg-[#111827] p-8 md:p-12 rounded-2xl text-center">
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-16 h-16 bg-emerald-500/15 rounded-full flex items-center justify-center">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="32"
-              height="32"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="#10B981"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="m9 12 2 2 4-4" />
-              <circle cx="12" cy="12" r="10" />
-            </svg>
-          </div>
-          <h3 className="text-white text-xl font-bold">
-            お問い合わせありがとうございます
-          </h3>
-          <p className="text-gray-300 text-sm leading-relaxed max-w-md">
-            お問い合わせを受け付けました。
-            <br />
-            担当者より3営業日以内にご連絡いたします。
-            <br />
-            今しばらくお待ちくださいませ。
+      <div
+        ref={successRef}
+        tabIndex={-1}
+        role="status"
+        className="surface w-full p-8 md:p-12 focus:outline-none"
+      >
+        <h3 className="h3">お問い合わせを受け付けました</h3>
+        <p className="body mt-4">
+          {isSales ? SALES_REPLY : REPLY_PROMISE}
+          <br />
+          入力いただいたメールアドレスに、受付の確認メールをお送りしました。
+        </p>
+        {!isSales && (
+          <p className="small mt-4">
+            確認メールが届かないときは、迷惑メールのフォルダをご確認ください。
           </p>
-        </div>
+        )}
       </div>
     );
   }
 
+  const renderChip = (cat: { value: string; label: string }) => {
+    const selected = formData.category === cat.value;
+    return (
+      <label
+        key={cat.value}
+        className={[
+          "inline-flex min-h-[44px] cursor-pointer items-center rounded-lg px-4 py-2 text-[15px] leading-snug transition-colors",
+          "has-[:focus-visible]:outline has-[:focus-visible]:outline-[3px] has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-[var(--accent)]",
+          selected
+            ? "border-2 border-[var(--accent-ink)] bg-[var(--accent-wash)] font-bold text-[var(--accent-ink)]"
+            : "border border-[var(--rule-strong)] bg-[var(--card)] text-[var(--ink-2)] hover:bg-[var(--paper-2)]",
+        ].join(" ")}
+      >
+        <input
+          type="radio"
+          name="category"
+          value={cat.value}
+          checked={selected}
+          onChange={handleChange}
+          className="sr-only"
+          aria-describedby={errors.category ? "category-error" : undefined}
+        />
+        {cat.label}
+      </label>
+    );
+  };
+
   return (
-    <div className="w-full flex flex-col items-center gap-8">
+    <div className="flex w-full flex-col gap-8">
       {(heading || description) && (
-        <div className="text-center flex flex-col gap-4">
-          {heading && (
-            <h2 className="text-[24px] md:text-[32px] font-extrabold">
-              {heading}
-            </h2>
-          )}
+        <div className="flex flex-col gap-4">
+          {heading && <h2 className="h2">{heading}</h2>}
           {description && (
-            <p className="text-gray-300 text-base leading-relaxed">
-              {renderMultiline(description)}
-            </p>
+            <p className="body measure">{renderMultiline(description)}</p>
           )}
         </div>
       )}
       <form
         onSubmit={handleSubmit}
-        className="w-full bg-[#111827] p-6 md:p-8 rounded-2xl flex flex-col gap-6"
+        className="surface flex w-full flex-col gap-7 p-6 md:p-8"
         noValidate
       >
         {/* お名前（必須） */}
-        <div className="flex flex-col gap-2">
-          <label htmlFor="name" className="text-sm font-medium text-gray-300">
-            お名前<span className="text-emerald-500 text-xs ml-1">必須</span>
+        <div>
+          <label htmlFor="name" className={labelClass}>
+            お名前{requiredMark}
           </label>
           <input
             type="text"
             id="name"
             name="name"
+            autoComplete="name"
             value={formData.name}
             onChange={handleChange}
             placeholder="山田 太郎"
-            className={`bg-[#0A0F1C] border rounded-lg px-4 py-3 text-white text-sm placeholder:text-gray-600 focus:outline-none focus:ring-1 transition-colors ${
-              errors.name
-                ? "border-red-400 focus:border-red-400 focus:ring-red-400"
-                : "border-[#1E293B] focus:border-emerald-500 focus:ring-emerald-500"
-            }`}
+            aria-invalid={errors.name ? true : undefined}
+            aria-describedby={errors.name ? "name-error" : undefined}
+            className={`mt-2 ${inputClass(!!errors.name)}`}
           />
-          {errors.name && <p className="text-red-400 text-xs">{errors.name}</p>}
+          <FieldError id="name-error" message={errors.name} />
         </div>
 
         {/* メールアドレス（必須） */}
-        <div className="flex flex-col gap-2">
-          <label htmlFor="email" className="text-sm font-medium text-gray-300">
-            メールアドレス
-            <span className="text-emerald-500 text-xs ml-1">必須</span>
+        <div>
+          <label htmlFor="email" className={labelClass}>
+            メールアドレス{requiredMark}
           </label>
           <input
             type="email"
             id="email"
             name="email"
+            autoComplete="email"
+            inputMode="email"
             value={formData.email}
             onChange={handleChange}
             placeholder="example@company.com"
-            className={`bg-[#0A0F1C] border rounded-lg px-4 py-3 text-white text-sm placeholder:text-gray-600 focus:outline-none focus:ring-1 transition-colors ${
-              errors.email
-                ? "border-red-400 focus:border-red-400 focus:ring-red-400"
-                : "border-[#1E293B] focus:border-emerald-500 focus:ring-emerald-500"
-            }`}
+            aria-invalid={errors.email ? true : undefined}
+            aria-describedby={errors.email ? "email-error" : undefined}
+            className={`mt-2 ${inputClass(!!errors.email)}`}
           />
-          {errors.email && (
-            <p className="text-red-400 text-xs">{errors.email}</p>
-          )}
+          <FieldError id="email-error" message={errors.email} />
         </div>
 
         {/* 法人名（任意） */}
-        <div className="flex flex-col gap-2">
-          <label
-            htmlFor="company"
-            className="text-sm font-medium text-gray-300"
-          >
-            法人名 / 組織名
-            <span className="text-gray-500 text-xs ml-1">任意</span>
+        <div>
+          <label htmlFor="company" className={labelClass}>
+            法人名・組織名{optionalMark}
           </label>
           <input
             type="text"
             id="company"
             name="company"
+            autoComplete="organization"
             value={formData.company}
             onChange={handleChange}
             placeholder="株式会社〇〇"
-            className="bg-[#0A0F1C] border border-[#1E293B] rounded-lg px-4 py-3 text-white text-sm placeholder:text-gray-600 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors"
+            aria-invalid={errors.company ? true : undefined}
+            aria-describedby={errors.company ? "company-error" : undefined}
+            className={`mt-2 ${inputClass(!!errors.company)}`}
           />
+          <FieldError id="company-error" message={errors.company} />
         </div>
 
-        {/* お問い合わせ種別（必須） */}
-        <div className="flex flex-col gap-2">
-          <p className="text-sm font-medium text-gray-300">
-            お問い合わせ種別
-            <span className="text-emerald-500 text-xs ml-1">必須</span>
-          </p>
-          <div className="flex flex-wrap gap-2">
-            {CONTACT_CATEGORIES.map((cat) => (
-              <button
-                key={cat.value}
-                type="button"
-                onClick={() => handleCategorySelect(cat.value)}
-                className={`px-4 py-2 rounded-lg border text-sm font-medium transition-all cursor-pointer ${
-                  formData.category === cat.value
-                    ? "bg-emerald-500/15 border-emerald-500/40 text-emerald-500"
-                    : "border-[#1E293B] text-gray-400 hover:border-gray-600 hover:text-gray-300"
-                }`}
-              >
-                {cat.label}
-              </button>
-            ))}
+        {/* お問い合わせ種別（必須）。営業のご連絡は別の段に分ける */}
+        <fieldset>
+          <legend className={labelClass}>お問い合わせ種別{requiredMark}</legend>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {PROJECT_CATEGORIES.map(renderChip)}
           </div>
-          {errors.category && (
-            <p className="text-red-400 text-xs">{errors.category}</p>
-          )}
-        </div>
+          <div className="mt-5 border-t border-[var(--rule)] pt-4">
+            <div className="flex flex-wrap gap-2">{renderChip(SALES_OPTION)}</div>
+            <p className="small mt-2">
+              当社へのサービスのご案内や営業のご連絡は、こちらを選んでください。内容を拝見し、必要なときに当社からご連絡します。
+            </p>
+          </div>
+          <FieldError id="category-error" message={errors.category} />
+        </fieldset>
 
         {/* ご予算（任意） */}
-        <div className="flex flex-col gap-2">
-          <label htmlFor="budget" className="text-sm font-medium text-gray-300">
-            ご予算<span className="text-gray-500 text-xs ml-1">任意</span>
+        <div>
+          <label htmlFor="budget" className={labelClass}>
+            ご予算{optionalMark}
           </label>
           <select
             id="budget"
             name="budget"
             value={formData.budget}
             onChange={handleChange}
-            className="bg-[#0A0F1C] border border-[#1E293B] rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors appearance-none"
+            className={`mt-2 appearance-none pr-10 ${inputClass(!!errors.budget)}`}
             style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")`,
+              backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%234e5d57' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")`,
               backgroundRepeat: "no-repeat",
-              backgroundPosition: "right 12px center",
+              backgroundPosition: "right 14px center",
             }}
           >
             {BUDGET_OPTIONS.map((opt) => (
@@ -326,40 +387,31 @@ export default function ContactForm({
               </option>
             ))}
           </select>
+          <FieldError id="budget-error" message={errors.budget} />
         </div>
 
         {/* ご相談内容（必須） */}
-        <div className="flex flex-col gap-2">
-          <label
-            htmlFor="message"
-            className="text-sm font-medium text-gray-300"
-          >
-            ご相談内容
-            <span className="text-emerald-500 text-xs ml-1">必須</span>
+        <div>
+          <label htmlFor="message" className={labelClass}>
+            ご相談内容{requiredMark}
           </label>
           <textarea
             id="message"
             name="message"
             value={formData.message}
             onChange={handleChange}
-            rows={5}
+            rows={6}
             placeholder={
-              "例: 自社サービスのWebアプリを開発したいと考えています。\n要件はまだ固まっていませんが、企画段階からご相談可能でしょうか？"
+              "例: 来年3月のイベントで、来場者が遊べるミニゲームを作りたいと考えています。キャラクターの素材は当社で用意できます。"
             }
             style={{ resize: "vertical" }}
-            className={`bg-[#0A0F1C] border rounded-lg px-4 py-3 text-white text-sm placeholder:text-gray-600 focus:outline-none focus:ring-1 transition-colors overflow-y-auto min-h-[120px] ${
-              errors.message
-                ? "border-red-400 focus:border-red-400 focus:ring-red-400"
-                : "border-[#1E293B] focus:border-emerald-500 focus:ring-emerald-500"
-            }`}
+            aria-invalid={errors.message ? true : undefined}
+            aria-describedby={errors.message ? "message-error message-count" : "message-count"}
+            className={`mt-2 min-h-[140px] overflow-y-auto ${inputClass(!!errors.message)}`}
           />
-          <div className="flex justify-between items-center">
-            {errors.message ? (
-              <p className="text-red-400 text-xs">{errors.message}</p>
-            ) : (
-              <span />
-            )}
-            <p className="text-gray-600 text-xs">
+          <div className="flex items-start justify-between gap-4">
+            <FieldError id="message-error" message={errors.message} />
+            <p id="message-count" className="small num ml-auto mt-2">
               {formData.message.length} / 2000
             </p>
           </div>
@@ -381,8 +433,14 @@ export default function ContactForm({
 
         {/* サーバーエラー */}
         {serverError && (
-          <div className="bg-red-500/10 border border-red-500/30 rounded-lg px-4 py-3">
-            <p className="text-red-400 text-sm">{serverError}</p>
+          <div
+            role="alert"
+            className="rounded-lg border-2 bg-[var(--card)] px-4 py-3"
+            style={{ borderColor: ERROR_COLOR }}
+          >
+            <p className="text-[15px] font-bold leading-relaxed" style={{ color: ERROR_COLOR }}>
+              {serverError}
+            </p>
           </div>
         )}
 
@@ -390,61 +448,17 @@ export default function ContactForm({
         <button
           type="submit"
           disabled={status === "submitting"}
-          className="inline-flex items-center justify-center gap-2.5 px-10 py-4 bg-emerald-500 hover:bg-emerald-600 disabled:bg-emerald-500/50 disabled:cursor-not-allowed text-white font-bold text-base rounded-xl transition-colors w-full cursor-pointer"
+          className="btn w-full cursor-pointer disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {status === "submitting" ? (
-            <>
-              <svg
-                className="animate-spin h-5 w-5"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                />
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-                />
-              </svg>
-              送信中...
-            </>
-          ) : (
-            <>
-              送信する
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M5 12h14" />
-                <path d="m12 5 7 7-7 7" />
-              </svg>
-            </>
-          )}
+          {status === "submitting" ? "送信しています" : "送信する"}
         </button>
 
-        <p className="text-gray-500 text-xs text-center">
-          本フォームを送信したことで、
-          <a href="/privacy/" target="_blank" class="text-emerald-400 underline">
+        <p className="small">
+          送信すると、
+          <a href="/privacy/" target="_blank" rel="noopener" className="link">
             プライバシーポリシー
           </a>
-          に同意したものとみなします。
-          <br />
-          60秒で送信完了 · 強引な営業は一切しません · 通常3営業日以内にご返信
+          に同意したものとみなします。ご相談には{REPLY_PROMISE}
         </p>
       </form>
     </div>

@@ -15,7 +15,8 @@ interface Props {
     jsonLd?: object[];
     /** ヒーロー H1 用の明朝（Shippori Mincho）を読み込むか。
      *  preload は高優先度で他の取得と帯域を奪い合うので、
-     *  この書体を使わないページは false を渡して preload と @font-face ごと落とす。既定 true */
+     *  この書体を使わないページは false を渡して preload と @font-face ごと落とす。
+     *  2026-10 の改修でトップの H1 も Zen Kaku Gothic New に替えたので、既定は false */
     preloadMincho?: boolean;
 }
 
@@ -30,7 +31,7 @@ const {
     image,
     noindex = false,
     jsonLd = [],
-    preloadMincho = true,
+    preloadMincho = false,
 } = Astro.props;
 
 // 各ページの canonical URL（クエリ・ハッシュは除外）

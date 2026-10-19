@@ -1,64 +1,52 @@
 ---
 import Layout from "@layouts/Layout.astro";
 import Navigation from "@components/Navigation.astro";
+import Footer from "@components/Footer.astro";
+
+// 末尾の「ゲームを作ってみる」。どのページから NoLogic に来たかを GA4 で分けられるよう UTM を付ける
+const nologicUrl =
+  "https://nologic.app/?utm_source=creatorpot&utm_medium=referral&utm_campaign=corporate_site&utm_content=essay_cta";
 ---
 
 <Layout
   title="非合理に生きるすべてのクリエイターへ。 | 株式会社クリエイターのうえきばち"
   description="株式会社クリエイターのうえきばち代表によるエッセイ「非合理に生きるすべてのクリエイターへ。」効率や合理性では測れない、創作という営みについての想いを綴っています。"
+  preloadMincho={false}
 >
-  <main class="bg-[#0A0F1C] text-white">
-    <!-- ヘッダー -->
-    <Navigation showBack={true} />
+  <!-- 読み物の本文は明朝で組む（BIZ UDPMincho。読めない環境では各OSの明朝に落ちる） -->
+  <Fragment slot="head">
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=BIZ+UDPMincho:wght@400;700&display=swap"
+    />
+  </Fragment>
 
-    <!-- Essay Hero -->
-    <section class="bg-[#111827] py-20 px-5 md:px-[120px]">
-      <div
-        class="max-w-4xl mx-auto flex flex-col items-center gap-6 text-center pt-16"
-      >
-        <div
-          class="inline-flex items-center gap-1.5 px-5 py-2 bg-emerald-500/15 text-emerald-500 text-xs font-bold rounded-full border border-emerald-500/25 tracking-[2px]"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            ><path d="M12 20h9"></path><path
-              d="M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.838a.5.5 0 0 1-.62-.62l.838-2.872a2 2 0 0 1 .506-.854z"
-            ></path></svg
-          >
-          ESSAY
-        </div>
-        <h1 class="text-3xl md:text-[44px] font-black leading-tight">
-          非合理に生きるすべてのクリエイターへ。
-        </h1>
-        <p class="text-gray-400 text-lg font-medium">
-          代表のクリエイターに向けた率直な思い
-        </p>
-        <div class="flex items-center gap-6 text-gray-500 text-[13px]">
-          <span>2025.02.18</span>
-          <span>山縣 帆高（代表取締役）</span>
-          <span>読了目安: 15分</span>
+  <Navigation />
+
+  <main>
+    <!-- 表題。読み手が「誰が・いつ書いた・どのくらいの長さか」を先に知れるようにする -->
+    <header class="band rule-top">
+      <div class="shell">
+        <div class="essay-measure mx-auto">
+          <p class="kicker">代表のエッセイ</p>
+          <h1 class="essay-title mt-4">非合理に生きるすべてのクリエイターへ。</h1>
+          <p class="lead mt-5">代表のクリエイターに向けた率直な思い</p>
+          <p class="small num mt-6 flex flex-wrap gap-x-6 gap-y-1">
+            <span>2025.02.18</span>
+            <span>山縣 帆高（代表取締役）</span>
+            <span>読了目安: 15分</span>
+          </p>
         </div>
       </div>
-    </section>
+    </header>
 
-    <!-- Essay Body -->
-    <section class="bg-[#0A0F1C] py-16 px-5 md:px-[320px]">
-      <div class="max-w-4xl mx-auto">
-        <article class="flex flex-col gap-6">
-          <h2 class="text-2xl font-extrabold">はじめに</h2>
-          <div class="w-12 h-[3px] bg-emerald-500"></div>
+    <!-- 本文 -->
+    <section class="band band--alt">
+      <div class="shell">
+        <article class="essay-measure mx-auto">
+          <h2 class="essay-h2">はじめに</h2>
 
-          <div
-            class="prose prose-invert max-w-none space-y-6 text-[#C0C8D4] text-base leading-[2] font-['BIZ_UDPMincho',serif]"
-          >
+          <div class="essay-body mt-8">
             <p>
               私は、現代でも非合理を追い続けるクリエイターが大好きだ。<br />
               どこを見てもコスパ・タイパが重視され、効率がすべてを支配するこの時代に、それでも自分の手で、自分の「好き」を形にし続ける人たちに、心の底から敬意を抱いている。
@@ -178,7 +166,7 @@ import Navigation from "@components/Navigation.astro";
 
             <p>私は、そういうあなたようなクリエイターのことが大好きだ。</p>
 
-            <h3 class="mt-8 font-bold text-white text-lg">
+            <h3>
               クリエイターのうえきばち / NextCreators について
             </h3>
 
@@ -205,64 +193,93 @@ import Navigation from "@components/Navigation.astro";
           </div>
 
           {/* 署名 */}
-          <div
-            class="flex flex-col items-end gap-2 mt-6 pt-6 border-t border-[#1E293B]"
-          >
-            <p class="text-gray-400 text-[15px] font-semibold">
-              株式会社クリエイターのうえきばち
-            </p>
-            <p class="text-gray-400 text-[15px] font-semibold">代表取締役</p>
-            <p class="text-white text-[32px] font-semibold">山縣 帆高</p>
+          <div class="essay-sign mt-14 pt-8 text-right">
+            <p class="small font-bold">株式会社クリエイターのうえきばち</p>
+            <p class="small font-bold">代表取締役</p>
+            <p class="essay-sign-name mt-1">山縣 帆高</p>
           </div>
         </article>
       </div>
     </section>
 
-    <!-- Essay CTA -->
-    <section class="bg-[#111827] py-16 px-5 md:px-[120px]">
-      <div
-        class="max-w-4xl mx-auto flex flex-col items-center gap-8 text-center"
-      >
-        <h2 class="text-[28px] font-extrabold">
-          あなたの「つくりたい」を、形にしよう。
-        </h2>
-        <div class="flex flex-wrap justify-center gap-4">
-          <a
-            href="https://nologic.app"
-            class="inline-flex items-center gap-2 px-9 py-4 bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-[15px] rounded-[10px] transition-colors"
-          >
-            ゲームを作ってみる
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              ><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg
+    <!-- 読み終えたクリエイター向けの次の一歩。受託の相談は Footer の上段が受ける -->
+    <section class="band">
+      <div class="shell">
+        <div class="essay-measure mx-auto">
+          <h2 class="h2">あなたの「つくりたい」を、形にしよう。</h2>
+          <div class="mt-8 flex flex-wrap items-center gap-x-8 gap-y-4">
+            <a href={nologicUrl} class="btn-line" data-cta-location="essay_cta">ゲームを作ってみる</a>
+            <a
+              href="https://discord.gg/3hy2UNmXca"
+              class="link font-bold"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-cta-location="essay_discord"
             >
-          </a>
-          <a
-            href="https://discord.gg/3hy2UNmXca"
-            class="inline-flex items-center px-9 py-4 bg-white/10 hover:bg-white/20 text-emerald-500 font-semibold text-[15px] rounded-[10px] border border-emerald-500/40 transition-colors"
-          >
-            コミュニティに参加する
-          </a>
+              コミュニティに参加する
+            </a>
+          </div>
         </div>
       </div>
     </section>
-
-    <!-- フッター -->
-    <div class="bg-[#0A0F1C] py-8 px-5 md:px-[120px]">
-      <div class="text-center">
-        <p class="text-gray-500 text-xs">
-          &copy; {new Date().getFullYear()} 株式会社クリエイターのうえきばち All
-          rights reserved.
-        </p>
-      </div>
-    </div>
   </main>
+
+  <Footer />
 </Layout>
+
+<style>
+  /* 1行を全角40字前後に収める */
+  .essay-measure {
+    max-width: 40em;
+  }
+
+  .essay-title {
+    font-family: "BIZ UDPMincho", "Hiragino Mincho ProN", "Yu Mincho", "YuMincho", serif;
+    font-size: clamp(28px, 4.2vw, 44px);
+    font-weight: 700;
+    line-height: 1.45;
+    color: var(--ink);
+  }
+
+  .essay-h2 {
+    font-size: var(--t-h3);
+    font-weight: 700;
+    line-height: 1.5;
+    color: var(--ink);
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--rule-strong);
+  }
+
+  .essay-body {
+    font-family: "BIZ UDPMincho", "Hiragino Mincho ProN", "Yu Mincho", "YuMincho", serif;
+    font-size: 17px;
+    line-height: 2.05;
+    color: var(--ink-2);
+  }
+
+  .essay-body :global(p) {
+    margin: 0 0 1.6em;
+  }
+
+  .essay-body :global(h3) {
+    margin: 3.2em 0 1.2em;
+    padding-top: 1.6em;
+    border-top: 1px solid var(--rule);
+    font-family: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", sans-serif;
+    font-size: var(--t-h3);
+    font-weight: 700;
+    line-height: 1.5;
+    color: var(--ink);
+  }
+
+  .essay-sign {
+    border-top: 1px solid var(--rule);
+  }
+
+  .essay-sign-name {
+    font-family: "BIZ UDPMincho", "Hiragino Mincho ProN", "Yu Mincho", "YuMincho", serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+</style>
