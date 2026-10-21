@@ -4,7 +4,7 @@
 
 ## セットアップ
 
-Node 22 と yarn が要る。
+Node 22.23.4（`.node-version` で固定）と yarn が要る。
 
 ```sh
 yarn install
