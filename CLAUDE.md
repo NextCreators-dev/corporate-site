@@ -22,7 +22,7 @@
 
 ## 規約
 
-- パッケージ管理は yarn。Node 22 を `.node-version`・`package.json` の `engines`・`netlify.toml` の `NODE_VERSION` の3か所で揃える
+- パッケージ管理は yarn。Node は `.node-version`（22.23.4 に固定）・`package.json` の `engines`（`>=22.23.4`）・`netlify.toml` の `NODE_VERSION`（本番ビルド設定のためメジャー指定の "22" のまま）の3か所で揃える。パッチを上げるときは前の2か所を同時に直す
 - `trailingSlash` は `always`。内部リンクは必ず末尾スラッシュで書く（非スラッシュは本番で301、dev では404）。リンクを足したら `yarn build && yarn check:links`
 - コマンドは `yarn dev`（localhost:4321）/ `yarn build` / `yarn preview` / `yarn check:links`。問い合わせフォームをローカルで動かすには `netlify dev` が要る
 - `tailwind.config.mjs` の `extend` は空。色や余白は `bg-[#0A0F1C]` のような任意値で直書きしている
