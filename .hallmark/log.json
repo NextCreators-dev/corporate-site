@@ -1,0 +1,59 @@
+[
+  {
+    "date": "2026-09-15",
+    "macrostructure": "Specimen",
+    "theme": "Grid",
+    "theme_axes": "light / grotesk-heavy-900 (Zen Kaku Gothic New) / brand teal two tones (#15514F fill, #26AFA7 surface) / exposed 12-col grid",
+    "vibe": "案内標識の手引き書。課題から始め、顔ぶれを格子に並べる",
+    "enrichment": "none",
+    "note": "plate full-bleed (gate 23 exception, theme-sanctioned); section head outside S1-S5 (gate 54 bans S1); signal ink is one hue in two tones; 6 member photographs are a 5th deviation from the theme's geometry-only rule, converted into grid units (208px module, 80px diameter, 1px rule)",
+    "brief": "株式会社クリエイターのうえきばち · 企業向けゲーム制作 LP 改訂 B（Pencil / ToB Game LP B (grid)）"
+  },
+  {
+    "date": "2026-09-15",
+    "macrostructure": "Narrative Workflow",
+    "theme": "custom",
+    "theme_axes": "light / roman-serif / brand deep teal #15514F + teal #26AFA7 (tp-* shared with Ryoiku LP v2, accent points at tb3-*)",
+    "vibe": "療育の版面で書いた、課題から始まる案内文書。顔ぶれを見せる",
+    "enrichment": "none",
+    "user_requested_duplicate": true,
+    "note": "user-requested: same system as Ryoiku LP v2 (diversification rule waived). tp-accent left untouched so x8Ss7 is not restyled; A points at tb3-accent (#15514F) instead.",
+    "brief": "株式会社クリエイターのうえきばち · 企業向けゲーム制作 LP 改訂 A（Pencil / ToB Game LP A (document)）"
+  },
+  {
+    "date": "2026-09-10",
+    "macrostructure": "Split Studio",
+    "theme": "custom",
+    "theme_axes": "dark / geometric-sans / chromatic-green (shared with Community Ops / Event Pack)",
+    "vibe": "主張のとなりに日付つきの根拠を置く仕様書",
+    "enrichment": "none",
+    "brief": "株式会社クリエイターのうえきばち · 企業向けゲーム制作 LP（Pencil / ToB Game LP）"
+  },
+  {
+    "date": "2026-09-06",
+    "macrostructure": "Manifesto",
+    "theme": "custom",
+    "theme_axes": "dark / geometric-sans / chromatic-green (shared with Community Ops LP)",
+    "vibe": "イベントのポスター、内訳は活字で",
+    "enrichment": "none",
+    "brief": "株式会社クリエイターのうえきばち · リアルイベントパック LP（Pencil / Event Pack LP）"
+  },
+  {
+    "date": "2026-09-06",
+    "macrostructure": "Letter",
+    "theme": "custom",
+    "theme_axes": "dark / geometric-sans / chromatic-green",
+    "vibe": "夜の紙に書いた手紙、緑は行動だけ",
+    "enrichment": "none",
+    "brief": "株式会社クリエイターのうえきばち · コミュニティ運営代行 LP（Pencil / Community Ops LP）"
+  },
+  {
+    "date": "2026-09-06",
+    "macrostructure": "Narrative Workflow",
+    "theme": "custom",
+    "theme_axes": "light / roman-serif / chromatic-teal",
+    "vibe": "刷られた案内文書、静かな深緑",
+    "enrichment": "none",
+    "brief": "TechPlant Studio · 療育・福祉向け AI 業務改善 LP（Pencil / Ryoiku LP v2）"
+  }
+]
