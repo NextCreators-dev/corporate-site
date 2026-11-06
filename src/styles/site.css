@@ -1,0 +1,282 @@
+/*
+ * サイト共通の配色・文字・部品（2026-10 改修。決定 0087）
+ *
+ * 背景は明るい紙色、文字は墨色。ブランド色のエメラルド #10B981 は残すが、
+ * 明るい背景の上では文字に使えるコントラストが取れない（約2.4:1）ので、
+ * 文字・ボタンには濃いエメラルド（--accent-ink, 白文字と5.5:1）を使い、
+ * #10B981 そのものは線・印・大きな面にだけ使う。
+ * /business-game/ は独自の Grid テーマ（.lp）を持つので、この変数は使っていない。
+ */
+
+:root {
+  --paper: #f7f9f8;
+  --paper-2: #edf2ef;
+  --card: #ffffff;
+  --ink: #13201c;
+  --ink-2: #2c3a35;
+  --muted: #4e5d57;
+  --rule: #d5ddd9;
+  --rule-strong: #9aa8a2;
+  --accent: #10b981;
+  --accent-ink: #047857;
+  --accent-ink-hover: #065f46;
+  --accent-wash: #e3f4ec;
+
+  --shell: 1180px;
+  --gutter: 20px;
+
+  --t-h1: clamp(30px, 4.6vw, 52px);
+  --t-h2: clamp(24px, 3vw, 34px);
+  --t-h3: clamp(18px, 1.8vw, 21px);
+  --t-lead: clamp(16px, 1.5vw, 18px);
+  --t-body: 16px;
+  --t-sm: 14px;
+  --t-xs: 12.5px;
+
+  --band: 72px;
+  --band-lg: 96px;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --gutter: 40px;
+    --band: 96px;
+    --band-lg: 128px;
+  }
+}
+
+html {
+  background: var(--paper);
+  scroll-padding-top: 88px;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", "Hiragino Sans",
+    "Noto Sans JP", "Yu Gothic", system-ui, sans-serif;
+  font-size: var(--t-body);
+  line-height: 1.85;
+  font-feature-settings: "palt" 0;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* ── 骨組み ───────────────────────────────── */
+.shell {
+  width: 100%;
+  max-width: calc(var(--shell) + var(--gutter) * 2);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.band {
+  padding-block: var(--band);
+}
+
+.band-lg {
+  padding-block: var(--band-lg);
+}
+
+.band--alt {
+  background: var(--paper-2);
+}
+
+.band + .band:not(.band--alt) {
+  border-top: 1px solid var(--rule);
+}
+
+/* ── 文字 ───────────────────────────────── */
+.h1 {
+  font-size: var(--t-h1);
+  font-weight: 900;
+  line-height: 1.32;
+  letter-spacing: 0.01em;
+  color: var(--ink);
+}
+
+.h2 {
+  font-size: var(--t-h2);
+  font-weight: 900;
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+  color: var(--ink);
+}
+
+.h3 {
+  font-size: var(--t-h3);
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+.lead {
+  font-size: var(--t-lead);
+  line-height: 1.9;
+  color: var(--ink-2);
+}
+
+.body {
+  font-size: var(--t-body);
+  line-height: 1.9;
+  color: var(--ink-2);
+}
+
+.small {
+  font-size: var(--t-sm);
+  line-height: 1.8;
+  color: var(--muted);
+}
+
+/* 節の見出しの上に置く短いラベル。何の節かを先に知らせる */
+.kicker {
+  display: inline-block;
+  font-size: var(--t-xs);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--accent-ink);
+}
+
+/* 見出しは文節で折り返す（対応ブラウザのみ。未対応は通常の折り返し） */
+.h1,
+.h2,
+.h3 {
+  word-break: auto-phrase;
+}
+
+.h2,
+.h3 {
+  text-wrap: balance;
+}
+
+.measure {
+  max-width: 40em;
+}
+
+.num {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+/* 日付や括弧書きを行末で割らない */
+.nb {
+  white-space: nowrap;
+}
+
+/* ── リンクとボタン ─────────────────────── */
+.link {
+  color: var(--accent-ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.25em;
+  transition: color 0.15s;
+}
+
+.link:hover {
+  color: var(--accent-ink-hover);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 12px 28px;
+  border-radius: 8px;
+  background: var(--accent-ink);
+  color: #fff;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1.4;
+  transition: background-color 0.15s;
+}
+
+.btn:hover {
+  background: var(--accent-ink-hover);
+}
+
+.btn:focus-visible,
+.btn-line:focus-visible,
+.link:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.btn--sm {
+  min-height: 44px;
+  padding: 8px 20px;
+  font-size: 15px;
+}
+
+/* 2番手の行動（日程調整・資料を見る など）。主ボタンと並べても主従が崩れない */
+.btn-line {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 12px 24px;
+  border-radius: 8px;
+  border: 1.5px solid var(--ink);
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1.4;
+  background: transparent;
+  transition: background-color 0.15s;
+}
+
+.btn-line:hover {
+  background: var(--paper-2);
+}
+
+/* ── 表 ───────────────────────────────── */
+.table-plain {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-plain th,
+.table-plain td {
+  padding: 16px 0;
+  border-bottom: 1px solid var(--rule);
+  text-align: left;
+  vertical-align: top;
+}
+
+.table-plain th {
+  width: 9em;
+  padding-right: 24px;
+  font-weight: 700;
+  color: var(--muted);
+  font-size: var(--t-sm);
+}
+
+.table-plain tr:first-child th,
+.table-plain tr:first-child td {
+  border-top: 1px solid var(--rule);
+}
+
+/* ── 補助 ───────────────────────────────── */
+.rule-top {
+  border-top: 1px solid var(--rule);
+}
+
+.rule-ink {
+  border-top: 2px solid var(--ink);
+}
+
+.surface {
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+    scroll-behavior: auto !important;
+  }
+}

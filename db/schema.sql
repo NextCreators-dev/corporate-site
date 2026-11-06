@@ -1,3 +1,4 @@
+-- category の値は src/lib/validation.ts の CONTACT_CATEGORIES（最長13字）。旧い値の行も残る
 CREATE TABLE IF NOT EXISTS contacts (
   id BIGSERIAL PRIMARY KEY,
   name VARCHAR(50) NOT NULL,
@@ -6,6 +7,8 @@ CREATE TABLE IF NOT EXISTS contacts (
   category VARCHAR(50) NOT NULL,
   message TEXT NOT NULL,
   budget VARCHAR(50) NOT NULL DEFAULT '',
+  -- 送信元ページのパス（決定 0087。既存DBへは db/migrations/20261020_contacts_source_page.sql で足す）
+  source_page TEXT NOT NULL DEFAULT '',
   is_spam BOOLEAN NOT NULL DEFAULT FALSE,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
@@ -15,6 +18,9 @@ CREATE INDEX IF NOT EXISTS contacts_email_idx ON contacts (email);
 
 -- RLS 有効化（サービスロールキーはバイパスする）
 ALTER TABLE contacts ENABLE ROW LEVEL SECURITY;
+
+-- 既存DB向け（CREATE TABLE IF NOT EXISTS は既存テーブルに列を足さないため）
+ALTER TABLE contacts ADD COLUMN IF NOT EXISTS source_page TEXT NOT NULL DEFAULT '';
 
 -- ------------------------------------------------------------
 -- 疎通確認（keepalive）

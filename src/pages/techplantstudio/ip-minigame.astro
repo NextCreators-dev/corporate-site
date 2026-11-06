@@ -1,0 +1,791 @@
+---
+// 版権・IP をお持ちの企業向け ミニゲーム制作のページ（/techplantstudio/ip-minigame/）
+// 読み手: アニメ・漫画・キャラクターの版権元、VTuber 事務所の担当者。多くは代表からの個別連絡に貼ったリンクで来る。
+// させたい行動: 打ち合わせの日程を選ぶ（主）／フォームで相談する／メール。
+// 下敷き: slide-kit/output/IPミニゲーム制作のご案内.html（決定 0084・汎用版）。料金は載せない（決定 0087）。
+// 書かないこと: 料金、遊び方の種類の数、公開後のプレイ回数の報告、監修の回数の目安（決定 0084 で未確定）、
+//   公式サイトへの埋め込み・独自ドメイン・公開期間・保守範囲の断定（決定 0073-4）、チームの人数。
+import { Image } from "astro:assets";
+import Layout from "@layouts/Layout.astro";
+import Navigation from "@components/Navigation.astro";
+import Footer from "@components/Footer.astro";
+import ContactForm from "@components/ContactForm";
+import nekoArt from "@public/portfolio/nologic-nekogame.png";
+import { members } from "../../data/members";
+import { SITE, breadcrumbSchema, serviceSchema, faqSchema } from "../../lib/seo";
+import {
+  SCHEDULE_URL_BUSINESS,
+  IS_EXTERNAL_SCHEDULE_URL,
+  CONTACT_EMAIL,
+} from "../../lib/scheduling";
+
+const pageUrl = `${SITE.url}/techplantstudio/ip-minigame/`;
+const pageTitle = "版権・IPのミニゲーム制作 | 株式会社クリエイターのうえきばち";
+const pageDescription =
+  "アニメ、漫画、キャラクター、VTuber の告知に使うブラウザのミニゲームを作ります。版元さまの監修を最初の予定に組み込み、早ければご相談から2週間で公開します。URL と QR コードで配れます。";
+
+const scheduleAttrs = IS_EXTERNAL_SCHEDULE_URL
+  ? { target: "_blank", rel: "noopener noreferrer" }
+  : {};
+
+// 返信前に確かめたい4点。個別連絡から来た人が、ここだけ読んで返信を決められるようにする
+const keyFacts = [
+  { label: "作るもの", value: "スマートフォンのブラウザで遊べるミニゲーム。アプリのインストールは要りません" },
+  { label: "お渡しの形", value: "NoLogic 上で公開し、URL と QR コードでお渡しします" },
+  { label: "期間", value: "早ければ、ご相談から公開まで2週間" },
+  { label: "料金", value: "遊び方の数と描き下ろしの量で変わります。内容を伺ってからお見積りします" },
+];
+
+// 場面ごとに「いつ出すか・どう配るか」。読み手が自分の企画に当てはめるための表
+const scenes = [
+  {
+    name: "新作・新シリーズの告知",
+    when: "放送・配信・発売の前から、公開日まで",
+    how: "告知の投稿にゲームの URL を添えて、公開日までの話題をつなぐ",
+  },
+  {
+    name: "周年・記念日",
+    when: "記念日の当日や、記念の月",
+    how: "ファンに遊んでもらい、結果を投稿してもらう企画にする",
+  },
+  {
+    name: "イベント・ポップアップストア",
+    when: "会期中",
+    how: "会場に QR コードを置き、来場者が待ち時間に自分のスマートフォンで遊ぶ",
+  },
+  {
+    name: "配信開始・再放送",
+    when: "配信や再放送が始まる時期",
+    how: "登場キャラクターを思い出してもらい、作品を見返す入口にする",
+  },
+];
+
+// 遊び方の例。種類の数は書かない（公開中のテンプレートの内訳が未確定。company/facts.md §4）
+const playStyles = [
+  { name: "落ちものパズル", body: "同じキャラクターを重ねて、大きく育てていく" },
+  { name: "ランナー", body: "キャラクターが走り、障害物をよけて距離を競う" },
+  { name: "3マッチパズル", body: "同じ絵柄を3つそろえて消していく" },
+  { name: "スライドパズル", body: "作品のイラストを並べ替えて完成させる" },
+  { name: "クレーンゲーム", body: "アームでキャラクターやグッズをつかむ" },
+];
+
+const steps = [
+  {
+    title: "ご相談（無料）",
+    body: "目的、公開したい日、使える素材を伺います。作品名をまだ出せない段階でも構いません。",
+    you: "日程を選ぶか、フォームから送ってください。",
+  },
+  {
+    title: "企画とお見積り",
+    body: "遊び方、絵柄、監修の予定を入れた企画とお見積りを、初回の打ち合わせから最短2日でお出しします。",
+    you: "社内と版元さまで内容を確かめてください。",
+  },
+  {
+    title: "試作と監修",
+    body: "動くものをお渡しし、絵柄と遊び方を見ていただきながら直します。",
+    you: "試作を遊んで、直してほしい点をお伝えください。",
+  },
+  {
+    title: "公開",
+    body: "NoLogic 上で公開し、URL と QR コードをお渡しします。",
+    you: "告知の投稿や会場の掲示に使ってください。",
+  },
+];
+
+const hearing = [
+  "目的（新作の告知、周年、イベントなど）",
+  "公開したい日",
+  "使える素材と、監修の流れ",
+  "配りたい場所（X、公式サイト、イベント会場など）",
+  "ご予算の目安（決まっていなければ、その旨で構いません）",
+];
+
+// 体制。人と役割は src/data/members.ts が正。並びと「この制作で担うこと」は営業資料の体制表に合わせる
+const teamPlan = [
+  { name: "山縣 帆高", part: "代表。ご相談の窓口、企画と進行、開発を担当します。" },
+  { name: "リロル", part: "元ゲーム会社所属。ゲームのプログラム、ドット絵の背景、3Dモデルを担当します。" },
+  { name: "nakachoco", part: "NoLogic の BGM を作っています。作品に合わせた曲を作ります。" },
+  { name: "Xia0", part: "人物イラストと背景のモデリング。公開前の動作の確認も担当します。" },
+  { name: "佐藤 諒", part: "ゲーム内の文章と、告知文を書きます。" },
+  { name: "坂部 凌央", part: "告知用の動画や、ゲームの紹介映像を作ります。" },
+];
+const team = teamPlan
+  .map((t) => {
+    const m = members.find((x) => x.name === t.name);
+    return m ? { ...m, part: t.part } : null;
+  })
+  .filter((m): m is NonNullable<typeof m> => m !== null);
+
+const faqs = [
+  {
+    question: "遊ぶ人はアプリを入れる必要がありますか。",
+    answer: "要りません。URL か QR コードを開けば、スマートフォンのブラウザでそのまま遊べます。",
+  },
+  {
+    question: "公式サイトに埋め込んだり、独自のドメインで公開したりできますか。",
+    answer:
+      "ゲームは NoLogic 上で公開し、URL と QR コードでお渡しするのが基本です。公式サイトへの埋め込みや独自ドメインでの公開は、内容を伺ってから可否をご案内します。公開期間と公開後の保守の範囲も、同じく内容を伺ってからご案内します。",
+  },
+  {
+    question: "お渡しできる素材が少なくても頼めますか。",
+    answer:
+      "頼めます。イラスト、ドット絵、3D、BGM を所属クリエイターが作るので、足りない素材は作品の絵柄に合わせて描き足します。描き下ろしの量はお見積りに入れます。",
+  },
+  {
+    question: "料金はどのくらいですか。",
+    answer:
+      "遊び方の数と描き下ろしの量で変わるので、内容を伺ってからお見積りします。初回の打ち合わせから最短2日でお出しします。",
+  },
+  {
+    question: "予算や時期が社内で決まる前でも相談できますか。",
+    answer: "できます。目的と、公開したい時期のおおよそが分かれば、進め方と費用の見通しをお返しします。",
+  },
+];
+
+const jsonLd = [
+  breadcrumbSchema([
+    { name: "ホーム", url: `${SITE.url}/` },
+    { name: "ゲーム制作のご相談", url: `${SITE.url}/techplantstudio/` },
+    { name: "版権・IPのミニゲーム制作", url: pageUrl },
+  ]),
+  serviceSchema({
+    name: "版権・IPのミニゲーム制作",
+    description:
+      "アニメ、漫画、キャラクター、VTuber の告知に使うブラウザのミニゲームの制作。NoLogic 上で公開し、URL と QR コードでお渡しします。",
+    serviceType: "プロモーション用ブラウザゲーム制作",
+    url: pageUrl,
+    // 料金はページに載せない（決定 0087）。lowPrice を省き、機械可読な価格を出さない
+    offers: [
+      {
+        name: "IP・キャラクターのミニゲーム制作",
+        description: "遊び方の数と描き下ろしの量で変わります。内容を伺ってからお見積りします。",
+      },
+    ],
+  }),
+  faqSchema(faqs),
+];
+---
+
+<Layout title={pageTitle} description={pageDescription} jsonLd={jsonLd} preloadMincho={false}>
+  <Navigation current="ip" contactHref="#contact" />
+
+  <main>
+    <!-- 冒頭: 何を・どう渡し・どのくらいで・料金はどう決まるか。返信する前の確認がここで済むようにする -->
+    <section class="band" data-section="hero" aria-labelledby="ip-hero-title">
+      <div class="shell grid gap-12 lg:grid-cols-12 lg:items-center">
+        <div class="lg:col-span-7">
+          <p class="kicker">版権・IPをお持ちの企業さまへ</p>
+          <h1 id="ip-hero-title" class="h1 mt-3">
+            <span class="inline-block">作品のキャラクターで</span><span class="inline-block">遊べるミニゲームを、</span><span class="inline-block">告知に合わせて</span><span class="inline-block">作ります</span>
+          </h1>
+          <p class="lead mt-6 measure">
+            アニメ、漫画、キャラクター、VTuber の版権をお持ちの企業さまから、SNS の告知に使うブラウザのミニゲームの制作をお受けしています。版元さまの監修を最初の予定に組み込み、早ければご相談から2週間で公開します。
+          </p>
+
+          <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
+            <a
+              href={SCHEDULE_URL_BUSINESS}
+              {...scheduleAttrs}
+              class="btn"
+              data-schedule-location="ip_hero"
+            >
+              打ち合わせの日程を選ぶ
+            </a>
+            <a href="#contact" class="link font-bold" data-cta-location="ip_hero_form">フォームで相談する</a>
+          </div>
+          <p class="small mt-3">
+            日程調整のページで、空いている時間を選べます。メールでも承ります（<a class="link" href={`mailto:${CONTACT_EMAIL}`} data-cta-location="ip_hero_mail">{CONTACT_EMAIL}</a>）
+          </p>
+
+          <dl class="key-facts mt-10">
+            {keyFacts.map((f) => (
+              <div class="key-facts__row">
+                <dt>{f.label}</dt>
+                <dd>{f.value}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+
+        <figure class="lg:col-span-5">
+          <Image
+            src={nekoArt}
+            alt="猫のキャラクター6匹のイラスト。ヘルメットや荷物を背負った姿で描かれている"
+            widths={[480, 800, 1200]}
+            sizes="(min-width: 1024px) 40vw, 100vw"
+            class="block h-auto w-full"
+            loading="eager"
+          />
+          <figcaption class="small mt-3">
+            所属クリエイターが NoLogic のゲーム用に描いたキャラクターです。作品の絵柄に合わせた描き下ろしや描き足しも、社内のクリエイターが担当します。
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- 場面: 読み手が自分の企画（いつ・どこで配るか）に当てはめて、使い道を社内で説明できるようにする -->
+    <section class="band band--alt" data-section="scenes" aria-labelledby="ip-scenes-title">
+      <div class="shell">
+        <p class="kicker">使う場面</p>
+        <h2 id="ip-scenes-title" class="h2 mt-2">企画ごとの出す時期と配り方</h2>
+        <p class="body mt-4 measure">
+          文章と画像の告知は、タイムラインですぐに流れていきます。ゲームは、遊んだ人に結果や URL を投稿してもらう形にできるので、告知の投稿に添えて使えます。想定している場面を、出す時期と配り方で並べました。
+        </p>
+
+        <table class="scene-table mt-8">
+          <thead>
+            <tr>
+              <th scope="col">場面</th>
+              <th scope="col">出す時期</th>
+              <th scope="col">配り方</th>
+            </tr>
+          </thead>
+          <tbody>
+            {scenes.map((s) => (
+              <tr>
+                <th scope="row">{s.name}</th>
+                <td data-label="出す時期">{s.when}</td>
+                <td data-label="配り方">{s.how}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <p class="small mt-4 measure">
+          ここに無い企画でも、目的と公開したい日を伺えば、合う遊び方と配り方をご提案します。
+        </p>
+      </div>
+    </section>
+
+    <!-- 作れるもの: 自社の作品がどんなゲームになるかを想像できるようにする。種類の数は書かない -->
+    <section class="band" data-section="games" aria-labelledby="ip-games-title">
+      <div class="shell grid gap-10 lg:grid-cols-12">
+        <div class="lg:col-span-5">
+          <p class="kicker">作れるもの</p>
+          <h2 id="ip-games-title" class="h2 mt-2">作品のキャラクターで遊ぶ、ブラウザのミニゲーム</h2>
+          <p class="body mt-4">
+            遊び方の土台に、作品のキャラクター、絵柄、音、演出をのせて作ります。土台に無い遊び方は、オリジナルで開発します（別途お見積り）。
+          </p>
+        </div>
+        <div class="lg:col-span-7">
+          <p class="text-[14px] font-bold text-[var(--muted)]">遊び方の例</p>
+          <dl class="play-list mt-3">
+            {playStyles.map((p) => (
+              <div class="play-list__row">
+                <dt>{p.name}</dt>
+                <dd>{p.body}</dd>
+              </div>
+            ))}
+          </dl>
+          <p class="small mt-4">このほかの遊び方も、作品と企画に合わせてご相談ください。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 頼む理由: 「短い期間で」「絵も音も」「監修込みで」が本当かを、制作画面と体制で確かめてもらう -->
+    <section class="band band--alt" data-section="reasons" aria-labelledby="ip-reasons-title">
+      <div class="shell">
+        <p class="kicker">当社に頼む理由</p>
+        <h2 id="ip-reasons-title" class="h2 mt-2">短い期間で公開できる理由と、監修の進め方</h2>
+
+        <div class="mt-10 grid gap-8 lg:grid-cols-12 lg:items-start">
+          <figure class="lg:col-span-7">
+            <video
+              class="ip-video block h-auto w-full"
+              src="/nologic-play.mp4"
+              poster="/nologic-play-poster.jpg"
+              loop
+              muted
+              playsinline
+              preload="metadata"
+              width="1280"
+              height="720"
+              aria-label="NoLogic の制作画面の録画。キャラクターの画像を入れ、設定を確かめ、落ちものパズルとして遊ぶまで"
+            ></video>
+            <figcaption class="small mt-3">
+              NoLogic の制作画面（PC のブラウザで録画）。キャラクターの画像を入れて設定を確かめると、落ちものパズルとして遊べます。
+            </figcaption>
+          </figure>
+          <div class="lg:col-span-5">
+            <h3 class="h3">自社で開発しているゲーム制作基盤を使う</h3>
+            <p class="body mt-3">
+              当社は、ゲーム制作基盤 NoLogic を開発・運営しています。NoLogic のプラットフォーム上で作られたゲームは600本以上（2026年9月時点）。当社が受託で作った本数ではなく、NoLogic の上で作られたゲーム全体の数です。
+            </p>
+            <p class="body mt-3">
+              ご依頼のゲームもこの基盤の上で作るので、遊びの仕組みをゼロから組むより短い期間で公開まで進められます。
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-12 grid gap-8 md:grid-cols-2">
+          <div class="rule-ink pt-6">
+            <h3 class="h3">監修の予定を、最初のスケジュールに入れる</h3>
+            <p class="body mt-3">
+              版元さま・原作者さまの確認をいつ、どの段階で行うかを、企画の時点でスケジュールに組み込みます。素材の使い方も、確認をいただきながら進めます。
+            </p>
+          </div>
+          <div class="rule-ink pt-6">
+            <h3 class="h3">絵と音も社内で作る</h3>
+            <p class="body mt-3">
+              イラスト、ドット絵、3D、BGM を所属クリエイターが作ります。お預かりした素材が足りないときは、作品の絵柄に合わせて描き足します。
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 進め方: 各段階で読み手が何をするかを示し、社内の稟議と版元の確認の段取りを組めるようにする -->
+    <section class="band" data-section="flow" aria-labelledby="ip-flow-title">
+      <div class="shell">
+        <p class="kicker">進め方</p>
+        <h2 id="ip-flow-title" class="h2 mt-2">ご相談から公開まで</h2>
+        <p class="body mt-4 measure">
+          早ければ、ご相談から公開まで2週間です。監修の段取りと描き下ろしの量によって、期間はお見積りのときにお伝えします。
+        </p>
+
+        <ol class="flow mt-10">
+          {steps.map((s, i) => (
+            <li class="flow__item">
+              <span class="flow__num num" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
+              <div>
+                <h3 class="h3">{s.title}</h3>
+                <p class="body mt-2">{s.body}</p>
+                <p class="small mt-2"><span class="font-bold text-[var(--ink-2)]">御社にお願いすること：</span>{s.you}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <!-- 伺うこと・公開の形・料金: 打ち合わせの前に社内で集めておく情報と、費用の決まり方を分かってもらう -->
+    <section class="band band--alt" data-section="hearing" aria-labelledby="ip-hearing-title">
+      <div class="shell grid gap-12 lg:grid-cols-12">
+        <div class="lg:col-span-6">
+          <p class="kicker">ご相談のときに</p>
+          <h2 id="ip-hearing-title" class="h2 mt-2">最初の打ち合わせで伺うこと</h2>
+          <ul class="hearing mt-6">
+            {hearing.map((h) => <li>{h}</li>)}
+          </ul>
+          <p class="small mt-4">決まっていない項目があっても、打ち合わせはできます。</p>
+        </div>
+        <div class="lg:col-span-6">
+          <table class="table-plain">
+            <tbody>
+              <tr>
+                <th scope="row">公開の形</th>
+                <td class="body">
+                  ゲームは NoLogic 上で公開し、URL と QR コードでお渡しします。公式サイトへの埋め込みや独自ドメインでの公開は、内容を伺ってから可否をご案内します。
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">料金</th>
+                <td class="body">
+                  遊び方の数と、描き下ろしの量によって変わります。内容を伺ってからお見積りします。
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">お返事</th>
+                <td class="body">フォームとメールには、2営業日以内にお返事します。</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 体制: 誰が窓口で、絵・音・開発を誰が担うかを顔と名前で確かめてもらう。人数は書かない -->
+    <section class="band" data-section="team" aria-labelledby="ip-team-title">
+      <div class="shell">
+        <p class="kicker">体制</p>
+        <h2 id="ip-team-title" class="h2 mt-2">企画、絵、音、開発の担当</h2>
+        <p class="body mt-4 measure">
+          ご相談の窓口は代表の山縣です。イラスト、3D、BGM、文章、映像は、所属のクリエイターが担当します。
+        </p>
+
+        <ul class="team mt-10">
+          {team.map((m) => (
+            <li class="team__item">
+              <img
+                src={m.avatar}
+                alt=""
+                width="96"
+                height="96"
+                loading="lazy"
+                decoding="async"
+                class="team__photo"
+              />
+              <div>
+                <p class="text-[17px] font-bold text-[var(--ink)]">{m.name}</p>
+                <p class="small">{m.role}</p>
+                <p class="body mt-2">{m.part}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <!-- よくある質問: 社内や版元さまに説明するときに聞かれる点（アプリ・公開先・素材・料金・時期）に答える -->
+    <section class="band band--alt" data-section="faq" aria-labelledby="ip-faq-title">
+      <div class="shell grid gap-10 lg:grid-cols-12">
+        <div class="lg:col-span-4">
+          <p class="kicker">よくある質問</p>
+          <h2 id="ip-faq-title" class="h2 mt-2">ご相談の前によく聞かれること</h2>
+        </div>
+        <div class="lg:col-span-8">
+          {faqs.map((f) => (
+            <details class="faq">
+              <summary class="faq__q">{f.question}</summary>
+              <p class="body mt-3">{f.answer}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- 相談: 主は日程を選ぶ。日程を決める前に文章で聞きたい人はフォーム、社内の決まりでメールを使う人はメール -->
+    <section id="contact" class="band rule-ink" data-section="contact" aria-labelledby="ip-contact-title">
+      <div class="shell grid gap-12 lg:grid-cols-12">
+        <div class="lg:col-span-5">
+          <p class="kicker">ご相談</p>
+          <h2 id="ip-contact-title" class="h2 mt-2">作品の次の告知について、打ち合わせで伺います</h2>
+          <p class="body mt-4">
+            打ち合わせでは、目的と公開したい日を伺い、合う遊び方と進め方をお伝えします。企画とお見積りは、その打ち合わせから最短2日でお出しします。
+          </p>
+          <div class="mt-8">
+            <a
+              href={SCHEDULE_URL_BUSINESS}
+              {...scheduleAttrs}
+              class="btn"
+              data-schedule-location="ip_contact"
+            >
+              打ち合わせの日程を選ぶ
+            </a>
+          </div>
+          <p class="small mt-6">
+            メール: <a class="link" href={`mailto:${CONTACT_EMAIL}`} data-cta-location="ip_contact_mail">{CONTACT_EMAIL}</a>
+          </p>
+        </div>
+        <div class="lg:col-span-7">
+          <ContactForm
+            client:load
+            defaultCategory="game-promo"
+            heading="フォームで相談する"
+            description="作品名をまだ出せない段階でも構いません。目的と、公開したい時期を分かる範囲で書いてください。2営業日以内にお返事します。"
+          />
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer hideCta contactHref="#contact" />
+
+  <script is:inline>
+    // 制作画面の動画は、画面に入ったときだけ再生する（docs/DESIGN.md §6）。
+    // 「視差効果を減らす」設定の環境では自動で再生せず、操作ボタンを出して本人が再生できるようにする
+    (function () {
+      var videos = document.querySelectorAll("video.ip-video");
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) {
+        videos.forEach(function (v) { v.setAttribute("controls", ""); });
+        return;
+      }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          var v = en.target;
+          if (en.isIntersecting) {
+            var p = v.play();
+            if (p && p.catch) p.catch(function () { v.setAttribute("controls", ""); });
+          } else {
+            v.pause();
+          }
+        });
+      }, { threshold: 0.4 });
+      videos.forEach(function (v) { io.observe(v); });
+    })();
+  </script>
+</Layout>
+
+<style>
+  /* 冒頭の要点。罫線だけで区切り、カードにしない */
+  .key-facts {
+    border-top: 2px solid var(--ink);
+  }
+
+  .key-facts__row {
+    display: grid;
+    grid-template-columns: 7em 1fr;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .key-facts dt {
+    font-size: var(--t-sm);
+    font-weight: 700;
+    color: var(--muted);
+    line-height: 1.85;
+  }
+
+  .key-facts dd {
+    font-size: var(--t-body);
+    line-height: 1.85;
+    color: var(--ink-2);
+  }
+
+  /* 場面の表。スマートフォンでは1場面を1まとまりに縦積みする */
+  .scene-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .scene-table thead th {
+    padding: 0 16px 12px 0;
+    font-size: var(--t-sm);
+    font-weight: 700;
+    color: var(--muted);
+    text-align: left;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .scene-table tbody th,
+  .scene-table tbody td {
+    padding: 20px 16px 20px 0;
+    border-bottom: 1px solid var(--rule-strong);
+    text-align: left;
+    vertical-align: top;
+    line-height: 1.85;
+  }
+
+  .scene-table tbody th {
+    width: 15em;
+    font-weight: 700;
+    font-size: 17px;
+    color: var(--ink);
+  }
+
+  .scene-table tbody td {
+    color: var(--ink-2);
+  }
+
+  .scene-table tbody td:first-of-type {
+    width: 16em;
+  }
+
+  @media (max-width: 767px) {
+    .scene-table thead {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+    }
+
+    .scene-table,
+    .scene-table tbody,
+    .scene-table tr,
+    .scene-table th,
+    .scene-table td {
+      display: block;
+      width: auto;
+    }
+
+    .scene-table tbody tr {
+      padding: 18px 0;
+      border-bottom: 1px solid var(--rule-strong);
+    }
+
+    .scene-table tbody tr:first-child {
+      border-top: 2px solid var(--ink);
+    }
+
+    .scene-table tbody th,
+    .scene-table tbody td {
+      padding: 0;
+      border: 0;
+    }
+
+    .scene-table tbody td:first-of-type {
+      width: auto;
+    }
+
+    .scene-table tbody td {
+      margin-top: 6px;
+    }
+
+    .scene-table tbody td::before {
+      content: attr(data-label) "　";
+      font-size: var(--t-sm);
+      font-weight: 700;
+      color: var(--muted);
+    }
+  }
+
+  /* 遊び方の例 */
+  .play-list {
+    border-top: 2px solid var(--ink);
+  }
+
+  .play-list__row {
+    display: grid;
+    grid-template-columns: 9em 1fr;
+    gap: 16px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .play-list dt {
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  .play-list dd {
+    color: var(--ink-2);
+  }
+
+  @media (max-width: 479px) {
+    .play-list__row,
+    .key-facts__row {
+      grid-template-columns: 1fr;
+      gap: 2px;
+    }
+  }
+
+  /* 制作画面の録画。画面そのものが暗いので、枠は細い線だけにする */
+  .ip-video {
+    aspect-ratio: 16 / 9;
+    border: 1px solid var(--rule-strong);
+    border-radius: 8px;
+    background: var(--paper-2);
+  }
+
+  /* 進め方 */
+  .flow {
+    border-top: 2px solid var(--ink);
+  }
+
+  .flow__item {
+    display: grid;
+    grid-template-columns: 3.5em 1fr;
+    gap: 16px;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .flow__num {
+    font-size: 20px;
+    font-weight: 900;
+    line-height: 1.5;
+    color: var(--accent-ink);
+  }
+
+  @media (min-width: 768px) {
+    .flow__item {
+      grid-template-columns: 5em 1fr;
+    }
+
+    .flow__item > div {
+      max-width: 40em;
+    }
+  }
+
+  /* 伺うこと */
+  .hearing li {
+    position: relative;
+    padding: 12px 0 12px 1.4em;
+    border-bottom: 1px solid var(--rule);
+    color: var(--ink-2);
+    line-height: 1.85;
+  }
+
+  .hearing li:first-child {
+    border-top: 1px solid var(--rule);
+  }
+
+  .hearing li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 1.45em;
+    width: 8px;
+    height: 2px;
+    background: var(--accent);
+  }
+
+  /* 体制 */
+  .team {
+    display: grid;
+    gap: 0 48px;
+    border-top: 2px solid var(--ink);
+  }
+
+  @media (min-width: 768px) {
+    .team {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .team__item {
+    display: grid;
+    grid-template-columns: 72px 1fr;
+    gap: 20px;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  @media (min-width: 768px) {
+    .team__item {
+      grid-template-columns: 96px 1fr;
+    }
+  }
+
+  .team__photo {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    height: auto;
+    object-fit: cover;
+    border-radius: 50%;
+    background: var(--paper-2);
+    border: 1px solid var(--rule);
+  }
+
+  /* よくある質問 */
+  .faq {
+    border-bottom: 1px solid var(--rule);
+    padding: 18px 0;
+  }
+
+  .faq:first-child {
+    border-top: 2px solid var(--ink);
+  }
+
+  .faq__q {
+    cursor: pointer;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.7;
+    list-style: none;
+    padding-right: 2em;
+    position: relative;
+  }
+
+  .faq__q::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq__q::after {
+    content: "＋";
+    position: absolute;
+    right: 0;
+    top: 0;
+    color: var(--accent-ink);
+  }
+
+  .faq[open] .faq__q::after {
+    content: "－";
+  }
+
+  .faq__q:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 3px;
+  }
+</style>

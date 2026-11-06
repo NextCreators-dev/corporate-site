@@ -10,7 +10,7 @@ export interface PortfolioItem {
   categoryLabel: string;
   /** ステータス */
   status?: "released" | "beta" | "development";
-  /** ステータス表示名（「β版運用中」「運用中」等） */
+  /** ステータス表示名（「開発中」「運用中」等）。status と食い違わせない */
   statusLabel?: string;
   /** 概要説明（2-3行） */
   description: string;
@@ -31,7 +31,7 @@ export const portfolioItems: PortfolioItem[] = [
     title: "Comoreviアプリ・LP実装",
     category: "client",
     categoryLabel: "クライアントワーク",
-    status: "released",
+    status: "development",
     statusLabel: "開発中",
     description:
       "児童発達支援・放課後等デイサービスの記録・勤怠・請求をクラウドで一元管理するアプリ。株式会社コモングランズと共同開発。",

@@ -87,7 +87,7 @@ export const newsItems: NewsItem[] = [
       <p>ただゲームが作れるで終わらず、投稿されたゲーム・キャラクターを中心にコミュニティが形成されていく。そんなサービスを目指し引き続き取り組んで参ります。</p>
 
       <p>詳細は下記のプレスリリースをご覧ください。</p>
-      <p><a href="https://prtimes.jp/main/html/rd/p/000000004.000160338.html" target="_blank" rel="noopener noreferrer" class="text-emerald-500 hover:underline">プレスリリース（PR TIMES）を読む</a></p>
+      <p><a href="https://prtimes.jp/main/html/rd/p/000000004.000160338.html" target="_blank" rel="noopener noreferrer">プレスリリース（PR TIMES）を読む</a></p>
     `,
   },
   {
@@ -121,7 +121,7 @@ export const newsItems: NewsItem[] = [
       <p>当社は、高専生が<strong>プログラミング経験の有無を問わずゲーム開発に挑戦できる環境</strong>を、NoLogicと連動する形で整備してまいります。学生クリエイターの「つくりたい」を形にする取り組みとして、今後もKOSEN GAME JAM等のイベントも企画予定です。</p>
 
       <p>詳細は下記のプレスリリースをご覧ください。</p>
-      <p><a href="https://prtimes.jp/main/html/rd/p/000000008.000105934.html" target="_blank" rel="noopener noreferrer" class="text-emerald-500 hover:underline">プレスリリース（PR TIMES）を読む</a></p>
+      <p><a href="https://prtimes.jp/main/html/rd/p/000000008.000105934.html" target="_blank" rel="noopener noreferrer">プレスリリース（PR TIMES）を読む</a></p>
     `,
   },
   {
@@ -183,7 +183,7 @@ export const newsItems: NewsItem[] = [
       <p>引き続き、「環境のせいで創作を諦めない世界」の実現に向け、クリエイターの皆さまの「つくりたい」を支援するプロダクト開発に注力してまいります。</p>
 
       <p>詳細は下記のプレスリリースをご覧ください。</p>
-      <p><a href="https://prtimes.jp/main/html/rd/p/000000001.000160338.html" target="_blank" rel="noopener noreferrer" class="text-emerald-500 hover:underline">プレスリリース（PR TIMES）を読む</a></p>
+      <p><a href="https://prtimes.jp/main/html/rd/p/000000001.000160338.html" target="_blank" rel="noopener noreferrer">プレスリリース（PR TIMES）を読む</a></p>
     `,
   },
   {

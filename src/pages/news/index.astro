@@ -18,72 +18,53 @@ const breadcrumb = breadcrumbSchema([
   title="お知らせ | 株式会社クリエイターのうえきばち"
   description="株式会社クリエイターのうえきばちのお知らせ・リリース情報の一覧です。NoLogicや会社の最新情報、コミュニティ運営に関するニュースを掲載しています。"
   jsonLd={[breadcrumb]}
+  preloadMincho={false}
 >
-  <div class="flex flex-col min-h-screen">
-    <main class="bg-[#0A0F1C] text-white flex-1">
-      <Navigation showBack={true} />
+  <Navigation current="news" />
 
-      <!-- ヘッダー -->
-      <section class="bg-[#111827] py-20 px-5 md:px-[120px]">
-        <div class="max-w-4xl mx-auto flex flex-col items-center gap-6 text-center pt-16">
-          <div class="inline-flex items-center gap-1.5 px-5 py-2 bg-emerald-500/15 text-emerald-500 text-xs font-bold rounded-full border border-emerald-500/25 tracking-[2px]">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 13v-2z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
-            NEWS
-          </div>
-          <h1 class="text-3xl md:text-[44px] font-black leading-tight">
-            お知らせ
-          </h1>
-        </div>
-      </section>
+  <main>
+    <header class="band rule-top">
+      <div class="shell">
+        <h1 class="h1">お知らせ</h1>
+        <p class="lead mt-4 measure">会社とサービスの新しい情報、プレスリリースを載せています。</p>
+      </div>
+    </header>
 
-      <!-- ニュース一覧 -->
-      <section class="bg-[#0A0F1C] py-16 px-5 md:px-[120px]">
-        <div class="max-w-4xl mx-auto flex flex-col gap-8">
-          <!-- カテゴリフィルター -->
-          <div class="flex flex-wrap gap-2" id="category-filter">
-            <button
-              data-category="all"
-              class="filter-btn active px-4 py-1.5 text-[13px] font-semibold rounded-full border transition-colors bg-emerald-500 text-white border-emerald-500"
-            >
-              すべて
-            </button>
-            {categories.map((cat) => (
-              <button
-                data-category={cat}
-                class="filter-btn px-4 py-1.5 text-[13px] font-semibold rounded-full border transition-colors bg-transparent text-gray-400 border-[#1E293B] hover:border-emerald-500/50 hover:text-emerald-500"
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
+    <section class="band band--alt" aria-label="お知らせの一覧">
+      <div class="shell">
+        <div class="news-measure">
+          <!-- カテゴリで絞り込む。種類が1つしかないときは出さない -->
+          {categories.length > 1 && (
+            <div class="flex flex-wrap gap-2" id="category-filter" role="group" aria-label="カテゴリで絞り込む">
+              <button type="button" data-category="all" class="filter-btn" aria-pressed="true">すべて</button>
+              {categories.map((cat) => (
+                <button type="button" data-category={cat} class="filter-btn" aria-pressed="false">{cat}</button>
+              ))}
+            </div>
+          )}
 
-          <!-- 記事リスト -->
-          <div class="flex flex-col" id="news-list">
+          <!-- 記事リスト。日付・カテゴリ・タイトルの順に読めるよう、日付とカテゴリを1行目にまとめる -->
+          <ul class="news-list mt-8" id="news-list">
             {newsItems.map((item) => (
-              <a
-                href={`/news/${item.slug}/`}
-                data-category={item.category}
-                class="news-item flex flex-col md:flex-row md:items-center gap-3 md:gap-6 py-5 border-b border-[#1E293B] hover:bg-white/[0.02] transition-colors -mx-4 px-4 rounded"
-              >
-                <span class="text-gray-500 text-[13px] font-medium shrink-0 tabular-nums">{item.date}</span>
-                <span class="inline-flex items-center justify-center w-[4.5rem] py-1 bg-emerald-500/10 text-emerald-500 text-[11px] font-semibold rounded border border-emerald-500/20 shrink-0">
-                  {item.category}
-                </span>
-                <span class="text-white text-[15px] font-medium">{item.title}</span>
-              </a>
+              <li class="news-item" data-category={item.category}>
+                <a href={`/news/${item.slug}/`} class="news-row">
+                  <span class="news-meta">
+                    <time class="num">{item.date}</time>
+                    <span class="news-cat">{item.category}</span>
+                  </span>
+                  <span class="news-title">{item.title}</span>
+                </a>
+              </li>
             ))}
-          </div>
+          </ul>
 
-          <!-- 該当なしメッセージ -->
-          <p id="no-results" class="hidden text-gray-500 text-sm text-center py-8">
-            該当するお知らせはありません。
-          </p>
+          <p id="no-results" class="small hidden py-8">該当するお知らせはありません。</p>
         </div>
-      </section>
-    </main>
+      </div>
+    </section>
+  </main>
 
-    <Footer />
-  </div>
+  <Footer />
 </Layout>
 
 <script>
@@ -91,36 +72,107 @@ const breadcrumb = breadcrumbSchema([
   const items = document.querySelectorAll<HTMLElement>(".news-item");
   const noResults = document.getElementById("no-results");
 
-  const activeClasses = ["bg-emerald-500", "text-white", "border-emerald-500"];
-  const inactiveClasses = ["bg-transparent", "text-gray-400", "border-[#1E293B]", "hover:border-emerald-500/50", "hover:text-emerald-500"];
-
   buttons.forEach((btn) => {
     btn.addEventListener("click", () => {
       const category = btn.dataset.category;
 
-      // ボタンのスタイル切り替え
-      buttons.forEach((b) => {
-        b.classList.remove(...activeClasses);
-        b.classList.add(...inactiveClasses);
-      });
-      btn.classList.remove(...inactiveClasses);
-      btn.classList.add(...activeClasses);
+      // 押したボタンだけを選択中にする（見た目は aria-pressed で切り替える）
+      buttons.forEach((b) => b.setAttribute("aria-pressed", String(b === btn)));
 
-      // 記事の表示切り替え
       let visibleCount = 0;
       items.forEach((item) => {
-        if (category === "all" || item.dataset.category === category) {
-          item.style.display = "";
-          visibleCount++;
-        } else {
-          item.style.display = "none";
-        }
+        const show = category === "all" || item.dataset.category === category;
+        item.style.display = show ? "" : "none";
+        if (show) visibleCount++;
       });
 
-      // 該当なしメッセージ
       if (noResults) {
         noResults.classList.toggle("hidden", visibleCount > 0);
       }
     });
   });
 </script>
+
+<style>
+  .news-measure {
+    max-width: 52em;
+  }
+
+  .filter-btn {
+    min-height: 40px;
+    padding: 6px 16px;
+    border: 1px solid var(--rule-strong);
+    border-radius: 999px;
+    background: var(--card);
+    color: var(--ink-2);
+    font-size: var(--t-sm);
+    font-weight: 700;
+    transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+  }
+  .filter-btn:hover {
+    border-color: var(--ink);
+  }
+  .filter-btn[aria-pressed="true"] {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: #fff;
+  }
+  .filter-btn:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .news-list {
+    border-top: 1px solid var(--rule-strong);
+  }
+  .news-item {
+    border-bottom: 1px solid var(--rule);
+  }
+  .news-row {
+    display: grid;
+    gap: 6px;
+    padding: 20px 0;
+  }
+  @media (min-width: 768px) {
+    .news-row {
+      grid-template-columns: 13.5em 1fr;
+      gap: 24px;
+      align-items: baseline;
+      padding: 22px 0;
+    }
+  }
+  .news-meta {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    font-size: var(--t-sm);
+    color: var(--muted);
+  }
+  .news-cat {
+    font-size: var(--t-xs);
+    font-weight: 700;
+    color: var(--ink-2);
+    padding: 1px 8px;
+    border: 1px solid var(--rule-strong);
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  .news-title {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.7;
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 0.25em;
+    transition: color 0.15s, text-decoration-color 0.15s;
+  }
+  .news-row:hover .news-title {
+    color: var(--accent-ink);
+    text-decoration-color: currentColor;
+  }
+  .news-row:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 2px;
+  }
+</style>

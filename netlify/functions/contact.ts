@@ -14,6 +14,14 @@ function getSupabaseClient() {
   return createClient(url, key);
 }
 
+// 列が見つからない系のエラーか（PostgREST の PGRST204 = スキーマキャッシュに列が無い、Postgres の 42703 = undefined_column）
+// source_page に触れているものだけを対象にし、ほかのエラーは今まで通り投げる
+function isMissingSourcePageColumn(error: { code?: string; message?: string }): boolean {
+  const code = error.code ?? "";
+  const message = error.message ?? "";
+  return (code === "PGRST204" || code === "42703") && message.includes("source_page");
+}
+
 function getJsonHeaders() {
   return { "Content-Type": "application/json" };
 }
@@ -59,7 +67,7 @@ export const handler: Handler = async (event) => {
 
     const supabase = getSupabaseClient();
 
-    const { error: dbError } = await supabase.from("contacts").insert({
+    const record = {
       name: data.name,
       email: data.email,
       company: data.company,
@@ -67,8 +75,22 @@ export const handler: Handler = async (event) => {
       message: data.message,
       budget: data.budget,
       is_spam: false,
-    });
-    if (dbError) throw dbError;
+    };
+
+    // source_page 列はマイグレーション（db/migrations/20261020_contacts_source_page.sql）で足す。
+    // 流す前にこの関数がデプロイされても送信が壊れないよう、列が無いエラーのときだけ外して保存し直す
+    const { error: dbError } = await supabase
+      .from("contacts")
+      .insert({ ...record, source_page: data.source_page });
+    if (dbError) {
+      if (!isMissingSourcePageColumn(dbError)) throw dbError;
+      console.warn(
+        "contacts に source_page 列が無いため、送信元ページを外して保存します。マイグレーションを流してください:",
+        dbError.message,
+      );
+      const { error: retryError } = await supabase.from("contacts").insert(record);
+      if (retryError) throw retryError;
+    }
 
     const mailParams = {
       name: data.name,
@@ -77,6 +99,7 @@ export const handler: Handler = async (event) => {
       category: data.category,
       message: data.message,
       budget: data.budget ?? "",
+      sourcePage: data.source_page ?? "",
     };
 
     const tasks: Promise<unknown>[] = [];
