@@ -4,14 +4,31 @@ import { Image } from "astro:assets";
 import Navigation from "@components/Navigation.astro";
 import Footer from "@components/Footer.astro";
 import CEOPhoto from "@public/ceo-photo.png";
-import nekoArt from "@public/portfolio/nologic-nekogame.png";
+import heroBg from "../assets/hero-bg.png";
 import { newsItems } from "../data/news";
 import { members } from "../data/members";
 import { portfolioItems } from "../data/portfolio";
 
 // トップに来るのは、代表からの連絡や紹介で社名を知り、確かめに来た企業の担当者が多い。
-// 最初の画面で「何を頼める会社か」を言い切り、次に用件ごとの入口と料金の目安を並べる。
+// 最初の画面は理念（2026-11 に代表の指示で改修前のデザインへ戻した）。
+// そのすぐ下で何の会社かと事業内容を言い切り、次に用件ごとの入口と料金の目安を並べる。
 // NoLogic とコミュニティは、受託を支える自社の取り組みとして後ろに置く。
+
+// 冒頭の理念の文。md 以上の幅では2行ずつ、スマホでは1文ずつ改行する
+const heroLines = [
+  "テクノロジーの力で、つくることのハードルを下げ、",
+  "アイデアをカタチにする喜びをすべての人に。",
+  "わたしたちは、創作の可能性をひらき、",
+  "誰もがクリエイターになれる世界を実現していきます。",
+];
+
+// 事業内容。名前から、その事業を詳しく読める節かページへつなぐ
+const businesses = [
+  { name: "ノーコードゲームプラットフォーム開発事業", href: "#nologic", go: "NoLogic について" },
+  { name: "ゲーム開発・イベント運営受託事業", href: "#services", go: "ご依頼と料金の目安" },
+  { name: "クリエイターコミュニティ運営事業", href: "#vision", go: "NextCreators について" },
+  { name: "AI研修・導入支援事業", href: "/techplantstudio/#ai-training", go: "AI 研修について" },
+];
 
 const nologicUrl =
   "https://nologic.app/?utm_source=creatorpot&utm_medium=referral&utm_campaign=corporate_site&utm_content=top_nologic";
@@ -78,38 +95,143 @@ const latestNews = newsItems.slice(0, 3);
 <Layout
   title="株式会社クリエイターのうえきばち | ゲームの受託開発とゲーム制作基盤 NoLogic"
   description="株式会社クリエイターのうえきばちは、Unity でのゲーム開発と、自社のゲーム制作基盤 NoLogic を使ったブラウザゲームの制作を受けています。作品の告知に使うミニゲーム、研修のゲーム、保育・療育向けの AI 研修もご相談いただけます。"
-  preloadMincho={false}
+  preloadMincho={true}
 >
   <Navigation current="home" />
 
   <main>
-    <!-- 1. 何を頼める会社か -->
-    <section class="band-lg" data-section="hero">
-      <div class="shell grid gap-12 lg:grid-cols-12 lg:items-center">
-        <div class="lg:col-span-7">
-          <p class="kicker">株式会社クリエイターのうえきばち</p>
-          <h1 class="h1 mt-4"><span class="inline-block">ゲームの制作を、</span><span class="inline-block">絵と音まで</span><span class="inline-block">社内でお受けします。</span></h1>
-          <p class="lead mt-6 measure">
-            Unity でのゲーム開発と、自社で運営するゲーム制作基盤 NoLogic を使ったブラウザゲームを作っています。作品の告知に使うミニゲームから、試作から始める開発まで、まずはご用件をお聞かせください。保育・療育の現場向けの AI 研修も行っています。
-          </p>
-          <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
-            <a href="/techplantstudio/#contact" class="btn" data-cta-location="top_hero">相談する</a>
-            <a href="#services" class="link font-bold" data-cta-location="top_hero_price">ご用件と料金の目安を見る</a>
+    <!-- 1. 理念（代表の指示で 2026-10 改修前のデザインに戻した） -->
+    <section
+      class="relative overflow-hidden bg-[#020B16] py-16 md:py-20"
+      data-section="hero"
+    >
+      <Image
+        src={heroBg}
+        alt=""
+        widths={[640, 1024, 1600]}
+        sizes="100vw"
+        formats={["avif", "webp"]}
+        quality={38}
+        loading="eager"
+        fetchpriority="high"
+        class="absolute inset-0 h-full w-full object-cover"
+      />
+      <!-- 文字の可読性を保つための暗いオーバーレイ -->
+      <div class="absolute inset-0 bg-black/60"></div>
+
+      <div
+        class="relative z-10 mx-auto flex min-h-[calc(100svh-68px-8rem)] max-w-[1140px] items-center px-5 md:min-h-[calc(100svh-68px-10rem)] md:px-0"
+      >
+        <div
+          class="grid w-full items-center gap-8 lg:grid-cols-[640px_minmax(420px,1fr)]"
+        >
+          <div class="max-w-[900px]">
+            <h1
+              class="hero-mincho text-[34px] font-extrabold leading-[1.52] tracking-[0.08em] text-white drop-shadow-[0_6px_18px_rgba(255,255,255,0.14)] md:text-[52px] lg:text-[64px]"
+              data-anim-stagger="25"
+            >
+              {
+                ["誰もが", "創作に挑戦できる", "世界の実現"].map((line) => (
+                  <span class="block whitespace-nowrap">
+                    {Array.from(line).map((ch) => (
+                      <span class="anim-char" data-char={ch}>{ch}</span>
+                    ))}
+                  </span>
+                ))
+              }
+            </h1>
+            <p
+              class="mt-7 max-w-[590px] text-[14px] font-bold leading-[2.05] tracking-[0.13em] text-white/[0.9] md:text-[15px]"
+              data-anim-stagger="10"
+            >
+              {
+                heroLines.map((line, i) => (
+                  <>
+                    {Array.from(line).map((ch) => (
+                      <span class="anim-char" data-char={ch}>{ch}</span>
+                    ))}
+                    {i < heroLines.length - 1 && (
+                      <br class={i % 2 === 0 ? "hidden md:block" : ""} />
+                    )}
+                  </>
+                ))
+              }
+            </p>
+            <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <a
+                href="#vision"
+                class="inline-flex min-w-[220px] items-center justify-center gap-5 rounded-full border border-emerald-400 px-7 py-3.5 text-[15px] font-bold text-emerald-300 transition-colors hover:bg-emerald-400 hover:text-[#052016]"
+              >
+                私たちについて
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                  ><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg
+                >
+              </a>
+              <a
+                href="/essay/"
+                class="inline-flex min-w-[240px] items-center justify-center gap-5 rounded-full border border-white/25 bg-white/[0.08] px-7 py-3.5 text-[15px] font-bold text-white transition-colors hover:border-white/50 hover:bg-white/20"
+              >
+                クリエイターの皆様へ
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                  ><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg
+                >
+              </a>
+            </div>
+          </div>
+
+          <div
+            class="relative mx-auto hidden h-[330px] w-full max-w-[420px] items-center justify-center md:flex md:h-[440px] md:max-w-[500px] lg:-mr-10 lg:h-[540px] lg:max-w-none"
+          >
+            <img
+              src="/crebachi-logo.png"
+              alt=""
+              class="relative h-[280px] w-[280px] object-contain md:h-[360px] md:w-[360px] lg:h-[400px] lg:w-[400px]"
+              loading="eager"
+            />
           </div>
         </div>
-        <figure class="lg:col-span-5">
-          <Image
-            src={nekoArt}
-            alt="ヘルメットやかばんを身につけた5匹の猫のキャラクター"
-            widths={[480, 800, 1200]}
-            sizes="(min-width: 1024px) 480px, 100vw"
-            loading="eager"
-            class="hero-art w-full"
-          />
-          <figcaption class="small mt-3">
-            NoLogic のゲームのために、所属のクリエイターが描いたキャラクター。絵も社内で描きます。
-          </figcaption>
-        </figure>
+      </div>
+    </section>
+
+    <!-- 1.5 何の会社か。理念のすぐ下で、事業を言い切る -->
+    <section class="band" data-section="about">
+      <div class="shell">
+        <p class="kicker">会社について</p>
+        <h2 class="h2 mt-2 about-lead">
+          <span class="inline-block">高専出身のクリエイター集団が</span><span class="inline-block">新規のゲーム開発や</span><span class="inline-block">AI導入を伴走し、</span><span class="inline-block">クリエイター支援を</span><span class="inline-block">行う会社です。</span>
+        </h2>
+
+        <h3 class="small mt-10 font-bold">事業内容</h3>
+        <ul class="biz mt-3">
+          {businesses.map((b) => (
+            <li>
+              <a href={b.href} class="biz-link">
+                <span class="biz-name">{b.name}</span>
+                <span class="biz-go" aria-hidden="true">{b.go}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
 
@@ -341,13 +463,69 @@ const latestNews = newsItems.slice(0, 3);
 </Layout>
 
 <style>
-  .hero-art {
-    aspect-ratio: 16 / 9;
-    object-fit: contain;
-    object-position: center;
-    background: var(--card);
-    border: 1px solid var(--rule);
-    border-radius: 12px;
+  .hero-mincho {
+    font-family: "Shippori Mincho", "Noto Serif JP", serif;
+    /* 文字の差し替え中のリフローを局所化し、H1 の高さを先に確定させる */
+    contain: layout;
+    min-height: calc(1.52em * 3);
+  }
+
+  [data-anim-stagger] {
+    contain: layout;
+  }
+
+  .about-lead {
+    max-width: 30em;
+  }
+
+  /* 事業内容。4つを同じ重さの行で並べ、それぞれの詳しい節へつなぐ */
+  .biz {
+    border-top: 2px solid var(--ink);
+  }
+
+  .biz li {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .biz-link {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 18px 0;
+    color: inherit;
+  }
+
+  @media (min-width: 768px) {
+    .biz-link {
+      flex-direction: row;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 24px;
+    }
+  }
+
+  .biz-name {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  .biz-go {
+    font-size: var(--t-sm);
+    font-weight: 700;
+    color: var(--accent-ink);
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+  }
+
+  .biz-link:hover .biz-name,
+  .biz-link:focus-visible .biz-name {
+    color: var(--accent-ink);
+  }
+
+  .biz-link:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 4px;
   }
 
   /* 用件の一覧。カードを並べず、行として読み比べられるようにする */
@@ -498,6 +676,53 @@ const latestNews = newsItems.slice(0, 3);
 </style>
 
 <script>
+  // 冒頭の理念の文字アニメーション。
+  // [data-anim-stagger] の配下の .anim-char を、ランダムな漢字に6回切り替えてから本来の文字に着地させる
+  const TICKS = 6;
+  const STEP_MS = 50;
+
+  const randomKanji = () => {
+    const code = 0x4e00 + Math.floor(Math.random() * (0x9fff - 0x4e00));
+    return String.fromCodePoint(code);
+  };
+
+  // 各 tick の書き込みを1フレームにまとめ、レイアウトの再計算を減らす
+  type Pending = { el: HTMLElement; text: string };
+  let pendingWrites: Pending[] = [];
+  let rafScheduled = false;
+  const scheduleWrite = (el: HTMLElement, text: string) => {
+    pendingWrites.push({ el, text });
+    if (rafScheduled) return;
+    rafScheduled = true;
+    requestAnimationFrame(() => {
+      const batch = pendingWrites;
+      pendingWrites = [];
+      rafScheduled = false;
+      for (const { el, text } of batch) el.textContent = text;
+    });
+  };
+
+  const animateTextGroups = () => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    document.querySelectorAll<HTMLElement>("[data-anim-stagger]").forEach((group) => {
+      const stagger = Number(group.dataset.animStagger) || 25;
+      group.querySelectorAll<HTMLElement>(".anim-char").forEach((el, i) => {
+        const target = el.dataset.char ?? el.textContent ?? "";
+        const startDelay = i * stagger;
+        for (let t = 0; t < TICKS; t++) {
+          window.setTimeout(() => scheduleWrite(el, randomKanji()), startDelay + t * STEP_MS);
+        }
+        window.setTimeout(() => scheduleWrite(el, target), startDelay + TICKS * STEP_MS);
+      });
+    });
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", animateTextGroups);
+  } else {
+    animateTextGroups();
+  }
+
   // 動画は画面に入ったときだけ再生する。動きを減らす設定の環境では再生しない
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   document.querySelectorAll<HTMLVideoElement>("video[data-autoplay]").forEach((v) => {
