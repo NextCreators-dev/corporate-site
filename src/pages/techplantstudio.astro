@@ -4,6 +4,7 @@
 //   B: Unity でゲームを作りたい企業 → #unity
 //   C: 広告代理店・Web制作会社・イベント制作会社 → #minigame と #partner
 //   D: 保育・療育の事業者 → #ai-training
+//   F: イベントを外に頼みたい企業・団体 → #event
 //   A: 版権・IP をお持ちの企業 → /techplantstudio/ip-minigame/ へ送る
 // 自分の用件・料金の目安・期間・体制・進め方を確かめ、フォームか日程調整で相談してもらう。
 import Layout from "@layouts/Layout.astro";
@@ -39,10 +40,11 @@ const heroPrices = [
   { href: "#unity", label: "Unity でのゲーム開発", price: "50万円〜" },
   { href: "#minigame", label: "ブラウザのミニゲーム", price: "20万円〜" },
   { href: "#ai-training", label: "AI研修・導入支援", price: "研修は1回ごとにお見積り" },
+  { href: "#event", label: "イベントの企画・運営", price: "15万円〜" },
 ];
 
 // ── 2. 受けている仕事 ───────────────────────────
-// 3つの用件を同じ項目（向く相談・こちらでやること・期間と料金・実績）で縦に並べ、読み比べられるようにする
+// 用件を同じ項目（向く相談・こちらでやること・期間と料金・実績）で縦に並べ、読み比べられるようにする
 type ServiceRow = { label: string; html: string };
 type Service = {
   id: string;
@@ -140,6 +142,35 @@ const services: Service[] = [
       },
     ],
   },
+  {
+    id: "event",
+    kicker: "イベントの企画・運営",
+    title: "イベントの企画・運営",
+    summary:
+      "イベントの企画から、撮影・音響の対応、当日の運営まで、すべて自社で対応できます。オンラインでもオフラインでも開催できます。",
+    rows: [
+      {
+        label: "こちらでやること",
+        html: "企画、撮影、音響、当日の運営。外部の業者に分けて頼む必要はありません。",
+      },
+      {
+        label: "開催の形",
+        html: "オンライン、オフラインのどちらにも対応します。",
+      },
+      {
+        label: "クリエイター向けのイベント",
+        html: "当社が運営するクリエイターコミュニティ「NextCreators」と連携して、クリエイター向けのイベントを開くこともできます。",
+      },
+      {
+        label: "これまでの規模",
+        html: "最大で120名ほどのオフラインイベントを運営しました。",
+      },
+      {
+        label: "料金の目安",
+        html: '<span class="num font-bold text-[var(--ink)]">15万円〜</span>（税別）。期間は内容を伺ってからご案内します。',
+      },
+    ],
+  },
 ];
 
 // ── 3. 料金の目安 ──────────────────────────────
@@ -190,16 +221,16 @@ const pricingRows: PriceRow[] = [
     note: "研修のあと、業務での使い方を月ごとに見直します。",
   },
   {
+    name: "イベント企画・運営（ワークショップ、ハッカソン、交流会など）",
+    price: "15万円〜",
+    duration: "内容を伺ってから",
+    note: 'オンライン・オフラインのどちらにも対応します。<a class="link" href="#event">内容</a>',
+  },
+  {
     group: "このほかに受けているもの",
     name: "クリエイティブ制作（動画、バナー、ポスターなど）",
     price: "10万円〜",
     duration: "1週間〜",
-    note: "",
-  },
-  {
-    name: "イベント企画・運営（ワークショップ、ハッカソン、交流会など）",
-    price: "15万円〜",
-    duration: "内容を伺ってから",
     note: "",
   },
   {
@@ -311,9 +342,9 @@ const jsonLd = [
       <div class="shell grid gap-12 lg:grid-cols-12 lg:items-end">
         <div class="lg:col-span-7">
           <p class="kicker">受託制作 TechPlant Studio</p>
-          <h1 class="h1 mt-3"><span class="inline-block">Unity のゲーム開発と、</span><span class="inline-block">ブラウザのミニゲーム制作を</span><span class="inline-block">受けています。</span></h1>
+          <h1 class="h1 mt-3"><span class="inline-block">ゲーム開発と</span><span class="inline-block">AI導入支援の伴走が</span><span class="inline-block">得意領域です</span></h1>
           <p class="lead mt-6 measure">
-            株式会社クリエイターのうえきばちの受託制作です。ミニゲームは、自社のゲーム制作基盤 NoLogic を使って作ります。保育・療育の現場向けの AI 研修と導入支援も行っています。
+            株式会社クリエイターのうえきばちの受託制作です。ミニゲームは、自社のゲーム制作基盤 NoLogic を使って作ります。保育・療育の現場向けの AI 研修と導入支援、イベントの企画・運営も行っています。
           </p>
           <div class="mt-8 flex flex-wrap gap-3">
             <a href="#contact" class="btn" data-cta-location="hero">相談する</a>
