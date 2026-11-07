@@ -107,7 +107,13 @@ export default function ContactForm({
   const [serverError, setServerError] = useState("");
   const [submittedCategory, setSubmittedCategory] = useState("");
   const startedRef = useRef(false);
+  // フォームを描画した時刻。送信までの時間をスパム判定に使う
+  const mountedAtRef = useRef(0);
   const successRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    mountedAtRef.current = Date.now();
+  }, []);
 
   useEffect(() => {
     if (status === "success") successRef.current?.focus();
@@ -151,7 +157,11 @@ export default function ContactForm({
     setServerError("");
 
     const sourcePage = getSourcePage();
-    const result = contactSchema.safeParse({ ...formData, source_page: sourcePage });
+    const result = contactSchema.safeParse({
+      ...formData,
+      source_page: sourcePage,
+      elapsed_ms: Date.now() - mountedAtRef.current,
+    });
     if (!result.success) {
       const newErrors: FormErrors = {};
       for (const issue of result.error.issues) {
