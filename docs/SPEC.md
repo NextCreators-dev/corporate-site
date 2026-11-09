@@ -15,7 +15,7 @@ Astro + Tailwind CSS + React で構築された静的サイトで、netlifyを�
 - 会社のビジョン・ミッション・バリューの発信
 - 主要プロダクト「NoLogic」（ノーコードゲーム制作プラットフォーム）の紹介
 - クリエイターコミュニティ「NextCreators」への誘導
-- 受託事業「TechPlant Studio」のサービス紹介
+- 受託事業のサービス紹介
 - 問い合わせ・採用等の窓口
 
 ### ページ構成
@@ -24,7 +24,7 @@ Astro + Tailwind CSS + React で構築された静的サイトで、netlifyを�
 |------|---------|------|
 | `/` | `index.astro` | トップページ（Hero, News, Track Record, Product, Community, Services, Vision, Company） |
 | `/essay` | `essay.astro` | 代表メッセージ |
-| `/techplantstudio` | `techplantstudio.astro` | TechPlant Studio サービス詳細 |
+| `/services` | `services.astro` | 受託のサービス詳細（2026-11 に `/techplantstudio` から移した。旧 URL は 301 転送） |
 | `/news` | `news/index.astro` | ニュース一覧 |
 | `/news/[slug]` | `news/[slug].astro` | ニュース個別記事 |
 | `/privacy` | `privacy.astro` | プライバシーポリシー |
@@ -99,7 +99,7 @@ corporate-site/
 │   └── pages/                   # ページ（ファイルベースルーティング）
 │       ├── index.astro          # トップページ
 │       ├── essay.astro          # 代表メッセージ
-│       ├── techplantstudio.astro # サービス詳細
+│       ├── services.astro        # サービス詳細
 │       ├── privacy.astro        # プライバシーポリシー
 │       └── news/
 │           ├── index.astro      # ニュース一覧
@@ -167,7 +167,7 @@ Astro のファイルベースルーティングを使用。`src/pages/` 配下�
 |---------|-----|
 | `src/pages/index.astro` | `/` |
 | `src/pages/essay.astro` | `/essay` |
-| `src/pages/techplantstudio.astro` | `/techplantstudio` |
+| `src/pages/services.astro` | `/services` |
 | `src/pages/privacy.astro` | `/privacy` |
 | `src/pages/news/index.astro` | `/news` |
 | `src/pages/news/[slug].astro` | `/news/:slug` |

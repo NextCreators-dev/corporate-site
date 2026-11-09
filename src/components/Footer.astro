@@ -14,7 +14,7 @@ interface Props {
   contactHref?: string;
 }
 
-const { hideCta = false, contactHref = "/techplantstudio/#contact" } = Astro.props;
+const { hideCta = false, contactHref = "/services/#contact" } = Astro.props;
 
 const scheduleAttrs = IS_EXTERNAL_SCHEDULE_URL
   ? { target: "_blank", rel: "noopener noreferrer" }
@@ -27,10 +27,10 @@ const groups = [
   {
     title: "ご依頼",
     links: [
-      { href: "/techplantstudio/", label: "ゲーム制作のご相談" },
-      { href: "/techplantstudio/ip-minigame/", label: "IPのミニゲーム制作" },
+      { href: "/services/", label: "ゲーム制作のご相談" },
+      { href: "/services/ip-minigame/", label: "IPのミニゲーム制作" },
       { href: "/business-game/", label: "社内研修のゲーム制作" },
-      { href: "/techplantstudio/#ai-training", label: "AI研修・導入支援" },
+      { href: "/services/#ai-training", label: "AI研修・導入支援" },
     ],
   },
   {

@@ -1,5 +1,5 @@
 // メンバーデータ定義
-// 正は本ファイル。techplantstudio.astro と business-game.astro の両方から参照する。
+// 正は本ファイル。services.astro と business-game.astro の両方から参照する。
 // desc は HTML 文字列（set:html で描画する）ため、編集時はタグの閉じ忘れに注意。
 
 export interface Member {

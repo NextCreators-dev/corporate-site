@@ -1,6 +1,6 @@
 # corporate-site
 
-株式会社クリエイターのうえきばちのコーポレートサイト（https://creatorpot.net）。会社紹介、ニュース、受託事業 TechPlant Studio の紹介と問い合わせフォームを載せている。Astro 5 + Tailwind CSS で作り、Netlify にデプロイしている。
+株式会社クリエイターのうえきばちのコーポレートサイト（https://creatorpot.net）。会社紹介、ニュース、受託事業の紹介と問い合わせフォームを載せている。Astro 5 + Tailwind CSS で作り、Netlify にデプロイしている。
 
 ## セットアップ
 
@@ -30,7 +30,7 @@ netlify dev
 
 | 場所 | 中身 |
 |---|---|
-| `src/pages/` | 各ページ（index / techplantstudio / essay / privacy / news） |
+| `src/pages/` | 各ページ（index / services / essay / privacy / news） |
 | `src/data/` | ニュース・実績・お客様の声のデータ |
 | `src/components/`・`src/layouts/` | コンポーネントと共通レイアウト |
 | `src/lib/` | SEO の構造化データ、メール、Slack 通知、入力検証 |

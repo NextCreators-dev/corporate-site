@@ -15,3 +15,15 @@
   for = "/fonts/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+
+# 受託ページの URL 変更（2026-11・経営ポータルの決定 0097）。旧 URL はサーバー側の 301 で新 URL へ送る。
+# Astro の redirects 設定は静的ビルドだと meta refresh になり 301 にならないので、ここで書く。
+[[redirects]]
+  from = "/techplantstudio/*"
+  to = "/services/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/techplantstudio"
+  to = "/services/"
+  status = 301

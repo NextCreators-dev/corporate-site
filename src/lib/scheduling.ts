@@ -15,7 +15,7 @@ export const IS_EXTERNAL_SCHEDULE_URL: boolean =
   /^https?:\/\//.test(SCHEDULE_URL_BUSINESS);
 
 /** 問い合わせフォーム（日程が合わない方の導線） */
-export const CONTACT_FORM_URL = "/techplantstudio/#contact";
+export const CONTACT_FORM_URL = "/services/#contact";
 
 /** 問い合わせ用メールアドレス */
 export const CONTACT_EMAIL = "contact@creatorpot.net";
