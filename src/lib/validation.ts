@@ -105,6 +105,15 @@ export const contactSchema = z.object({
     .transform((value) => normalizeSourcePage(value)),
   // ハニーポット
   website: z.string().trim().optional().default(""),
+  // フォームを開いてから送信までのミリ秒（スパム判定用。src/lib/spam.ts）。数でなければ null
+  elapsed_ms: z
+    .unknown()
+    .optional()
+    .transform((value) =>
+      typeof value === "number" && Number.isFinite(value) && value >= 0
+        ? Math.round(value)
+        : null,
+    ),
 });
 
 export type ContactFormData = z.infer<typeof contactSchema>;

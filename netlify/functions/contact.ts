@@ -3,6 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import { Resend } from "resend";
 import { sendAutoReply, sendAdminNotify } from "../../src/lib/mail";
 import { notifySlack } from "../../src/lib/slack";
+import { detectSpam } from "../../src/lib/spam";
 import { contactSchema } from "../../src/lib/validation";
 
 function getSupabaseClient() {
@@ -65,6 +66,15 @@ export const handler: Handler = async (event) => {
       };
     }
 
+    // スパムと判定した送信も保存はする（誤判定を DB から拾えるように）。通知と自動返信は止める。
+    // 自動返信を止めるのは、他人のアドレスを入れたスパムに当社からメールを送らないため
+    const spamReasons = detectSpam({
+      name: data.name,
+      message: data.message,
+      elapsedMs: data.elapsed_ms,
+    });
+    const isSpam = spamReasons.length > 0;
+
     const supabase = getSupabaseClient();
 
     const record = {
@@ -74,7 +84,7 @@ export const handler: Handler = async (event) => {
       category: data.category,
       message: data.message,
       budget: data.budget,
-      is_spam: false,
+      is_spam: isSpam,
     };
 
     // source_page 列はマイグレーション（db/migrations/20261020_contacts_source_page.sql）で足す。
@@ -90,6 +100,16 @@ export const handler: Handler = async (event) => {
       );
       const { error: retryError } = await supabase.from("contacts").insert(record);
       if (retryError) throw retryError;
+    }
+
+    if (isSpam) {
+      console.warn(`スパムと判定し、通知を止めました（${spamReasons.join(", ")}）: ${data.email}`);
+      // 送信者には成功と同じ応答を返し、判定に当たったことを知らせない
+      return {
+        statusCode: 200,
+        headers: getJsonHeaders(),
+        body: JSON.stringify({ success: true }),
+      };
     }
 
     const mailParams = {
