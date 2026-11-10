@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-株式会社クリエイターのうえきばちのコーポレートサイト（https://creatorpot.net）。Astro 5 + Tailwind + yarn、Netlify にデプロイ。事業は NoLogic（ノーコードゲーム制作）、NextCreators（Discord コミュニティ）、TechPlant Studio（受託）の3つ。
+株式会社クリエイターのうえきばちのコーポレートサイト（https://creatorpot.net）。Astro 5 + Tailwind + yarn、Netlify にデプロイ。事業は NoLogic（ノーコードゲーム制作）、NextCreators（Discord コミュニティ）、受託制作の3つ。受託のページは2026-11 に `/techplantstudio/` から `/services/` へ移し、旧 URL は `netlify.toml` で 301 転送している。
 
 ## 守ってほしいこと
 
@@ -13,7 +13,7 @@
 
 ## 構成
 
-- ページは `index`（理念 / 何の会社かと事業内容 / ご用件ごとの入口と料金の目安 / NoLogic / 体制 / 実績 / 私たちについて / お知らせ / 会社概要）、`techplantstudio`（Unity・ブラウザのミニゲーム・AI研修、料金、進め方、体制、実績、FAQ、問い合わせフォーム）、`techplantstudio/ip-minigame`（版権・IP企業向けのミニゲーム）、`business-game`（社内研修向けのゲーム。独自テーマ）、`essay`、`privacy`、`news/index`、`news/[slug]`
+- ページは `index`（理念 / 何の会社かと事業内容 / ご用件ごとの入口と料金の目安 / NoLogic / 体制 / 実績 / 私たちについて / お知らせ / 会社概要）、`services`（Unity・ブラウザのミニゲーム・AI研修、料金、進め方、体制、実績、FAQ、問い合わせフォーム）、`services/ip-minigame`（版権・IP企業向けのミニゲーム）、`business-game`（社内研修向けのゲーム。独自テーマ）、`essay`、`privacy`、`news/index`、`news/[slug]`
 - コンテンツの入口は `src/data/`（`news.ts` `portfolio.ts` `testimonials.ts`）。ニュースを足すのは `news.ts` で、sitemap の `lastmod` も `astro.config.mjs` がここから生成する。`testimonials.ts` は現在0件で、その場合はセクションごと非表示になる。公開前に実際の声へ差し替える
 - SEO は `src/lib/seo.ts` の JSON-LD ビルダー（Organization / WebSite / NewsArticle / BreadcrumbList / FAQPage）。`Layout.astro` 1枚が全ページを包み、`Head.astro` が astro-seo のメタと JSON-LD を出す
 - コンポーネントは `.astro`。React は `ContactForm.tsx` だけで `client:load`

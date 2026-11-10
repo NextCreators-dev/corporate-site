@@ -135,7 +135,7 @@ export function serviceSchema(params: {
   };
 }
 
-/** よくある質問（FAQPage）— TechPlantStudio で出力 */
+/** よくある質問（FAQPage）— 受託のページ（services.astro）で出力 */
 export function faqSchema(faqs: { question: string; answer: string }[]) {
   return {
     "@context": "https://schema.org",

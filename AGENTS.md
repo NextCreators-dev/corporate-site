@@ -1,6 +1,6 @@
 # AGENTS.md
 
-株式会社クリエイターのうえきばちのコーポレートサイト（https://creatorpot.net）。Astro 5 + Tailwind + yarn、Netlify にデプロイ。事業は NoLogic（ノーコードゲーム制作）、NextCreators（Discord コミュニティ）、TechPlant Studio（受託）の3つ。
+株式会社クリエイターのうえきばちのコーポレートサイト（https://creatorpot.net）。Astro 5 + Tailwind + yarn、Netlify にデプロイ。事業は NoLogic（ノーコードゲーム制作）、NextCreators（Discord コミュニティ）、受託制作の3つ。受託のページは2026-11 に `/techplantstudio/` から `/services/` へ移し、旧 URL は `netlify.toml` で 301 転送している。
 
 ## 守ってほしいこと
 
@@ -8,11 +8,11 @@
 - 会社の事実と数値を勝手に書かない・更新しない。トップの実績数値（ゲーム数・クリエイター数・連携企業数）、メンバー数、設立日、リリース日、採択歴は代表の指示があるときだけ変える。数値を書くときは経営ポータルの `fundraising/master-numbers.md` の値に実測日を添える（例: 完了310本・2026-09-05 本番DB実測）。ポータルは代表の環境ではこのリポジトリの親ディレクトリにある
 - 表記の正は社名「株式会社クリエイターのうえきばち」。「植木鉢」「クリエーター」「Creator Pot」「creatorpot（社名として）」は使わない。`src/lib/seo.ts` の alternateName にある "CreatorPot" は検索エンジン向けの別称で、表記の正ではない。みらいスタジオは当社ではなく別法人。所在地に含まれる拠点名として以外は書かない
 - ブランド色の数値をこのファイルに持たない。正は経営ポータルの `slide-kit/design/スライドデザイン規約.md`。現行実装の emerald #10B981 は規約と一致しておらず、揃えるかは判断待ち（pending-0040）。指示なく色を変えない
-- メンバー情報は双方向。掲載本文は `src/pages/techplantstudio.astro` の `members` 配列、顔写真は `public/members/` にあり、経営ポータルの `company/team.md` がここを出典にしている。変えたら team.md 側の更新も代表に伝える
+- メンバー情報は双方向。掲載本文は `src/pages/services.astro` の `members` 配列、顔写真は `public/members/` にあり、経営ポータルの `company/team.md` がここを出典にしている。変えたら team.md 側の更新も代表に伝える
 
 ## 構成
 
-- ページは `index`（Hero / News / Metrics / NoLogic / NextCreators / TechPlant Studio / Vision & CEO / Company Info）、`techplantstudio`（対応領域・実績・メンバー・制作フロー・FAQ・参考価格・問い合わせフォーム）、`essay`、`privacy`、`news/index`、`news/[slug]`
+- ページは `index`（Hero / News / Metrics / NoLogic / NextCreators / 受託制作 / Vision & CEO / Company Info）、`services`（対応領域・実績・メンバー・制作フロー・FAQ・参考価格・問い合わせフォーム）、`essay`、`privacy`、`news/index`、`news/[slug]`
 - コンテンツの入口は `src/data/`（`news.ts` `portfolio.ts` `testimonials.ts`）。ニュースを足すのは `news.ts` で、sitemap の `lastmod` も `astro.config.mjs` がここから生成する。`testimonials.ts` は現在0件で、その場合はセクションごと非表示になる。公開前に実際の声へ差し替える
 - SEO は `src/lib/seo.ts` の JSON-LD ビルダー（Organization / WebSite / NewsArticle / BreadcrumbList / FAQPage）。`Layout.astro` 1枚が全ページを包み、`Head.astro` が astro-seo のメタと JSON-LD を出す
 - コンポーネントは `.astro`。React は `ContactForm.tsx` だけで `client:load`

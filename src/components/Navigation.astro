@@ -9,13 +9,13 @@ interface Props {
   current?: "home" | "studio" | "ip" | "ai" | "news";
 }
 
-const { contactHref = "/techplantstudio/#contact", current } = Astro.props;
+const { contactHref = "/services/#contact", current } = Astro.props;
 
 // 読み手が「自分の用件はどこか」で選べるよう、受託の入口を先に並べる
 const links = [
-  { href: "/techplantstudio/", label: "ゲーム制作のご相談", key: "studio" },
-  { href: "/techplantstudio/ip-minigame/", label: "IPのミニゲーム", key: "ip" },
-  { href: "/techplantstudio/#ai-training", label: "AI研修", key: "ai" },
+  { href: "/services/", label: "ゲーム制作のご相談", key: "studio" },
+  { href: "/services/ip-minigame/", label: "IPのミニゲーム", key: "ip" },
+  { href: "/services/#ai-training", label: "AI研修", key: "ai" },
   { href: "/#company", label: "会社情報", key: "home" },
   { href: "/news/", label: "お知らせ", key: "news" },
 ] as const;

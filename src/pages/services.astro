@@ -1,11 +1,11 @@
 ---
-// 受託のサービスページ（TechPlant Studio）。2026-10 改修（経営ポータルの決定 0087）
+// 受託のサービスページ（/services/）。2026-10 改修（経営ポータルの決定 0087）、2026-11 に /techplantstudio/ から移した（決定 0097）
 // 読み手は、代表からの連絡やトップページから来た企業の担当者。
 //   B: Unity でゲームを作りたい企業 → #unity
 //   C: 広告代理店・Web制作会社・イベント制作会社 → #minigame と #partner
 //   D: 保育・療育の事業者 → #ai-training
 //   F: イベントを外に頼みたい企業・団体 → #event
-//   A: 版権・IP をお持ちの企業 → /techplantstudio/ip-minigame/ へ送る
+//   A: 版権・IP をお持ちの企業 → /services/ip-minigame/ へ送る
 // 自分の用件・料金の目安・期間・体制・進め方を確かめ、フォームか日程調整で相談してもらう。
 import Layout from "@layouts/Layout.astro";
 import Navigation from "@components/Navigation.astro";
@@ -25,9 +25,9 @@ import {
 const pageTitle =
   "ゲーム制作の受託（Unity・ブラウザのミニゲーム）とAI研修 | 株式会社クリエイターのうえきばち";
 const pageDescription =
-  "株式会社クリエイターのうえきばちの受託制作（TechPlant Studio）。Unity でのゲーム開発は50万円から、自社のゲーム制作基盤 NoLogic を使うブラウザのミニゲームは20万円から（税別）。保育・療育の現場向けの AI 研修と導入支援も行っています。";
+  "株式会社クリエイターのうえきばちの受託制作。Unity でのゲーム開発は50万円から、自社のゲーム制作基盤 NoLogic を使うブラウザのミニゲームは20万円から（税別）。保育・療育の現場向けの AI 研修と導入支援も行っています。";
 
-const IP_PAGE = "/techplantstudio/ip-minigame/";
+const IP_PAGE = "/services/ip-minigame/";
 const BUSINESS_GAME_PAGE = "/business-game/";
 
 const scheduleAttrs = IS_EXTERNAL_SCHEDULE_URL
@@ -328,7 +328,7 @@ const jsonLd = [
   faqSchema(faqs),
   breadcrumbSchema([
     { name: "ホーム", url: `${SITE.url}/` },
-    { name: "ゲーム制作のご相談", url: `${SITE.url}/techplantstudio/` },
+    { name: "ゲーム制作のご相談", url: `${SITE.url}/services/` },
   ]),
 ];
 ---
@@ -341,7 +341,7 @@ const jsonLd = [
     <section class="band" data-section="hero">
       <div class="shell grid gap-12 lg:grid-cols-12 lg:items-end">
         <div class="lg:col-span-7">
-          <p class="kicker">受託制作 TechPlant Studio</p>
+          <p class="kicker">受託制作</p>
           <h1 class="h1 mt-3"><span class="inline-block">ゲーム開発と</span><span class="inline-block">AI導入支援の伴走が</span><span class="inline-block">得意領域です</span></h1>
           <p class="lead mt-6 measure">
             株式会社クリエイターのうえきばちの受託制作です。ミニゲームは、自社のゲーム制作基盤 NoLogic を使って作ります。保育・療育の現場向けの AI 研修と導入支援、イベントの企画・運営も行っています。
